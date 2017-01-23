@@ -48,7 +48,7 @@ public class NuovaRecensione extends Notifica {
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = con.prepareStatement("remove from nuovarecensione where id = ?");
+            stm = manager.con.prepareStatement("remove from nuovarecensione where id = ?");
             stm.setInt(1, getId());
             stm.executeUpdate();
             res = true;

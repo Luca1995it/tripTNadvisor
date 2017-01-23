@@ -49,7 +49,7 @@ public class SegnalaFotoRecensione extends Notifica{
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = con.prepareStatement("delete from segnalafotorecensione where id = ?");
+            stm = manager.con.prepareStatement("delete from segnalafotorecensione where id = ?");
             stm.setInt(1, getId());
             stm.executeUpdate();
             res = true;

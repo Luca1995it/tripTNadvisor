@@ -54,7 +54,7 @@ public class SegnalaFotoRistorante extends Notifica {
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = con.prepareStatement("delete from segnalafotoristorante where id = ?");
+            stm = manager.con.prepareStatement("delete from segnalafotoristorante where id = ?");
             stm.setInt(1, getId());
             stm.executeUpdate();
             res = true;

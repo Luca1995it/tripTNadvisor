@@ -7,7 +7,6 @@ package Notify;
 
 import DataBase.DBManager;
 import java.io.Serializable;
-import java.sql.Connection;
 import java.sql.Date;
 import java.util.Objects;
 
@@ -18,7 +17,6 @@ import java.util.Objects;
 public abstract class Notifica implements Serializable{
 
     protected final DBManager manager;
-    protected final Connection con;
     int id;
     Date data;
 
@@ -85,7 +83,6 @@ public abstract class Notifica implements Serializable{
     
     Notifica(int id, Date data, DBManager manager) {
         this.manager = manager;
-        con = manager.con;
         this.id = id;
         this.data = data;
     }

@@ -92,9 +92,12 @@ public class RegistrationServlet extends HttpServlet {
         if (tornaIndietro) {
             request.getRequestDispatcher("/registration.jsp").forward(request, response);
         } else if ((user = manager.addRegistrato(name, surname, mail1, pass1, privacy)) != null) {
+            System.out.println("Registrato " + user.getEmail());
             String cfr = encrypt(mail1);
+            System.out.println("Con chiave: " + cfr);
             manager.addKey(user, cfr);
             sendMail(labels.getString("click.link.mail") + " http://localhost:2000" + request.getContextPath() + "/ConfirmServlet?hash=" + cfr, mail1, session);
+            System.out.println("Mail sent");
             request.getRequestDispatcher("/HomeServlet").forward(request, response);
         } else {
             request.setAttribute("problemMessage", labels.getString("error.message"));
