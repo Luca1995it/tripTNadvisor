@@ -37,11 +37,6 @@ public class HomeServlet extends HttpServlet {
         HttpSession session = request.getSession(true);
         Utente utente = (Utente) session.getAttribute("utente");
        
-        if (utente == null) {
-            session.setAttribute("title", "Home Page");
-        } else {
-            session.setAttribute("title", "HomePage - " + utente.getNome() + " " + utente.getCognome());
-        }
 
         session.setAttribute("mostVoted", manager.getRistorantiPiuVotati());
         session.setAttribute("mostSeen", manager.getRistorantiPiuVisitati());

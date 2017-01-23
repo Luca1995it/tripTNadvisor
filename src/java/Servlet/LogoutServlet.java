@@ -26,15 +26,9 @@ public class LogoutServlet extends HttpServlet {
     public void doGetPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         HttpSession session = req.getSession(false);
-        if (session != null) {
-            try {
-                Language lan = (Language) session.getAttribute("lan");
-                session.removeAttribute("utente");
-                session = req.getSession();
-                session.setAttribute("lan", lan);
-            } catch (IllegalStateException e) {
-            }
-        }
+
+        session.removeAttribute("utente");
+
         req.getRequestDispatcher("/HomeServlet").forward(req, resp);
     }
 }

@@ -33,10 +33,10 @@ public class SegnalaFotoServlet extends HttpServlet {
         String type = request.getParameter("type");
         if (type.equals("ristorante")) {
             manager.newNotSegnalaFotoRistorante(manager.getFoto(Integer.parseInt(request.getParameter("id_foto"))));
-            session.setAttribute("segnalaMessageRist", "La foto è stata segnalata ad un amministratore");
+            request.setAttribute("segnalaMessageRist", "La foto è stata segnalata ad un amministratore");
         } else if(type.equals("rec")){
             manager.newNotSegnalaFotoRecensione(manager.getRecensione(Integer.parseInt(request.getParameter("id_rec"))));
-            session.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
+            request.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
         }
         request.getRequestDispatcher("/info.jsp").forward(request, response);
 

@@ -359,7 +359,7 @@
                                 <div class="col-md-4">
                                     <div class="caption">
                                         <div class="caption-content">
-                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt=" This review has kein image "/>
+                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt=" This review has kein image" height="200"/>
                                             <br>
                                             <c:if test="${utente.proprietario(ristorante) && !rec.justSegnalato()}">
                                                 <label class="control-form">

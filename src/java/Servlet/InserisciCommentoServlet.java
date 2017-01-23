@@ -35,11 +35,11 @@ public class InserisciCommentoServlet extends HttpServlet {
         int id_rec = Integer.parseInt(request.getParameter("id_rec"));
 
         if (commento == null) {
-            session.setAttribute("commentoErrMessage1", "Nessun testo inserito");
+            request.setAttribute("commentoErrMessage1", "Nessun testo inserito");
         } else if (manager.newNotCommentoRecensione(manager.getRecensione(id_rec), commento)) {
-            session.setAttribute("commentoErrMessage1", "Il commento sarà approvato da un amministratore");
+            request.setAttribute("commentoErrMessage1", "Il commento sarà approvato da un amministratore");
         } else {
-            session.setAttribute("commentoErrMessage1", "Richiesta fallita, riprova");
+            request.setAttribute("commentoErrMessage1", "Richiesta fallita, riprova");
         }
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);
