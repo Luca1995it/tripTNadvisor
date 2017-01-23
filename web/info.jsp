@@ -44,7 +44,7 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
 
         <!-- javascript file specific for this page-->
-        <script type="text/javascript" src="<%= request.getContextPath()%>/personalScript/show_hidden.js"></script>
+        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/show_hidden.js"></script>
     </head>
 
     <body id="page-top" class="index">

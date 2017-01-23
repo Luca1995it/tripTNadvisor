@@ -500,17 +500,18 @@ public class DBManager implements Serializable {
      * @return un ArrayList dei Ristoranti trovati
      */
     public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng) {
-        ArrayList<Ristorante> res;
+
+        ArrayList<Ristorante> original;
         PreparedStatement stm = null;
         ResultSet rs = null;
 
-        if (lat.equals("") || lng.equals("")) {
-            res = new ArrayList<>();
+        if ((lat == null) || (lng == null) || lat.equals("") || lng.equals("")) {
+            original = new ArrayList<>();
             try {
                 stm = con.prepareStatement("SELECT * FROM RISTORANTE");
                 rs = stm.executeQuery();
                 while (rs.next()) {
-                    res.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), rs.getString("cucina"), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
+                    original.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), rs.getString("cucina"), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -532,92 +533,152 @@ public class DBManager implements Serializable {
             }
 
         } else {
-            res = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), 50);
+            original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), 50);
         }
-        System.out.println("1: " + res.size());
-        Iterator i = res.iterator();
-        switch (tipo) {
-            case "all":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String name = r.getNome().toLowerCase();
-                    String addr = "";
-                    if (r.getLuogo() != null) {
-                        addr = r.getLuogo().getAddress().toLowerCase();
-                    }
-                    String cucina = r.getCucina().toLowerCase();
-                    if (!similString(name, research) && !similString(addr, research) && !similString(cucina, research)) {
-                        i.remove();
-                    }
-                }
-                break;
+        System.out.println("1: " + original.size());
 
-            case "nome":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String name = r.getNome().toLowerCase();
-                    if (!similString(name, research)) {
-                        i.remove();
-                    }
-                }
-                break;
+        boolean found = false;
+        ArrayList<Ristorante> res = new ArrayList<>();
 
-            case "addr":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String addr = "";
-                    if (r.getLuogo() != null) {
-                        addr = r.getLuogo().getSmallZone().toLowerCase();
+        for (int k = 3; (k < 15) && !found; k++) {
+            res = (ArrayList<Ristorante>) original.clone();
+            Iterator i = res.iterator();
+            switch (tipo) {
+                case "all":
+                    while (i.hasNext()) {
+                        Ristorante r = (Ristorante) i.next();
+                        String name = r.getNome().toLowerCase();
+                        String addr = "";
+                        if (r.getLuogo() != null) {
+                            addr = r.getLuogo().getAddress().toLowerCase();
+                        }
+                        String cucina = r.getCucina().toLowerCase();
+                        if (!similString(name, research, k) && !similString(addr, research, k) && !similString(cucina, research, k)) {
+                            System.out.println("remove" + i);
+                            i.remove();
+                        }
                     }
-                    if (!similString(addr, research)) {
-                        i.remove();
-                    }
-                }
-                break;
+                    break;
 
-            case "zona":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String addr = "";
-                    if (r.getLuogo() != null) {
-                        addr = r.getLuogo().getGeographicZone().toLowerCase();
+                case "nome":
+                    while (i.hasNext()) {
+                        Ristorante r = (Ristorante) i.next();
+                        String name = r.getNome().toLowerCase();
+                        if (!similString(name, research, k)) {
+                            i.remove();
+                        }
                     }
-                    if (!similString(addr, research)) {
-                        i.remove();
-                    }
-                }
-                break;
+                    break;
 
-            case "spec":
+                case "addr":
+                    while (i.hasNext()) {
+                        Ristorante r = (Ristorante) i.next();
+                        if (r.getLuogo() != null) {
+                            String addr = r.getLuogo().getSmallZone().toLowerCase();
+                            if (!similString(addr, research, k)) {
+                                i.remove();
+                            }
+                        }
+                    }
+                    break;
+
+                case "zona":
+                    while (i.hasNext()) {
+                        Ristorante r = (Ristorante) i.next();
+                        if (r.getLuogo() != null) {
+                            String addr = r.getLuogo().getGeographicZone().toLowerCase();
+                            if (!similString(addr, research, k)) {
+                                i.remove();
+                            }
+                        }
+                    }
+                    break;
+
+                case "spec":
+                    while (i.hasNext()) {
+                        Ristorante r = (Ristorante) i.next();
+                        String cucina = r.getCucina();
+                        if (!similString(cucina, research, k)) {
+                            i.remove();
+                        }
+                    }
+                    break;
+            }
+            System.out.println("2: " + res.size());
+            i = res.iterator();
+            if (!spec.toLowerCase().equals("all")) {
                 while (i.hasNext()) {
                     Ristorante r = (Ristorante) i.next();
                     String cucina = r.getCucina();
-                    if (!similString(cucina, research)) {
+                    if (!similString(spec, cucina, k)) {
                         i.remove();
                     }
                 }
-                break;
-        }
-        System.out.println("2: " + res.size());
-        i = res.iterator();
-        if (!spec.toLowerCase().equals("all")) {
-            while (i.hasNext()) {
-                Ristorante r = (Ristorante) i.next();
-                String cucina = r.getCucina();
-                if (Levenshtein_distance(spec, cucina) > 1) {
-                    i.remove();
-                }
+            }
+            if (res.size() > 0) {
+                found = true;
             }
         }
         return res;
     }
 
-    public boolean similString(String a, String b) {
+    public boolean similString(String a, String b, int k) {
         if (a == null || b == null) {
             return false;
         } else {
-            return a.contains((CharSequence) b) || b.contains((CharSequence) a) || (Levenshtein_distance(a, b) < 3);
+            a = a.toLowerCase();
+            b = b.toLowerCase();
+            return a.contains((CharSequence) b) || b.contains((CharSequence) a) || (Levenshtein_distance(a, b) < k);
         }
+    }
+
+    public int Levenshtein_distance(String x, String y) {
+        int m = x.length();
+        int n = y.length();
+
+        int i, j;
+        int distance;
+
+        int[] prev = new int[n + 1];
+        int[] curr = new int[n + 1];
+        int[] tmp;
+
+        for (i = 0; i <= n; i++) {
+            prev[i] = i;
+        }
+
+        for (i = 1; i <= m; i++) {
+            curr[0] = i;
+            for (j = 1; j <= n; j++) {
+                if (x.charAt(i - 1) != y.charAt(j - 1)) {
+                    int k = minimum(curr[j - 1], prev[j - 1], prev[j]);
+                    curr[j] = k + 1;
+                } else {
+                    curr[j] = prev[j - 1];
+                }
+            }
+
+            tmp = prev;
+            prev = curr;
+            curr = tmp;
+
+            curr = new int[n + 1];
+        }
+
+        distance = prev[n];
+
+        return distance;
+    }
+
+    int minimum(int a, int b, int c) {
+        int res = a;
+        if (b < res) {
+            res = b;
+        }
+        if (c < res) {
+            res = c;
+        }
+        return res;
     }
 
     /**
@@ -1104,7 +1165,7 @@ public class DBManager implements Serializable {
         }
         return res;
     }
-    
+
     /**
      * Crea una nuova notifica di tipo ReclamaRistorante sul DB per permettere
      * ad un amministratore di verificare se questo utente è il reale
@@ -1397,55 +1458,6 @@ public class DBManager implements Serializable {
                             .getName()).log(Level.SEVERE, null, ex);
                 }
             }
-        }
-        return res;
-    }
-
-    public int Levenshtein_distance(String x, String y) {
-        int m = x.length();
-        int n = y.length();
-
-        int i, j;
-        int distance;
-
-        int[] prev = new int[n + 1];
-        int[] curr = new int[n + 1];
-        int[] tmp = null;
-
-        for (i = 0; i <= n; i++) {
-            prev[i] = i;
-        }
-
-        for (i = 1; i <= m; i++) {
-            curr[0] = i;
-            for (j = 1; j <= n; j++) {
-                if (x.charAt(i - 1) != y.charAt(j - 1)) {
-                    int k = minimum(curr[j - 1], prev[j - 1], prev[j]);
-                    curr[j] = k + 1;
-                } else {
-                    curr[j] = prev[j - 1];
-                }
-            }
-
-            tmp = prev;
-            prev = curr;
-            curr = tmp;
-
-            curr = new int[n + 1];
-        }
-
-        distance = prev[n];
-
-        return distance;
-    }
-
-    int minimum(int a, int b, int c) {
-        int res = a;
-        if (b < res) {
-            res = b;
-        }
-        if (c < res) {
-            res = c;
         }
         return res;
     }

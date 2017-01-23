@@ -41,7 +41,7 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery-1.8.2.min.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery.mockjax.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
-        <script type="text/javascript" src="<%= request.getContextPath()%>/personalScript/maps.js"></script>
+        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/maps.js"></script>
 
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA61l8xRmFya8etADzBQAHA7oZVu9vUQEY"></script>
     </head>
