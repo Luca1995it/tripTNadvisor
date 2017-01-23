@@ -1,5 +1,10 @@
-/build/
-/dist/
 /Libraries/
+/web/fotoRecensioni/
+/web/fotoUtenti/
+/web/fotoRistoranti/
+/build/
 /test/
+/nbproject/
+/web/WEB-INF/
 /build.xml
+/dist/
