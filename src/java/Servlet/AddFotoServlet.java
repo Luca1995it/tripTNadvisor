@@ -6,6 +6,7 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Foto;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import com.oreilly.servlet.MultipartRequest;
@@ -22,7 +23,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 
 public class AddFotoServlet extends HttpServlet {
 
@@ -50,7 +50,7 @@ public class AddFotoServlet extends HttpServlet {
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
         MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
-        
+
         Enumeration files = multi.getFileNames();
         String name = null;
         while (files.hasMoreElements()) {
@@ -62,8 +62,15 @@ public class AddFotoServlet extends HttpServlet {
             rd = request.getRequestDispatcher("/private/choose.jsp");
         } else {
             String newAvPath = dirName + "/" + multi.getFilesystemName(name);
-            ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);
-            rd = request.getRequestDispatcher("/ConfigurazioneRistorante?id_rist=" + ristorante.getId());
+            Foto foto = ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);
+            if (foto != null) {
+                manager.newNotNuovaFoto(foto);
+                rd = request.getRequestDispatcher("/ConfigurazioneRistorante?id_rist=" + ristorante.getId());
+
+            } else {
+                request.setAttribute("errMessage", "Errore nel caricamento, riprova");
+                rd = request.getRequestDispatcher("/private/choose.jsp");
+            }
         }
         rd.forward(request, response);
     }

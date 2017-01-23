@@ -654,12 +654,13 @@ public class Ristorante implements Serializable {
      * @param utente utente che aggiunge la foto
      * @return true se l'aggiunta ha avuto successo, false altrimenti
      */
-    public boolean addFoto(String path, String descr, Utente utente) {
+    public Foto addFoto(String path, String descr, Utente utente) {
         if (utente == null) {
-            return false;
+            return null;
         }
         PreparedStatement stm = null;
-        boolean res = false;
+        ResultSet rs = null;
+        Foto res = null;
         try {
             stm = manager.con.prepareStatement("INSERT INTO FOTO (fotopath, descr, data, id_rist, id_utente) VALUES (?,?,?,?,?)");
             stm.setString(1, path);
@@ -669,7 +670,14 @@ public class Ristorante implements Serializable {
             stm.setInt(4, getId());
             stm.setInt(5, utente.getId());
             stm.executeUpdate();
-            res = true;
+            
+            stm = manager.con.prepareStatement("select * from foto where fotopath = ? and descr = ?");
+            stm.setString(1, path);
+            stm.setString(2, descr);
+            rs = stm.executeQuery();
+            if(rs.next()){ //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
+                res = new Foto(rs.getInt("id"), rs.getString("fotopath"), rs.getString("descr"), rs.getDate("data"), manager.getUtente(rs.getInt("id_utente")), this, manager);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -680,6 +688,14 @@ public class Ristorante implements Serializable {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
         }
         return res;
     }
@@ -708,6 +724,7 @@ public class Ristorante implements Serializable {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            
         }
         return res;
     }
@@ -842,41 +859,7 @@ public class Ristorante implements Serializable {
         return res;
     }
 
-    /**
-     * Crea una nuova notifica di tipo ReclamaRistorante sul DB per permettere
-     * ad un amministratore di verificare se questo utente è il reale
-     * proprietario del ristorante
-     *
-     * @param utente l'utente che vuole reclamare quel ristorante
-     * @return true se la notifica è stata registrata con successo sul DB, false
-     * altriementi
-     */
-    public boolean newNotReclamaRistorante(Utente utente) {
-        if (utente == null) {
-            return false;
-        }
-        PreparedStatement stm = null;
-        boolean res = false;
-        try {
-            stm = manager.con.prepareStatement("insert into richiestaristorante(id_rist, id_utente, data) values (?,?,?)");
-            stm.setInt(1, getId());
-            stm.setInt(2, utente.getId());
-            stm.setDate(3, new Date(System.currentTimeMillis()));
-            stm.executeUpdate();
-            res = true;
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return res;
-    }
+    
 
     //cerca i 20 ristoranti più vicini
     public ArrayList<Ristorante> getVicini() {

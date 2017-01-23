@@ -2,9 +2,12 @@
 /web/fotoRecensioni/
 /web/fotoUtenti/
 /web/fotoRistoranti/
+/web/qr/
 /build/
 /test/
 /nbproject/
 /web/WEB-INF/
 /build.xml
 /dist/
+
+

@@ -25,23 +25,26 @@ import javax.servlet.http.HttpSession;
 public class ReclamaRistoranteServlet extends HttpServlet {
 
     private DBManager manager;
-    
+
     @Override
     public void init() throws ServletException {
         // inizializza il DBManager dagli attributi di Application
-        this.manager = (DBManager)super.getServletContext().getAttribute("dbmanager");
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-            
-            HttpSession session = request.getSession();
-            Utente utente = (Utente) session.getAttribute("utente");
-            Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
-           
-            ristorante.newNotReclamaRistorante(utente);
+
+        HttpSession session = request.getSession();
+        Utente utente = (Utente) session.getAttribute("utente");
+        Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
+
+        if (manager.newNotReclamaRistorante(ristorante, utente)) {
             session.setAttribute("notMessage", "La tua richiesta sarà valutata da un amministratore");
-            request.getRequestDispatcher("/info.jsp").forward(request, response);
+        } else {
+            session.setAttribute("notMessage", "Richiesta fallita, riprova");
+        }
+        request.getRequestDispatcher("/info.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

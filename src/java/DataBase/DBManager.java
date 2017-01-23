@@ -848,7 +848,7 @@ public class DBManager implements Serializable {
     }
 
     public boolean updateAutocomplete() {
-        String path = "/autocomplete.txt";
+        String path = "/web/autocomplete.txt";
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
@@ -934,13 +934,11 @@ public class DBManager implements Serializable {
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = con.prepareStatement("insert into nuovafoto(id_foto, id_dest, data) values (?,?,?)");
+            stm = con.prepareStatement("insert into nuovafoto(id_foto, data) values (?,?)");
             stm.setInt(1, foto.getId());
-            stm.setInt(2, foto.getRistorante().getUtente().getId());
-            stm.setDate(3, new Date(System.currentTimeMillis()));
+            stm.setDate(2, new Date(System.currentTimeMillis()));
             stm.executeUpdate();
             res = true;
-
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -970,10 +968,9 @@ public class DBManager implements Serializable {
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = con.prepareStatement("insert into nuovarecensione(id_rec, id_dest, data) values (?,?,?)");
+            stm = con.prepareStatement("insert into nuovarecensione(id_rec, data) values (?,?)");
             stm.setInt(1, recensione.getId());
-            stm.setInt(2, recensione.getRistorante().getUtente().getId());
-            stm.setDate(3, new Date(System.currentTimeMillis()));
+            stm.setDate(2, new Date(System.currentTimeMillis()));
             stm.executeUpdate();
             res = true;
 
@@ -1102,6 +1099,43 @@ public class DBManager implements Serializable {
                 } catch (SQLException ex) {
                     Logger.getLogger(DBManager.class
                             .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+    
+    /**
+     * Crea una nuova notifica di tipo ReclamaRistorante sul DB per permettere
+     * ad un amministratore di verificare se questo utente è il reale
+     * proprietario del ristorante
+     *
+     * @param ristorante
+     * @param utente l'utente che vuole reclamare quel ristorante
+     * @return true se la notifica è stata registrata con successo sul DB, false
+     * altriementi
+     */
+    public boolean newNotReclamaRistorante(Ristorante ristorante, Utente utente) {
+        if (utente == null) {
+            return false;
+        }
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = con.prepareStatement("insert into richiestaristorante(id_rist, id_utente, data) values (?,?,?)");
+            stm.setInt(1, ristorante.getId());
+            stm.setInt(2, utente.getId());
+            stm.setDate(3, new Date(System.currentTimeMillis()));
+            stm.executeUpdate();
+            res = true;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }

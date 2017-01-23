@@ -33,11 +33,13 @@ public class InserisciCommentoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String commento = request.getParameter("commento");
         int id_rec = Integer.parseInt(request.getParameter("id_rec"));
-        
-        if (commento == null) session.setAttribute("commentoErrMessage1", "Nessun testo inserito");
-        else {
-            manager.newNotCommentoRecensione(manager.getRecensione(id_rec), commento);
+
+        if (commento == null) {
+            session.setAttribute("commentoErrMessage1", "Nessun testo inserito");
+        } else if (manager.newNotCommentoRecensione(manager.getRecensione(id_rec), commento)) {
             session.setAttribute("commentoErrMessage1", "Il commento sarà approvato da un amministratore");
+        } else {
+            session.setAttribute("commentoErrMessage1", "Richiesta fallita, riprova");
         }
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);

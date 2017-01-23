@@ -73,19 +73,21 @@ public class AddRistorante extends HttpServlet {
             request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
         } else {
 
-            if (nome.equals("") || descr.equals("") || linkSito.equals("") || addr.equals("")) {
+            if (nome.equals("") || descr.equals("")) {
                 tornaIndietro = true;
-                request.setAttribute("error", "devi riempire tutti i campi");
+                request.setAttribute("error", "devi riempire almeno nome e descrizione");
             }
-            
+
             if (fotoPath.equals("") || fotoDescr.equals("")) {
                 tornaIndietro = true;
-                request.setAttribute("error", "devi riempire anche i campi della prima fotografia");
+                request.setAttribute("errorFoto", "devi riempire anche i campi della prima fotografia");
             }
-            
-            if (!manager.okLuogo(addr)) {
-                tornaIndietro = true;
-                request.setAttribute("addrError", "Indirizzo invalido, inseriscine uno del tipo  - via e numero civico, città, CAP");
+
+            if (!linkSito.equals("")) {
+                if (!manager.okLuogo(addr)) {
+                    tornaIndietro = true;
+                    request.setAttribute("addrError", "Indirizzo invalido, inseriscine uno del tipo  - via e numero civico, città, CAP");
+                }
             }
 
             if (manager.esisteNomeRistorante(nome)) {
@@ -106,6 +108,7 @@ public class AddRistorante extends HttpServlet {
             }
         }
     }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

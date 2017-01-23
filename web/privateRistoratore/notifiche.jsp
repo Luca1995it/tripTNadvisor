@@ -187,9 +187,9 @@
                                             </div>
                                             <div class="col-md-4">
                                                 
-                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value='${notifica.getId()}' hidden/>"/><button class="btn btn-primary" type="submit"><fmt:message key="accept"/></button></form>
+                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="accept"/></button></form>
                                                 <br>
-                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="false" hidden/><input name="id_not" value="<c:out value='${notifica.getId()}' hidden/>"/><button class="btn btn-primary" type="submit"><fmt:message key="regret"/></button></form>
+                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="false" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="regret"/></button></form>
                                             </div>
                                         </div>
                                     </c:forEach>

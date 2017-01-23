@@ -53,7 +53,10 @@ public class Ristoratore extends Utente {
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
-            stm = manager.con.prepareStatement("select * from nuovafoto where id_dest = ?");
+            stm = manager.con.prepareStatement("select * from (select myrist.id from (select myfoto.id, ristorante.ID_UTENTE from "
+                    + "(select foto.id, foto.id_rist from nuovafoto, foto where nuovafoto.ID_FOTO = foto.id) "
+                    + "as myfoto, ristorante where myfoto.id_rist = ristorante.id) as myrist, utente where myrist.id_utente = utente.id and utente.id = ?) "
+                    + "as id, nuovafoto where id.id = nuovafoto.ID_foto");
             stm.setInt(1, getId());
             rs = stm.executeQuery();
             while (rs.next()) { //DBManager manager, int id, Date data, Foto foto
@@ -88,7 +91,12 @@ public class Ristoratore extends Utente {
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
-            stm = manager.con.prepareStatement("select * from nuovafoto where id_dest = ?");
+            stm = manager.con.prepareStatement("select * from (select myrist.id from "
+                    + "(select myrec.id, ristorante.ID_UTENTE from "
+                    + "(select recensione.id, recensione.id_rist from nuovarecensione, recensione where nuovarecensione.id_rec = recensione.id) "
+                    + "as myrec, ristorante where myrec.id_rist = ristorante.id)"
+                    + " as myrist, utente where myrist.id_utente = utente.id and utente.id = ?) "
+                    + "as id, nuovarecensione where id.id = nuovarecensione.id_rec");
             stm.setInt(1, getId());
             rs = stm.executeQuery();
             while (rs.next()) {
@@ -125,6 +133,7 @@ public class Ristoratore extends Utente {
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
+            System.out.println(manager + " " + manager.con);
             stm = manager.con.prepareStatement("select * from Ristorante where id_utente = ?");
             stm.setInt(1, getId());
             rs = stm.executeQuery();

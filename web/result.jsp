@@ -234,13 +234,15 @@
                             <fmt:message key="cucina"/>: <c:out value="${ristorante.getCucina()}"/><br>
                             <fmt:message key="voto"/>: <c:out value="${ristorante.getVoto()}"/><br>
                             <fmt:message key="ranking"/>:
-                            <c:when test="${ristorante.getLuogo() != null}">
-                                <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
-                            </c:when>
-                            <c:otherwise>
-                                <fmt:message key="non.disponibile"/>
-                            </c:otherwise>
-                            <fmt:message key="numero.recensioni"/>: <c:out value="${ristorante.getRecensioni().size()}"/><br>
+                            <c:choose>
+                                <c:when test="${ristorante.getLuogo() != null}">
+                                    <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <fmt:message key="non.disponibile"/>
+                                </c:otherwise>
+                            </c:choose><br>
+                            <fmt:message key="reviews"/>: <c:out value="${ristorante.getRecensioni().size()}"/><br>
                         </div>
 
                     </div>

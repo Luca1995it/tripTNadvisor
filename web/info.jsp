@@ -226,7 +226,7 @@
                                 <br>
                                 <c:if test="${ristorante.getLuogo() != null}">
                                     <label class="control-label"><a href="<%= request.getContextPath()%>/maps.jsp"><fmt:message key="maps"/></a></label>
-                                </c:if>
+                                    </c:if>
                             </div>
                         </div>
                     </div>
@@ -241,15 +241,15 @@
                         <div class="caption">
                             <div class="caption-content">
                                 <label class="control-label"><fmt:message key="ranking"/>:
-                                <c:choose>
-                                    
-                                    <c:when test="${ristorante.getLuogo() != null}">
-                                         <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/></label>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <fmt:message key="non.disponibile"/>
-                                    </c:otherwise>
-                                </c:choose>
+                                    <c:choose>
+
+                                        <c:when test="${ristorante.getLuogo() != null}">
+                                            <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/></label>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <fmt:message key="non.disponibile"/>
+                                        </c:otherwise>
+                                    </c:choose>
                                 <br>
                                 <label class="control-label">
                                     <fmt:message key="users.vote"/>:
@@ -343,7 +343,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <h2>><fmt:message key="reviews"/></h2>
+                        <h2><fmt:message key="reviews"/></h2>
                         <hr class="star-primary">
                     </div>
                 </div>
@@ -411,42 +411,42 @@
 
                                         <div class="caption-content">
                                             <c:if test="${utente.proprietario(ristorante)}">
-                                                <td>
-                                                    <button type="submit" class="btn btn-primary" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>1')">
-                                                        <c:choose>
-                                                            <c:when test='${rec.getCommento() != null && !rec.getCommento().equals("")}'>
-                                                                <fmt:message key="ri.comment"/>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <fmt:message key="comment"/>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </button>
-                                                    <div id="nomediv<c:out value='${rec.getId()}'/>1" hidden>
-                                                        <form method="post" action="<%= request.getContextPath()%>/private/InserisciCommentoServlet?id_rec=<c:out value="${rec.getId()}"/>">
-                                                            <input type="text" name="commento" class="form-control"/>
-                                                            <button class="btn btn-primary" type="submit"><fmt:message key="go"/></button>
-                                                        </form>
-                                                    </div>
-                                                </c:if>
 
-                                                <br><br>
+                                                <button type="submit" class="btn btn-primary" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>1')">
+                                                    <c:choose>
+                                                        <c:when test='${rec.getCommento() != null && !rec.getCommento().equals("")}'>
+                                                            <fmt:message key="ri.comment"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <fmt:message key="comment"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </button>
+                                                <div id="nomediv<c:out value='${rec.getId()}'/>1" hidden>
+                                                    <form method="post" action="<%= request.getContextPath()%>/private/InserisciCommentoServlet?id_rec=<c:out value="${rec.getId()}"/>">
+                                                        <input type="text" name="commento" class="form-control"/>
+                                                        <button class="btn btn-primary" type="submit"><fmt:message key="go"/></button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
 
-                                                <c:if test="${utente != null && !utente.proprietario(rec)}">
-                                                <td>
-                                                    <button type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
-                                                    <div id='nomediv<c:out value="${rec.getId()}"/>2' hidden>
-                                                        <form method="post" action="<%= request.getContextPath()%>/private/VotaRecensioneServlet?id_rec=<c:out value="${rec.getId()}"/>">
-                                                            <label><input type="radio" name="rating" value="1"> 1 |</label>
-                                                            <label><input type="radio" name="rating" value="2"> 2 |</label>
-                                                            <label><input type="radio" name="rating" value="3" checked> 3 |</label> 
-                                                            <label><input type="radio" name="rating" value="4"> 4 | </label>
-                                                            <label><input type="radio" name="rating" value="5"> 5</label>
-                                                            <br><br>
-                                                            <button class="btn btn-primary" type="submit"><fmt:message key="go"/></button>
-                                                        </form>
-                                                    </div>
-                                                </c:if>
+                                            <br><br>
+
+                                            <c:if test="${utente != null && !utente.proprietario(rec)}">
+
+                                                <button type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
+                                                <div id='nomediv<c:out value="${rec.getId()}"/>2' hidden>
+                                                    <form method="post" action="<%= request.getContextPath()%>/private/VotaRecensioneServlet?id_rec=<c:out value="${rec.getId()}"/>">
+                                                        <label><input type="radio" name="rating" value="1"> 1 |</label>
+                                                        <label><input type="radio" name="rating" value="2"> 2 |</label>
+                                                        <label><input type="radio" name="rating" value="3" checked> 3 |</label> 
+                                                        <label><input type="radio" name="rating" value="4"> 4 | </label>
+                                                        <label><input type="radio" name="rating" value="5"> 5</label>
+                                                        <br><br>
+                                                        <button class="btn btn-primary" type="submit"><fmt:message key="go"/></button>
+                                                    </form>
+                                                </div>
+                                            </c:if>
                                         </div>
                                     </div>
                                 </div>

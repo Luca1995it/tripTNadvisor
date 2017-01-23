@@ -180,6 +180,7 @@
                     <div class="col-md-6">
                         <form enctype='multipart/form-data' method="POST" action="<%= request.getContextPath()%>/private/AddRistorante">
                             <label class="label label-warning"><c:out value="${errMessageAdd}"/></label>
+                            <label class="label label-warning"><c:out value="${error}"/></label>
                             <br>
                             <label class="control-label"><fmt:message key="name"/></label>
                             <input type="text" class="form-control" name="nome"/>
@@ -213,8 +214,9 @@
                                 <option value="Normale"><fmt:message key="normal"/></option>
                                 <option value="Lussuoso"><fmt:message key="luxury"/></option>                                                    
                             </select>
-
+                            
                             <br>
+                            <label class="label label-warning"><c:out value="${errorFoto}"/></label>
                             <label class="control-label"><fmt:message key="upload.main.photo"/></label>
                             <input type='file' name='img1'>
                             <br>
