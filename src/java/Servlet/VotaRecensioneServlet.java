@@ -22,20 +22,29 @@ import javax.servlet.http.HttpSession;
 public class VotaRecensioneServlet extends HttpServlet {
 
     private DBManager manager;
-    
+
     @Override
     public void init() throws ServletException {
         // inizializza il DBManager dagli attributi di Application
-        this.manager = (DBManager)super.getServletContext().getAttribute("dbmanager");
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         int id_rec = Integer.parseInt(request.getParameter("id_rec"));
         Recensione rec = manager.getRecensione(id_rec);
         Utente utente = (Utente) session.getAttribute("utente");
-        rec.addVoto(utente,Integer.parseInt(request.getParameter("voto")));
+
+        if (!utente.justVotato(rec)) {
+            if (rec.addVoto(utente, Integer.parseInt(request.getParameter("rating")))) {
+                request.setAttribute("messageVotoRec", "Voto registrato correttamente");
+            } else {
+                request.setAttribute("messageVotoRec", "Errore nell'inserimento del voto");
+            }
+        }
+        request.setAttribute("messageVotoRec", "Non puoi rivotare questa recensione");
+
         request.getRequestDispatcher("/info.jsp").forward(request, response);
     }
 

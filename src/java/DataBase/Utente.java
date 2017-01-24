@@ -343,6 +343,42 @@ public abstract class Utente implements Serializable {
         }
         return res;
     }
+    
+    /**
+     * Serve a verificare se un utente ha già votato un ristorante oggi
+     *
+     * @param recensione
+     * @return true se l'utente ha già votato quel ristorante oggi, false
+     * altrimenti
+     */
+    public boolean justVotato(Recensione recensione) {
+        if (recensione == null) {
+            return false;
+        }
+        PreparedStatement stm = null;
+        ResultSet rs;
+        boolean res = false;
+        Date d;
+        try {
+            Date now = new Date(System.currentTimeMillis());
+            stm = manager.con.prepareStatement("select data from votorec where id_utente = ? AND id_rist = ? order by data desc { limit 1 }");
+            stm.setInt(1, getId());
+            stm.setInt(2, recensione.getId());
+            rs = stm.executeQuery();
+            res = rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
 
     /**
      * Questa funzione controlla se l'utente è proprietario di un ristorante
@@ -460,7 +496,6 @@ public abstract class Utente implements Serializable {
      * @param desc descrizione del ristorante
      * @param linkSito link al sito web del ristorante
      * @param fascia fascia del ristorante ("Economica","Normale","Lussuoso")
-     * @param spec specialità del ristorante
      * @param address indirizzo del ristorante
      * @param fotoPath prima foto del ristorante (sarà possibile aggiungerne
      * altre)

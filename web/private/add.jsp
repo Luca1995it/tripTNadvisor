@@ -197,6 +197,11 @@
                             <input type="text" name="addr" class="form-control"/>
                             <label class="label label-warning"><c:out value="${addrError}"/></label>
                             <br>
+                            <label class="control-label"><fmt:message key="spec"/></label>
+                            <div class="checkbox">
+                                <input type="checkbox" name="spec" >
+                            </div>
+                            <br>
                             <label class="control-label"><fmt:message key="economy.zone"/></label>:
                             <select class="form-group selectBar" name="fascia">
                                 <option value="Economico"><fmt:message key="economy"/></option>

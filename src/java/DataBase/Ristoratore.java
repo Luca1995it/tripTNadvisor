@@ -60,7 +60,7 @@ public class Ristoratore extends Utente {
                     + "as id, nuovafoto where id.id = nuovafoto.ID_foto");
             stm.setInt(1, getId());
             rs = stm.executeQuery();
-            while (rs.next()) { //DBManager manager, int id, Date data, Foto foto
+            while (rs.next()) {
                 res.add(new NuovaFoto(rs.getInt("id"), rs.getDate("data"), manager.getFoto(rs.getInt("id_foto")), manager));
             }
         } catch (SQLException ex) {

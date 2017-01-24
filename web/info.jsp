@@ -434,7 +434,7 @@
 
                                             <br><br>
 
-                                            <c:if test="${utente != null && !utente.proprietario(rec)}">
+                                            <c:if test="${utente != null && !utente.proprietario(rec) && !utente.justVotato(res)}">
 
                                                 <button type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
                                                 <div id='nomediv<c:out value="${rec.getId()}"/>2' hidden>
@@ -449,6 +449,7 @@
                                                     </form>
                                                 </div>
                                             </c:if>
+                                            <label class="control-label"><c:out value="${messageVotoRec}"/></label>
                                         </div>
                                     </div>
                                 </div>
