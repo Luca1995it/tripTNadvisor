@@ -181,26 +181,35 @@
                         <form enctype='multipart/form-data' method="POST" action="<%= request.getContextPath()%>/private/AddRistorante">
                             <label class="label label-warning"><c:out value="${errMessageAdd}"/></label>
                             <label class="label label-warning"><c:out value="${error}"/></label>
+                            <hr>
                             <br>
+                            
                             <label class="control-label"><fmt:message key="name"/></label>
                             <input type="text" class="form-control" name="nome"/>
                             <label class="label label-warning"><c:out value="${nomeError}"/></label>
+                            <hr>
                             <br>
                             <label class="control-label"><fmt:message key="description"/></label>
                             <textarea class="form-control" cols="80" rows="5" name="desc"></textarea>
+                            <hr>
                             <br>
                             <label class="control-label"><fmt:message key="web.site"/></label>
                             <input type="text" name="linkSito" class="form-control"/> 
                             <label class="label label-warning"><c:out value="${linkError}"/></label>
+                            <hr>
                             <br>
                             <label class="control-label"><fmt:message key="address"/></label>
                             <input type="text" name="addr" class="form-control"/>
                             <label class="label label-warning"><c:out value="${addrError}"/></label>
+                            <hr>
                             <br>
                             <label class="control-label"><fmt:message key="spec"/></label>
                             <div class="checkbox">
-                                <input type="checkbox" name="spec" >
+                                <c:forEach var="speci" items="${cucine}">
+                                    <input type="checkbox" name="spec" value="<c:out value="${speci}"/>"/> <fmt:message key='${speci}'/><br>
+                                </c:forEach>
                             </div>
+                            <hr>
                             <br>
                             <label class="control-label"><fmt:message key="economy.zone"/></label>:
                             <select class="form-group selectBar" name="fascia">
@@ -208,13 +217,16 @@
                                 <option value="Normale"><fmt:message key="normal"/></option>
                                 <option value="Lussuoso"><fmt:message key="luxury"/></option>                                                    
                             </select>
+                            <hr>
                             <br>
                             <label class="label label-warning"><c:out value="${errorFoto}"/></label>
                             <label class="control-label"><fmt:message key="upload.main.photo"/></label>
                             <input type='file' name='img1'>
+                            
                             <br>
                             <label class="control-label"><fmt:message key="photo.description"/></label>
                             <input type='text' name="fotoDescr" placeholder="Breve descrizione della fotografia" class="form-control"/>
+                            <hr>
                             <br>
                             <button class="btn btn-primary" type="submit"><fmt:message key="add.restaurant"/></button>
                         </form>   

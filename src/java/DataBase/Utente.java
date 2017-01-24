@@ -502,6 +502,7 @@ public abstract class Utente implements Serializable {
      * @param desc descrizione del ristorante
      * @param linkSito link al sito web del ristorante
      * @param fascia fascia del ristorante ("Economica","Normale","Lussuoso")
+     * @param spec
      * @param address indirizzo del ristorante
      * @param fotoPath prima foto del ristorante (sarà possibile aggiungerne
      * altre)
@@ -509,7 +510,7 @@ public abstract class Utente implements Serializable {
      * @return true se la registrazione del ristorante sul db ha avuto successo,
      * false altrimenti
      */
-    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String address, String fotoPath, String fotoDescr) {
+    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String [] spec, String address, String fotoPath, String fotoDescr) {
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
@@ -529,6 +530,9 @@ public abstract class Utente implements Serializable {
                 Ristorante rist = manager.getRistorante(rs.getInt("id"));
                 rist.addFoto(fotoPath, fotoDescr, this);
                 rist.setLuogo(address);
+                for(String x: spec){
+                    rist.addCucina(x);
+                }
                 res = true;
             }
         } catch (SQLException ex) {
