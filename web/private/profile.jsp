@@ -169,7 +169,7 @@
                         <div class="intro-text">
                             <span class="name"><fmt:message key="profile.of"/> <c:out value="${utente.getNomeCognome()}"/></span>
                             <hr class="star-light">
-                            <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" height="200" width="300" border="0" alt="Image not available"/>
+                            <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" height="200" width="300" border="0" alt="<fmt:message key="no.img"/>"/>
                             <div class="col-md-4">
                                 <label class="control-label"><fmt:message key="name"/>: <c:out value="${utente.getNome()}"/></label>
                                 <br>

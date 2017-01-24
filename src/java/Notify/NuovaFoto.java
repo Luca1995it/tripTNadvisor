@@ -48,8 +48,9 @@ public class NuovaFoto extends Notifica {
         PreparedStatement stm = null;
         boolean res = false;
         try {
+            System.out.println("Cancello con id: " + id);
             stm = manager.con.prepareStatement("delete from nuovafoto where id = ?");
-            stm.setInt(1, getId());
+            stm.setInt(1, id);
             stm.executeUpdate();
             res = true;
         } catch (SQLException ex) {

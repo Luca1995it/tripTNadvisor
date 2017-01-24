@@ -196,14 +196,12 @@
 
                         <div class="col-md-3">
                             <fmt:message key="filter.by.spec"/><br>
-                            <select class="form-group selectBar" name="spec">
-                                <option value="TuttiSpec">Tutti</option>
-                                <option value="Ristorante">Ristorante</option>
-                                <option value="Pizzeria">Pizzeria</option>
-                                <option value="Trattoria">Trattoria</option>
-                                <option value="Polleria">Polleria</option>
-                                <option value="Chinese">Chinese</option>
-                                <option value="Japanese">Japanese</option>                                                    
+                            <select class='form-group selectBar' name='spec'>
+                                <c:forEach var="speci" items="${cucine}">
+                                    <option value='<c:out value="${speci}"/>'>
+                                        <fmt:message key='${speci}'/>
+                                    </option>
+                                </c:forEach>
                             </select>
                         </div>
 
@@ -222,7 +220,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <a href="">
-                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="">
+                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="<fmt:message key="no.img"/>">
                             </a>
                         </div>
                         <div class="col-md-6">

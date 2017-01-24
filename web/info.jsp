@@ -189,7 +189,7 @@
                                     <c:set var="first" value="${true}" scope="session"/>
                                     <c:forEach var="foto" items="${ristorante.getFoto()}">
                                         <div class="item <c:if test="${first}"> active<c:set var="first" value="${false}" scope="session"/></c:if>">
-                                            <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="Chania">
+                                            <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
                                         </div>
                                     </c:forEach>
 
@@ -331,7 +331,7 @@
                         <label class="control-label"><c:out value="${messageVoto}"/></label>
                     </div>
                     <div class="col-md-4">
-                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.creaQR()}"/>" class="img-responsive qrCarouselImg" alt="Error creating QR Code">
+                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.creaQR()}"/>" class="img-responsive qrCarouselImg" alt="<fmt:message key="no.img"/>">
                     </div>
 
                 </div>
@@ -361,7 +361,7 @@
                                 <div class="col-md-4">
                                     <div class="caption">
                                         <div class="caption-content">
-                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt=" This review has kein image" height="200"/>
+                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt="<fmt:message key="no.img"/>" height="200"/>
                                             <br>
                                             <c:if test="${utente.proprietario(ristorante) && !rec.justSegnalato()}">
                                                 <label class="control-form">

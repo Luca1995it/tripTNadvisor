@@ -173,7 +173,7 @@
         <header>
             <div class="container">
                 <div class="row">
-                    <img class="img-responsive" src="<%= request.getContextPath()%>/img/profile.jpeg" alt="" height="200" width="400">
+                    <img class="img-responsive" src="<%= request.getContextPath()%>/img/profile.jpeg" alt="<fmt:message key="no.img"/>" height="200" width="400">
                     <div class="intro-text">
                         <span class="name"><fmt:message key="index.spot"/></span>
                     </div>
@@ -203,13 +203,10 @@
                                     <h5 class=""><fmt:message key="search.spec"/></h5>
                                     <div class="radio">
                                         <h5>
-                                            <label><input type="radio" name="spec" value="All" checked="checked"><fmt:message key="all"/> | </label>
-                                            <label><input type="radio" name="spec" value="Ristorante"><fmt:message key="restaurant"/> | </label>
-                                            <label><input type="radio" name="spec" value="Pizzeria"><fmt:message key="pizzeria"/> | </label>
-                                            <label><input type="radio" name="spec" value="Trattoria"><fmt:message key="tavern"/> | </label>
-                                            <label><input type="radio" name="spec" value="Polleria"><fmt:message key="polleria"/> | </label>
-                                            <label><input type="radio" name="spec" value="Chinese"><fmt:message key="chinese"/> | </label>
-                                            <label><input type="radio" name="spec" value="Japanese"><fmt:message key="japanese"/></label>
+                                            <label><input type="radio" name="spec" value="all" checked="checked"><fmt:message key="all"/></label>
+                                                <c:forEach var="speci" items="${cucine}">
+                                                <label><input type="radio" name="spec" value="<c:out value="${speci}"/>"><fmt:message key='${speci}'/></label>
+                                                </c:forEach>
                                         </h5>
 
                                     </div>
@@ -262,7 +259,7 @@
                                     <c:if test="${ristorante.getVoto() > 0}">
                                         <c:out value="${ristorante.getVoto()}"/>
                                     </c:if><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="" height="200" width="300">
+                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
                                 </a>
                             </h5>
                         </div>
@@ -290,7 +287,7 @@
                                     <c:out value="${ristorante.getNome()}"/><br>
                                     <fmt:message key="ristorante.getvoto"/>
                                     <c:out value="${ristorante.getVoto()}"/><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="" height="200" width="300">
+                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
                                 </a>
                             </h5>
                         </div>

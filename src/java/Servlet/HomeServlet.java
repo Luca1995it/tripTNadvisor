@@ -37,6 +37,7 @@ public class HomeServlet extends HttpServlet {
         session.setAttribute("mostVoted", manager.getRistorantiPiuVotati());
         session.setAttribute("mostSeen", manager.getRistorantiPiuVisitati());
         session.setAttribute("lastRec", manager.getUltimeRecensioni());
+        session.setAttribute("cucine", manager.getSpecialita());
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }
 

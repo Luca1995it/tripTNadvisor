@@ -448,6 +448,38 @@ public class DBManager implements Serializable {
         return res;
     }
 
+    public ArrayList<String> getSpecialita() {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        ArrayList<String> res = new ArrayList<>();
+        try {
+            stm = con.prepareStatement("select * from specialita");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                res.add(rs.getString("nome"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+
     /**
      * Controlla che un indirizzo venga riconosciuto correttamente da Google
      * Maps
@@ -535,7 +567,6 @@ public class DBManager implements Serializable {
         } else {
             original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), 50);
         }
-        System.out.println("1: " + original.size());
 
         boolean found = false;
         ArrayList<Ristorante> res = new ArrayList<>();
@@ -554,7 +585,6 @@ public class DBManager implements Serializable {
                         }
                         ArrayList<String> cucina = r.getCucina();
                         if (!similString(name, research, k) && !similString(addr, research, k) && !similString(cucina, research, k)) {
-                            System.out.println("remove" + i);
                             i.remove();
                         }
                     }
@@ -604,7 +634,6 @@ public class DBManager implements Serializable {
                     }
                     break;
             }
-            System.out.println("2: " + res.size());
             i = res.iterator();
             if (!spec.toLowerCase().equals("all")) {
                 while (i.hasNext()) {
@@ -621,9 +650,9 @@ public class DBManager implements Serializable {
         }
         return res;
     }
-    
-    private boolean similString(ArrayList<String> a, String b, int k) {
-        return a.stream().anyMatch((x) -> (similString(x,b,k)));
+
+    public boolean similString(ArrayList<String> a, String b, int k) {
+        return a.stream().anyMatch((x) -> (similString(x, b, k)));
     }
 
     public boolean similString(String a, String b, int k) {
@@ -1465,7 +1494,7 @@ public class DBManager implements Serializable {
         }
         return res;
     }
-    
+
     public ArrayList<String> getCucina(int id) {
         PreparedStatement stm = null;
         ResultSet rs = null;
@@ -1503,8 +1532,4 @@ public class DBManager implements Serializable {
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
-
-    
-    
-   
 }

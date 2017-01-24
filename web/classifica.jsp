@@ -168,7 +168,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <img class="img-responsive" src="img/profile.png" alt="">
+                        <img class="img-responsive" src="img/profile.png" alt="<fmt:message key="no.img"/>">
                         <div class="intro-text">
                             <span class="name"><fmt:message key="users.ranking"/></span>
                             <hr class="star-light">
@@ -184,7 +184,7 @@
                 <c:forEach var="utente" items="${classifica}">
                     <div class="row">
                         <div class="col-md-4">
-                            <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" alt="Image no available">
+                            <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" alt="<fmt:message key="no.img"/>">
                         </div>
                         <div class="col-md-4">
                             <label class="control-label"><fmt:message key="position.ranking"/>: <c:out value="${utente.getPosizioneClassifica()}"/></label>

@@ -240,35 +240,7 @@ public class Ristorante implements Serializable {
     }
     
     public ArrayList<String> getTutteCucine(){
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        ArrayList<String> res = new ArrayList<>();
-        try {
-            stm = manager.con.prepareStatement("select * from specialita");
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                res.add(rs.getString("nome"));
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return res;
+        return manager.getSpecialita();
     }
     
     /**

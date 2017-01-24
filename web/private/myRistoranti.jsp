@@ -169,7 +169,7 @@
                     <div class="row">
                         <div class="col-md-4">
                             <a href="">
-                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="Image not available">
+                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>">
                             </a>
                         </div>
                         <div class="col-md-4">

@@ -120,7 +120,7 @@ public class SearchServlet extends HttpServlet {
                 Ristorante tmp = (Ristorante) i.next();
                 if (!"TuttiFascia".equals(fascia) && (!tmp.getFascia().equals(fascia))) {
                     i.remove();
-                } else if (!"TuttiSpec".equals(spec) && (!tmp.getCucina().equals(spec))) {
+                } else if (!"all".equals(spec) && (!manager.similString(tmp.getCucina(),spec,1))) {
                     i.remove();
                 }
             }
