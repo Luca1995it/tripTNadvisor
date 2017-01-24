@@ -168,7 +168,6 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <img class="img-responsive" src="img/profile.png" alt="<fmt:message key="no.img"/>">
                         <div class="intro-text">
                             <span class="name"><fmt:message key="users.ranking"/></span>
                             <hr class="star-light">
@@ -177,6 +176,7 @@
                 </div>
             </div>
         </header>
+                            
 
         <!-- Portfolio Grid Section -->
         <section id="portfolio">

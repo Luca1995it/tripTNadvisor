@@ -413,11 +413,11 @@ public final class DBManager implements Serializable {
         PreparedStatement stm = null;
         ResultSet rs = null;
         try {
-            stm = con.prepareStatement("select utente.id as idU, mid from (select avg(voti.rate) as mid, recensione.ID_UTENTE as "
+            stm = con.prepareStatement("select utente.id as idU from (select avg(voti.rate) as mid, recensione.ID_UTENTE as "
                     + "id from (select recensione.id as id, avg(rating) as rate from recensione left join votorec on "
                     + "recensione.id = votorec.ID_REC group by recensione.id) as voti, recensione where voti.id = recensione.ID "
                     + "group by recensione.ID_UTENTE) as res right join (select * from utente where amministratore = false) as utente"
-                    + " on res.id = utente.ID order by mid, utente.id");
+                    + " on res.id = utente.ID order by mid desc nulls last");
             rs = stm.executeQuery();
 
             while (rs.next()) {

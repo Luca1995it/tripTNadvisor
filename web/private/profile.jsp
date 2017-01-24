@@ -199,7 +199,9 @@
                                     <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfigurazioneRistoranti"><fmt:message key="my.restaurant"/></a></label>
                                     <br>
                                     <label class="control-label"><a href="<%= request.getContextPath()%>/private/ConfigurazioneAddRistorante"><fmt:message key="add.restaurant"/></a></label>
-                                </c:if>
+                                    </c:if>
+                                <br>
+                                <label class="control-label"><a href="<%= request.getContextPath()%>/PreparaClassificaServlet"><fmt:message key="users.ranking"/></a></label>
                             </div>
                         </div>
                     </div>
