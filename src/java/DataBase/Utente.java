@@ -473,7 +473,7 @@ public abstract class Utente implements Serializable {
         ResultSet rs = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("INSERT INTO Ristorante (nome,descr,linksito,fascia) VALUES (?,?,?,?,?)");
+            stm = manager.con.prepareStatement("INSERT INTO Ristorante (nome,descr,linksito,fascia) VALUES (?,?,?,?)");
             stm.setString(1, nome);
             stm.setString(2, desc);
             stm.setString(3, linkSito);
