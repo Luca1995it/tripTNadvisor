@@ -314,7 +314,7 @@ public abstract class Utente implements Serializable {
      */
     public boolean justVotatoOggi(Ristorante ristorante) {
         if (ristorante == null) {
-            return false;
+            return true;
         }
         PreparedStatement stm = null;
         ResultSet rs;
@@ -353,16 +353,15 @@ public abstract class Utente implements Serializable {
      */
     public boolean justVotato(Recensione recensione) {
         if (recensione == null) {
-            return false;
+            return true;
         }
         PreparedStatement stm = null;
-        ResultSet rs;
+        ResultSet rs = null;
         boolean res = false;
         Date d;
         try {
-            Date now = new Date(System.currentTimeMillis());
-            stm = manager.con.prepareStatement("select data from votorec where id_utente = ? AND id_rist = ? order by data desc { limit 1 }");
-            stm.setInt(1, getId());
+            stm = manager.con.prepareStatement("select * from votorec where id_utente = ? AND id_rec = ?");
+            stm.setInt(1, id);
             stm.setInt(2, recensione.getId());
             rs = stm.executeQuery();
             res = rs.next();
@@ -372,6 +371,13 @@ public abstract class Utente implements Serializable {
             if (stm != null) {
                 try {
                     stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }

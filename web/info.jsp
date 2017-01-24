@@ -431,11 +431,8 @@
                                                     </form>
                                                 </div>
                                             </c:if>
-
                                             <br><br>
-
-                                            <c:if test="${utente != null && !utente.proprietario(rec) && !utente.justVotato(res)}">
-
+                                            <c:if test="${utente != null && !utente.proprietario(rec) && !utente.justVotato(rec)}">
                                                 <button type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
                                                 <div id='nomediv<c:out value="${rec.getId()}"/>2' hidden>
                                                     <form method="post" action="<%= request.getContextPath()%>/private/VotaRecensioneServlet?id_rec=<c:out value="${rec.getId()}"/>">
