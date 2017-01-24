@@ -197,7 +197,8 @@
                         <div class="col-md-3">
                             <fmt:message key="filter.by.spec"/><br>
                             <select class='form-group selectBar' name='spec'>
-                                <c:forEach var="speci" items="${cucine}">
+                                <option value='all'><fmt:message key="all"/></option>
+                                    <c:forEach var="speci" items="${cucine}">
                                     <option value='<c:out value="${speci}"/>'>
                                         <fmt:message key='${speci}'/>
                                     </option>

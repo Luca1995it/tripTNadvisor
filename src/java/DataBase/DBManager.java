@@ -104,7 +104,7 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
         try {
             //int id, String titolo, String testo, Date data, String commento, String fotoPath, DBManager manager
-            stm = con.prepareStatement("select * from recensione order by data desc { limit 5 }");
+            stm = con.prepareStatement("select * from recensione order by data desc nulls last { limit 5 }");
             rs = stm.executeQuery();
             while (rs.next()) {
                 res.add(new Recensione(rs.getInt("id"), rs.getString("titolo"), rs.getString("testo"), rs.getDate("data"), rs.getString("commento"), rs.getString("fotopath"), getRistorante(rs.getInt("id_rist")), getUtente(rs.getInt("id_utente")), this));
@@ -143,7 +143,7 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
         try {
             //int id, String titolo, String testo, Date data, String commento, String fotoPath, DBManager manager
-            stm = con.prepareStatement("select * from( select ristorante.ID, avg(rating) as media from votorist, ristorante where ristorante.ID = votorist.ID_RIST group by ristorante.ID) as res, ristorante as ristorante where res.id = ristorante.ID order by res.media DESC { limit 5 }");
+            stm = con.prepareStatement("select * from( select ristorante.ID, avg(rating) as media from votorist, ristorante where ristorante.ID = votorist.ID_RIST group by ristorante.ID) as res, ristorante as ristorante where res.id = ristorante.ID order by res.media desc nulls last { limit 5 }");
             rs = stm.executeQuery();
             while (rs.next()) {
                 res.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
@@ -181,7 +181,7 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
         try {
             //int id, String titolo, String testo, Date data, String commento, String fotoPath, DBManager manager
-            stm = con.prepareStatement("SELECT * FROM ristorante order by ristorante.VISITE desc { limit 5 }");
+            stm = con.prepareStatement("SELECT * FROM ristorante order by ristorante.VISITE desc nulls last { limit 5 } ");
             rs = stm.executeQuery();
             while (rs.next()) {
                 res.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
@@ -901,7 +901,7 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
         PreparedStatement stm = null;
         try {
-            stm = con.prepareStatement("select * from ristorante, (SELECT ristorante.id , sqrt((?-l.LAT)*(?-l.lat) + (?-l.LNG)*(?-l.LNG)) as distance FROM RISTORANTE as ristorante, Luogo as l where ristorante.id_luogo = l.id) as res where res.id = ristorante.id order by distance asc { limit ? }");
+            stm = con.prepareStatement("select * from ristorante, (SELECT ristorante.id , sqrt((?-l.LAT)*(?-l.lat) + (?-l.LNG)*(?-l.LNG)) as distance FROM RISTORANTE as ristorante, Luogo as l where ristorante.id_luogo = l.id) as res where res.id = ristorante.id order by distance asc nulls last { limit ? }");
             stm.setDouble(1, lat);
             stm.setDouble(2, lat);
             stm.setDouble(3, lng);

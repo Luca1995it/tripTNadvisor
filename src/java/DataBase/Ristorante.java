@@ -439,7 +439,7 @@ public class Ristorante implements Serializable {
         ResultSet rs = null;
         int res = 1;
         try {
-            stm = manager.con.prepareStatement("select avg(1.0 * votorist.rating) as media, ristorante.ID as id_rist from (select ristorante.* from ristorante, luogo where ristorante.id_luogo = luogo.id and luogo.city = ?) as ristorante Left Join votorist on (ristorante.ID = votorist.ID_RIST) group by (ristorante.ID) order by media asc");
+            stm = manager.con.prepareStatement("select avg(1.0 * votorist.rating) as media, ristorante.ID as id_rist from (select ristorante.* from ristorante, luogo where ristorante.id_luogo = luogo.id and luogo.city = ?) as ristorante Left Join votorist on (ristorante.ID = votorist.ID_RIST) group by (ristorante.ID) order by media desc nulls last");
             stm.setString(1, luogo.getCity());
             rs = stm.executeQuery();
             while (rs.next()) {
