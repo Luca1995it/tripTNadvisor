@@ -904,7 +904,7 @@ public class Ristorante implements Serializable {
      * @return true se il voto è stato aggiunto con successo, false altrimenti
      */
     public boolean addVoto(Utente user, int rating) {
-        if (utente == null) {
+        if (user == null) {
             return false;
         }
         PreparedStatement stm = null;

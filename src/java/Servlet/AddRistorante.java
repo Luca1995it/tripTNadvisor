@@ -83,21 +83,16 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("errorFoto", "devi riempire anche i campi della prima fotografia");
             }
 
-            if (!linkSito.equals("")) {
-                if (!manager.okLuogo(addr)) {
-                    tornaIndietro = true;
-                    request.setAttribute("addrError", "Indirizzo invalido, inseriscine uno del tipo  - via e numero civico, città, CAP");
-                }
-            }
-
             if (manager.esisteNomeRistorante(nome)) {
                 request.setAttribute("nomeError", "Nome già in uso");
                 tornaIndietro = true;
             }
 
-            if (manager.esisteLinkSitoRistorante(linkSito)) {
-                request.setAttribute("linkError", "Link già in uso");
-                tornaIndietro = true;
+            if (linkSito.equals("")){
+                if (manager.esisteLinkSitoRistorante(linkSito)) {
+                    request.setAttribute("linkError", "Link già in uso");
+                    tornaIndietro = true;
+                }
             }
 
             if (tornaIndietro) {
@@ -109,7 +104,7 @@ public class AddRistorante extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -123,10 +118,14 @@ public class AddRistorante extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (ParseException ex) {
-            Logger.getLogger(AddRistorante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddRistorante.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(AddRistorante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddRistorante.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -143,10 +142,14 @@ public class AddRistorante extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (ParseException ex) {
-            Logger.getLogger(AddRistorante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddRistorante.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (SQLException ex) {
-            Logger.getLogger(AddRistorante.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddRistorante.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

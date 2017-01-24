@@ -35,10 +35,11 @@ public class VotaRistoranteServlet extends HttpServlet {
         Utente user = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
         int rating = Integer.parseInt(request.getParameter("rating"));
+        System.out.println(user.justVotatoOggi(ristorante));
         if(!ristorante.addVoto(user, rating)) request.setAttribute("errMessageVoto", "Non puoi rivotare oggi, torna domani");
         else request.setAttribute("messageVoto","Il tuo voto è stato registrato");
+        
         request.getRequestDispatcher("/info.jsp").forward(request, response);
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

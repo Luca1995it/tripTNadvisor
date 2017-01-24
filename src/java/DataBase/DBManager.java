@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class DBManager implements Serializable {
+public final class DBManager implements Serializable {
 
     //transient == non viene serializzato
     public transient Connection con;
@@ -37,12 +37,9 @@ public class DBManager implements Serializable {
         }
         try {
             con = DriverManager.getConnection(dburl, user, password);
+            updateAutocomplete();
         } catch (SQLException ex) {
-            try {
-                con = DriverManager.getConnection(dburl, user, password);
-            } catch (SQLException ex1) {
-                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
