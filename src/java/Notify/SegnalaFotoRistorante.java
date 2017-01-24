@@ -43,7 +43,6 @@ public class SegnalaFotoRistorante extends Notifica {
     }
 
     @Override
-    @SuppressWarnings("empty-statement")
     public boolean accetta() {
         ristorante.removeFoto(foto);
         return done();

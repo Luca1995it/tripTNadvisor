@@ -260,6 +260,14 @@
         <servlet-name>PrivacyServlet</servlet-name>
         <servlet-class>Servlet.PrivacyServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CambiaCucinaServlet</servlet-name>
+        <servlet-class>Servlet.CambiaCucinaServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ConfiguraCucine</servlet-name>
+        <servlet-class>Servlet.ConfiguraCucine</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ConfigurazioneProfilo</servlet-name>
         <url-pattern>/private/ConfigurazioneProfilo</url-pattern>
@@ -374,7 +382,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ApplicaNotificaServlet</servlet-name>
-        <url-pattern>/privateAdministrator/ApplicaNotificaServlet</url-pattern>
+        <url-pattern>/privateRistoratore/ApplicaNotificaServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>GetMapsData</servlet-name>
@@ -387,6 +395,14 @@
     <servlet-mapping>
         <servlet-name>PrivacyServlet</servlet-name>
         <url-pattern>/PrivacyServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CambiaCucinaServlet</servlet-name>
+        <url-pattern>/privateRistoratore/CambiaCucinaServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ConfiguraCucine</servlet-name>
+        <url-pattern>/privateRistoratore/ConfiguraCucine</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,10 +6,8 @@
 package Servlet;
 
 import DataBase.DBManager;
-import DataBase.Language;
 import DataBase.Utente;
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,9 +32,7 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(true);
-        Utente utente = (Utente) session.getAttribute("utente");
-       
+        HttpSession session = request.getSession();
 
         session.setAttribute("mostVoted", manager.getRistorantiPiuVotati());
         session.setAttribute("mostSeen", manager.getRistorantiPiuVisitati());

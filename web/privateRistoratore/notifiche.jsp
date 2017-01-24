@@ -179,17 +179,23 @@
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <img src="<%= request.getContextPath()%><c:out value="${notifica.getFotoPath()}"/>" alt="<fmt:message key="no.image"/>">
+                                                <img src="<%= request.getContextPath()%><c:out value="${notifica.getFotoPath()}"/>" alt="<fmt:message key="no.image"/>" width="250">
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="control-label"><c:out value="${notifica.getData()}"/></label>
                                                 <label class="control-label"><c:out value="${notifica.toString()}"/></label>
                                             </div>
                                             <div class="col-md-4">
-                                                
-                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="accept"/></button></form>
-                                                <br>
-                                                <form action="<%= request.getContextPath()%>/privateAdministrator/ApplicaNotificaServlet" method="post"><input name="accept" value="false" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="regret"/></button></form>
+                                                <c:choose>
+                                                    <c:when test="${utente.isAmministratore()}">
+                                                        <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="accept"/></button></form>
+                                                        <br>
+                                                        <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="false" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="regret"/></button></form>
+                                                    </c:when>
+                                                    <c:when test="${utente.isRistoratore()}">
+                                                        <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="delete"/></button></form>
+                                                    </c:when>
+                                                </c:choose>
                                             </div>
                                         </div>
                                     </c:forEach>

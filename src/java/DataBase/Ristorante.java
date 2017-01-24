@@ -53,7 +53,7 @@ public class Ristorante implements Serializable {
         return fascia;
     }
 
-    public String getCucina() {
+    public ArrayList<String> getCucina() {
         return cucina;
     }
 
@@ -71,11 +71,7 @@ public class Ristorante implements Serializable {
      * @return
      */
     public Ristoratore getUtente() {
-        if (utente == null) {
-            return null;
-        } else {
-            return (Ristoratore) utente;
-        }
+        return (Ristoratore) utente;
     }
 
     private final int id;
@@ -83,7 +79,7 @@ public class Ristorante implements Serializable {
     private final String descr;
     private final String linksito;
     private final String fascia;
-    private final String cucina;
+    private final ArrayList<String> cucina;
     public String dirName;
     private final Utente utente;
     private int visite;
@@ -103,7 +99,7 @@ public class Ristorante implements Serializable {
      * @param visite numero di visite del ristorante
      * @param luogo
      */
-    public Ristorante(int id, String nome, String descr, String linksito, String fascia, String cucina, Utente utente, int visite, Luogo luogo, DBManager manager) {
+    public Ristorante(int id, String nome, String descr, String linksito, String fascia, ArrayList<String> cucina, Utente utente, int visite, Luogo luogo, DBManager manager) {
         this.luogo = luogo;
         this.id = id;
         this.nome = nome;
@@ -165,6 +161,116 @@ public class Ristorante implements Serializable {
         return utente != null;
     }
 
+    public boolean addCucina(String spec) {
+        System.out.println("Add:" + spec);
+        boolean res = false;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            stm = manager.con.prepareStatement("select id from specialita where nome = ?");
+            stm.setString(1, spec);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                stm = manager.con.prepareStatement("insert into specrist (id_spec,id_rist) values (?,?)");
+                stm.setInt(1,rs.getInt("id"));
+                stm.setInt(2, id);
+                stm.executeUpdate();
+                res = true;
+                cucina.add(spec);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return res;
+    }
+
+    public boolean removeCucina(String spec){
+        System.out.println("Remove:" + spec);
+        boolean res = false;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        try {
+            stm = manager.con.prepareStatement("select id from specialita where nome = ?");
+            stm.setString(1, spec);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                stm = manager.con.prepareStatement("delete from specrist where id_spec = ? and id_rist = ?");
+                stm.setInt(1,rs.getInt("id"));
+                stm.setInt(2, id);
+                stm.executeUpdate();
+                res = true;
+                cucina.remove(spec);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    public ArrayList<String> getTutteCucine(){
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        ArrayList<String> res = new ArrayList<>();
+        try {
+            stm = manager.con.prepareStatement("select * from specialita");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                res.add(rs.getString("nome"));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+    
     /**
      * Aggiunge una visita al ristorante
      *
@@ -192,6 +298,7 @@ public class Ristorante implements Serializable {
         visite++;
         return res;
     }
+    
 
     /**
      *
@@ -199,23 +306,21 @@ public class Ristorante implements Serializable {
      * @param address nuovo indirizzo
      * @param linksito nuovo sito web
      * @param descr nuova descrizione
-     * @param cucina nuova cucina
      * @param fascia nuova fascia
      * @return true se i dati sono stati aggiornati correttamente, false
      * altrimenti
      */
-    public boolean updateData(String nome, String address, String linksito, String descr, String cucina, String fascia) {
+    public boolean updateData(String nome, String address, String linksito, String descr, String fascia) {
         if (!manager.okLuogo(address)) {
             return false;
         }
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("update ristorante set nome = ?, linksito = ?, descr = ?, cucina = ?, fascia = ? where id = ?");
+            stm = manager.con.prepareStatement("update ristorante set nome = ?, linksito = ?, descr = ?, fascia = ? where id = ?");
             stm.setString(1, nome);
             stm.setString(2, linksito);
             stm.setString(3, descr);
-            stm.setString(4, cucina);
             stm.setString(5, fascia);
             stm.setInt(6, getId());
             stm.executeUpdate();
@@ -253,13 +358,13 @@ public class Ristorante implements Serializable {
             String req = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address.replace(' ', '+') + "&key=" + manager.googleKey;
             JSONObject json = readJsonFromUrl(req);
             if (json.getString("status").equals("OK")) {
-                
+
                 stm = manager.con.prepareStatement("delete from Luogo where id = (select id_luogo from ristorante where id = ?)");
                 stm.setInt(1, getId());
                 stm.executeUpdate();
 
                 stm = manager.con.prepareStatement("INSERT INTO Luogo (lat,lng,state,area1,area2,city,street,street_number) VALUES (?,?,?,?,?,?,?,?)");
-                
+
                 JSONArray faddress = json.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
                 JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
 
@@ -321,7 +426,7 @@ public class Ristorante implements Serializable {
         ResultSet rs = null;
         float res = 0;
         try {
-            stm = manager.con.prepareStatement("SELECT avg(1.0 * rating) AS mediavoto FROM votorist WHERE id_rist=?");
+            stm = manager.con.prepareStatement("SELECT avg(1.0 * rating) AS mediavoto FROM votorist WHERE id_rist = ?");
             stm.setInt(1, getId());
             rs = stm.executeQuery();
             if (rs.next()) {
@@ -670,12 +775,12 @@ public class Ristorante implements Serializable {
             stm.setInt(4, getId());
             stm.setInt(5, utente.getId());
             stm.executeUpdate();
-            
+
             stm = manager.con.prepareStatement("select * from foto where fotopath = ? and descr = ?");
             stm.setString(1, path);
             stm.setString(2, descr);
             rs = stm.executeQuery();
-            if(rs.next()){ //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
+            if (rs.next()) { //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
                 res = new Foto(rs.getInt("id"), rs.getString("fotopath"), rs.getString("descr"), rs.getDate("data"), manager.getUtente(rs.getInt("id_utente")), this, manager);
             }
         } catch (SQLException ex) {
@@ -695,7 +800,7 @@ public class Ristorante implements Serializable {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
         }
         return res;
     }
@@ -724,7 +829,7 @@ public class Ristorante implements Serializable {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            
+
         }
         return res;
     }
@@ -859,8 +964,6 @@ public class Ristorante implements Serializable {
         return res;
     }
 
-    
-
     //cerca i 20 ristoranti più vicini
     public ArrayList<Ristorante> getVicini() {
         if (luogo != null) {
@@ -874,9 +977,9 @@ public class Ristorante implements Serializable {
     public boolean nowOpen() {
         return true;
     }
-    
+
     @Override
-    public Ristorante clone() throws CloneNotSupportedException{
+    public Ristorante clone() throws CloneNotSupportedException {
         super.clone();
         Ristorante clone = new Ristorante(id, nome, descr, linksito, fascia, cucina, utente, visite, luogo, manager);
         return clone;

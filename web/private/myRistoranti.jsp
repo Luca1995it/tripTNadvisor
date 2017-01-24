@@ -173,14 +173,19 @@
                             </a>
                         </div>
                         <div class="col-md-4">
-                            <label class="control-label"><a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>">
+                            <label class="control-label">
+                                <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>">
                                     <c:out value="${ristorante.getNome()}"/>
                                 </a>
                             </label>
                             <br>
                             <label class="control-label"><fmt:message key="fascia"/>: <c:out value="${ristorante.getFascia()}"/></label>
                             <br>
-                            <label class="control-label"><fmt:message key="cucina"/>: <c:out value="${ristorante.getCucina()}"/></label>
+                            <label class="control-label"><fmt:message key="cucina"/>: 
+                                <c:forEach var="cucina" items="${ristorante.getCucina()}">
+                                    <fmt:message key="${cucina}"/>,
+                                </c:forEach>
+                            </label>
                             <br>
                             <label class="control-label"><fmt:message key="rank"/>: 
                                 <c:choose>
@@ -204,6 +209,8 @@
                             <label class="control-label"><fmt:message key="actions.ristorante"/></label>
                             <br>
                             <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraOrariApertura?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.orari"/></a></label>
+                            <br>
+                            <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraCucine?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.spec"/></a></label>
                             <br>
                             <label class="control-label"><a href="<%= request.getContextPath()%>/private/LoadRistoranteServlet?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="modify.restaurant"/></a></label>
                             <br>

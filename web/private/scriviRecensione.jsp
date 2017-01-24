@@ -179,21 +179,14 @@
                                 <input type="text" name="titolo" placeholder="Titolo" class="form-control">
                                 <br>
 
-                                <label class="control-label"><fmt:message key="contenuto"/></label>
+                                <label class="control-label"><fmt:message key="description"/></label>
                                 <textarea cols="50" rows="5" name="rec" placeholder="<fmt:message key="insert.review"/>" class="form-control"></textarea>
                                 <br>
 
                                 <label class="control-label"><fmt:message key="add.foto"/></label>
-                                <fmt:message key="insert.photo"/><input type='file' name='img'>
-                                <br>
-
-                                <label class="control-label"><fmt:message key="vote.restaurant"/></label>
-                                <br>
-                                <label><input type="radio" name="voto" value="1"> 1 |</label>
-                                <label><input type="radio" name="voto" value="2"> 2 |</label>
-                                <label><input type="radio" name="voto" value="3" checked> 3 |</label> 
-                                <label><input type="radio" name="voto" value="4"> 4 | </label>
-                                <label><input type="radio" name="voto" value="5"> 5</label>
+                                
+                                <input type='file' name='img'>
+                                
                                 <br><br>
                                 <button type="submit" class="btn btn-primary"><fmt:message key="invia"/></button><br>
                             </form>

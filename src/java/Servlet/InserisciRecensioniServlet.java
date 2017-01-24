@@ -55,7 +55,6 @@ public class InserisciRecensioniServlet extends HttpServlet {
             name = (String) files.nextElement();
         }
 
-        int voto = Integer.parseInt(multi.getParameter("voto"));
         String titolo = multi.getParameter("titolo");
         String recensione = multi.getParameter("rec");
 

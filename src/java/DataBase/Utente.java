@@ -318,7 +318,7 @@ public abstract class Utente implements Serializable {
         }
         PreparedStatement stm = null;
         ResultSet rs;
-        boolean res = true;
+        boolean res = false;
         Date d;
         try {
             Date now = new Date(System.currentTimeMillis());
@@ -468,17 +468,16 @@ public abstract class Utente implements Serializable {
      * @return true se la registrazione del ristorante sul db ha avuto successo,
      * false altrimenti
      */
-    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String spec, String address, String fotoPath, String fotoDescr) {
+    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String address, String fotoPath, String fotoDescr) {
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("INSERT INTO Ristorante (nome,descr,linksito,cucina,fascia) VALUES (?,?,?,?,?)");
+            stm = manager.con.prepareStatement("INSERT INTO Ristorante (nome,descr,linksito,fascia) VALUES (?,?,?,?,?)");
             stm.setString(1, nome);
             stm.setString(2, desc);
             stm.setString(3, linkSito);
-            stm.setString(4, spec);
-            stm.setString(5, fascia);
+            stm.setString(4, fascia);
             stm.executeUpdate();
 
             stm = manager.con.prepareStatement("select id from Ristorante where nome = ? AND linkSito = ?");
@@ -487,7 +486,6 @@ public abstract class Utente implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) {
                 Ristorante rist = manager.getRistorante(rs.getInt("id"));
-                System.out.println("Ristooooo: " + rist);
                 rist.addFoto(fotoPath, fotoDescr, this);
                 rist.setLuogo(address);
                 res = true;

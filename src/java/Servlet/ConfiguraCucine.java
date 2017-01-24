@@ -8,6 +8,7 @@ package Servlet;
 import DataBase.DBManager;
 import DataBase.Ristorante;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author lucadiliello
  */
-public class ConfiguraOrariApertura extends HttpServlet {
+public class ConfiguraCucine extends HttpServlet {
 
     private DBManager manager;
 
@@ -39,7 +40,7 @@ public class ConfiguraOrariApertura extends HttpServlet {
             if (ristorante != null) {
                 session.setAttribute("ristorante", ristorante);
             }
-            request.getRequestDispatcher("/privateRistoratore/orari.jsp").forward(request, response);
+            request.getRequestDispatcher("/privateRistoratore/spec.jsp").forward(request, response);
         } catch (NumberFormatException | NullPointerException e) {
             request.getRequestDispatcher("/private/myRistoranti.jsp").forward(request, response);
         }

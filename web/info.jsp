@@ -220,7 +220,11 @@
                             <div class="caption-content">
                                 <label class="control-label"><a href="<c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
                                 <br>
-                                <label class="control-label"><fmt:message key="cooking.type"/>: <c:out value="${ristorante.getCucina()}"/></label>
+                                <label class="control-label"><fmt:message key="cooking.type"/>: 
+                                    <c:forEach var="cucina" items="${ristorante.getCucina()}">
+                                        <fmt:message key="${cucina}"/>,
+                                    </c:forEach>
+                                </label>
                                 <br>
                                 <label class="control-label"><fmt:message key="economy.zone"/>: <c:out value="${ristorante.getFascia()}"/></label>
                                 <br>
@@ -290,7 +294,9 @@
                                 <c:when test="${utente.proprietario(ristorante)}">
                                     <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/modificaRist.jsp"><fmt:message key="modify.restaurant"/></a></label>
                                     <br>
-                                    <label class="control-label"><a href="/privateRistoratore/ConfiguraOrariApertura?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.orari"/></a></label>
+                                    <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraOrariApertura?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.orari"/></a></label>
+                                    <br>
+                                    <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraCucine?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.spec"/></a></label>
                                     <br>
                                 </c:when>
                                 <c:otherwise>
@@ -310,19 +316,15 @@
 
                     <div class="col-md-4">
                         <c:if test="${utente != null && !utente.justVotatoOggi(ristorante) && !utente.proprietario(ristorante)}">
-                            <button class="btn btn-primary" onClick="visualizza('nomediv')"><fmt:message key="vote"/></button>
-                            <br><br>
-                            <div id="nomediv" hidden>
-                                <form method="post" action="<%= request.getContextPath()%>/private/VotaRistoranteServlet?">
-                                    <label><input type="radio" name="rating" value="1"> 1 |</label>
-                                    <label><input type="radio" name="rating" value="2"> 2 |</label>
-                                    <label><input type="radio" name="rating" value="3" checked> 3 |</label> 
-                                    <label><input type="radio" name="rating" value="4"> 4 | </label>
-                                    <label><input type="radio" name="rating" value="5"> 5</label>
-                                    <br><br>
-                                    <button class="btn btn-primary" type="submit"><fmt:message key="go"/></button>
-                                </form>
-                            </div>
+                            <form method="post" action="<%= request.getContextPath()%>/private/VotaRistoranteServlet?">
+                                <label><input type="radio" name="rating" value="1"> 1 |</label>
+                                <label><input type="radio" name="rating" value="2"> 2 |</label>
+                                <label><input type="radio" name="rating" value="3" checked> 3 |</label> 
+                                <label><input type="radio" name="rating" value="4"> 4 | </label>
+                                <label><input type="radio" name="rating" value="5"> 5</label>
+                                <br><br>
+                                <button class="btn btn-primary" type="submit"><fmt:message key="vote"/></button>
+                            </form>
                         </c:if>
                         <label class="label-danger"><c:out value="${errMessageVoto}"/></label>
                         <br>

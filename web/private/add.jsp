@@ -197,24 +197,12 @@
                             <input type="text" name="addr" class="form-control"/>
                             <label class="label label-warning"><c:out value="${addrError}"/></label>
                             <br>
-                            <br>
-                            <label class="control-label"><fmt:message key="specialty"/></label>:
-                            <select class="form-group selectBar" name="spec">
-                                <option value="Ristorante"><fmt:message key="restaurant"/></option>
-                                <option value="Pizzeria"><fmt:message key="pizzeria"/></option>
-                                <option value="Trattoria"><fmt:message key="tavern"/></option>
-                                <option value="Polleria"><fmt:message key="polleria"/></option>
-                                <option value="Chinese"><fmt:message key="chinese"/></option>
-                                <option value="Japanese"><fmt:message key="giapponese"/></option>                                                    
-                            </select>
-                            <br>
                             <label class="control-label"><fmt:message key="economy.zone"/></label>:
                             <select class="form-group selectBar" name="fascia">
                                 <option value="Economico"><fmt:message key="economy"/></option>
                                 <option value="Normale"><fmt:message key="normal"/></option>
                                 <option value="Lussuoso"><fmt:message key="luxury"/></option>                                                    
                             </select>
-                            
                             <br>
                             <label class="label label-warning"><c:out value="${errorFoto}"/></label>
                             <label class="control-label"><fmt:message key="upload.main.photo"/></label>

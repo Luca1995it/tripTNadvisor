@@ -35,12 +35,12 @@ public class NuovaFoto extends Notifica {
 
     @Override
     public boolean rifiuta() {
-        return false;
+        return done();
     }
 
     @Override
     public boolean accetta() {
-        return false;
+        return done();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class NuovaFoto extends Notifica {
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("remove from nuovafoto where id = ?");
+            stm = manager.con.prepareStatement("delete from nuovafoto where id = ?");
             stm.setInt(1, getId());
             stm.executeUpdate();
             res = true;

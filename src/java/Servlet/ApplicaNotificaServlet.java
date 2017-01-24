@@ -8,6 +8,7 @@ package Servlet;
 import Notify.Notifica;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +33,10 @@ public class ApplicaNotificaServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-
+        
         String sc = request.getParameter("accept");
         String id = request.getParameter("id_not");
+        
         ArrayList<Notifica> res = (ArrayList<Notifica>) session.getAttribute("notifiche");
         if (id == null || sc == null || res == null) {
             request.setAttribute("errMessageNotifica", "errore applicazione notifica, riprova");
@@ -42,7 +44,7 @@ public class ApplicaNotificaServlet extends HttpServlet {
             boolean scelta = Boolean.parseBoolean(sc);
             int id_not = Integer.parseInt(request.getParameter("id_not"));
 
-            Notifica notifica = res.get(searchArrayList(res, id_not));
+            Notifica notifica = searchArrayList(res, id_not);
 
             if (scelta) {
                 notifica.accetta();
@@ -57,15 +59,13 @@ public class ApplicaNotificaServlet extends HttpServlet {
         request.getRequestDispatcher("/privateRistoratore/notifiche.jsp").forward(request, response);
     }
 
-    int searchArrayList(ArrayList<Notifica> r, int id_not) {
-        int i = 0;
+    Notifica searchArrayList(ArrayList<Notifica> r, int id_not) {
         for (Notifica n : r) {
             if (n.getId() == id_not) {
-                return i;
+                return n;
             }
-            i++;
         }
-        return -1;
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

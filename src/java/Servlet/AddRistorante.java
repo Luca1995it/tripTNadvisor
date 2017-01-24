@@ -60,7 +60,7 @@ public class AddRistorante extends HttpServlet {
         String nome = multi.getParameter("nome");
         String descr = multi.getParameter("desc");
         String linkSito = multi.getParameter("linkSito");
-        String spec = multi.getParameter("spec");
+
         String addr = multi.getParameter("addr");
         String fascia = multi.getParameter("fascia");
         String fotoPath = dirName + "/" + multi.getFilesystemName(name);
@@ -68,7 +68,7 @@ public class AddRistorante extends HttpServlet {
 
         boolean tornaIndietro = false;
 
-        if (nome == null || descr == null || linkSito == null || spec == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null) {
+        if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null) {
             request.setAttribute("errMessageAdd", "errore interno, riprovare");
             request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
         } else {
@@ -103,7 +103,7 @@ public class AddRistorante extends HttpServlet {
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
-                utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, fotoPath, fotoDescr);
+                utente.addRistorante(nome, descr, linkSito, fascia, addr, fotoPath, fotoDescr);
                 request.getRequestDispatcher("/HomeServlet").forward(request, response);
             }
         }

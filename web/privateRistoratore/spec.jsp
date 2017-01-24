@@ -6,9 +6,7 @@
 <fmt:setBundle basename="Resources.string" />
 
 <html lang="en">
-
     <head>
-
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,12 +14,12 @@
         <meta name="author" content="">
 
         <title>
-            <fmt:message key="results"/>
+            <fmt:message key="orari"/>
             <c:if test="${utente != null}">
                 - <c:out value="${utente.getNomeCognome()}"/>
             </c:if>
         </title>
-        <c:set value="/result.jsp" scope="session" var="lastPage"/>
+        <c:set value="/privateRistoratore/orari.jsp" scope="session" var="lastPage"/>
 
         <!-- Bootstrap Core CSS -->
         <link href="<%= request.getContextPath()%>/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -34,6 +32,8 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
+        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/show_hidden.js"></script>
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -45,7 +45,6 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/src/jquery.autocomplete.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/autocomplete.txt"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
-
     </head>
 
     <body id="page-top" class="index">
@@ -170,90 +169,54 @@
         <header>
             <div class="container">
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="intro-text">
+                            <span class="name"><fmt:message key="spec.di"/> <c:out value="${ristorante.getNome()}"/></span>
+                            <hr class="star-light">
+                            <label class="label-danger"><c:out value="${errSpec}"/></label>
 
-                    <form action="<%= request.getContextPath()%>/SearchServlet" method="GET">
-                        <div class="col-md-3">
-                            <fmt:message key="order.by"/><br>
-                            <select class="form-group selectBar" name="tipo">
-                                <option value="NoOrdine">NessunOrdine</option>
-                                <option value="pos">Posizione in classifica</option>
-                                <option value="pre">Fascia di prezzo</option>
-                                <option value="alf">Alfabeticamente</option>
-                            </select><br>
-                            <input type="radio" name="ordine" value="1" checked>Crescente
-                            <input type="radio" name="ordine" value="2">Decrescente
-                        </div>
+                            <c:forEach var="cucina" items="${ristorante.getCucina()}">
+                                <label class="control-label">
+                                    <fmt:message key="${cucina}"/> - 
+                                    <a href="<%= request.getContextPath()%>/privateRistoratore/CambiaCucinaServlet?spec=<c:out value="${cucina}"/>">
+                                        <fmt:message key="rimuovi.spec"/>
+                                    </a>
+                                </label>
+                                <br>
+                            </c:forEach>
+                            <br><br>
+                            <button class="btn btn-primary" onclick="visualizza('formDays')"><fmt:message key="add.spec"/></button>
+                            <div id="formDays" style='display: none'>
+                                <form method="POST" action="<%= request.getContextPath()%>/privateRistoratore/CambiaCucinaServlet">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <select class='form-group selectBar' name='spec'>
+                                                        <c:forEach var="speci" items="${ristorante.getTutteCucine()}">
+                                                            <option value='<c:out value="${speci}"/>'>
+                                                                <fmt:message key='${speci}'/>
+                                                            </option>
+                                                        </c:forEach>
 
-                        <div class="col-md-3">
-                            <fmt:message key="filter.by.money"/><br>
-                            <select class="form-group selectBar" name="fascia">
-                                <option value="TuttiFascia">Tutti</option>
-                                <option value="Economico">Economico</option>
-                                <option value="Normale">Normale</option>
-                                <option value="Lussuoso">Lussuoso</option>                                                    
-                            </select>
-                        </div>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4"></div>
+                                    </div>
+                                    <br>
+                                    <button class="btn btn-primary" type="submit"><fmt:message key="submit"/></button>
+                                </form>
 
-                        <div class="col-md-3">
-                            <fmt:message key="filter.by.spec"/><br>
-                            <select class="form-group selectBar" name="spec">
-                                <option value="TuttiSpec">Tutti</option>
-                                <option value="Ristorante">Ristorante</option>
-                                <option value="Pizzeria">Pizzeria</option>
-                                <option value="Trattoria">Trattoria</option>
-                                <option value="Polleria">Polleria</option>
-                                <option value="Chinese">Chinese</option>
-                                <option value="Japanese">Japanese</option>                                                    
-                            </select>
+                            </div>
                         </div>
-
-                        <div class="col-md-3">
-                            <button class="btn btn-primary" type="submit"><fmt:message key="filter.go"/></button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Portfolio Grid Section -->
-        <section>
-            <div class="container">
-                <c:forEach var="ristorante" items="${result}">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <a href="">
-                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="">
-                            </a>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>">
-                                <c:out value="${ristorante.getNome()}"/>
-                            </a>
-                            <br>
-                            <fmt:message key="fascia"/>: <c:out value="${ristorante.getFascia()}"/><br>
-                            <fmt:message key="cucina"/>: 
-                            <c:forEach var="cucina" items="${ristorante.getCucina()}">
-                                <fmt:message key="${cucina}"/>,
-                            </c:forEach>
-                            <br>
-                            <fmt:message key="voto"/>: <c:out value="${ristorante.getVoto()}"/><br>
-                            <fmt:message key="ranking"/>:
-                            <c:choose>
-                                <c:when test="${ristorante.getLuogo() != null}">
-                                    <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
-                                </c:when>
-                                <c:otherwise>
-                                    <fmt:message key="non.disponibile"/>
-                                </c:otherwise>
-                            </c:choose><br>
-                            <fmt:message key="reviews"/>: <c:out value="${ristorante.getRecensioni().size()}"/><br>
-                        </div>
-
-                    </div>
-                    <div class="row"><hr></div>
-                    </c:forEach>
-            </div>
-        </section>
 
 
         <!-- Footer -->
@@ -292,6 +255,7 @@
                 <i class="fa fa-chevron-up"></i>
             </a>
         </div>
+
 
 
         <!-- jQuery -->
