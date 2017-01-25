@@ -174,40 +174,40 @@
                             <span class="name"><c:out value="${ristorante.getNome()}"/></span>
                             <hr class="star-light">
                             <c:choose>
-                                <c:when test="${ristorante.getFoto().size() == 0}">
-                                <div id="myCarousel" class="carousel slide" data-ride="carousel">
-                                    <!-- Indicators -->
-                                    <c:set var="first" value="${true}" scope="session"/>
-
-                                    <ol class="carousel-indicators">
-                                        <li data-target="#myCarousel" data-slide-to="<c:out value="${i}"/>" class="active"></li>
-                                            <c:forEach var="i" begin="1" end="${ristorante.getFoto().size()-1}">
-                                            <li data-target="#myCarousel" data-slide-to="<c:out value="${i}"/>"></li>
-                                            </c:forEach>
-                                    </ol>
-
-                                    <!-- Wrapper for slides -->
-                                    <div class="carousel-inner" role="listbox">
+                                <c:when test="${ristorante.getFoto().size() > 0}">
+                                    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                                        <!-- Indicators -->
                                         <c:set var="first" value="${true}" scope="session"/>
-                                        <c:forEach var="foto" items="${ristorante.getFoto()}">
-                                            <div class="item <c:if test="${first}"> active<c:set var="first" value="${false}" scope="session"/></c:if>">
-                                                <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
-                                            </div>
-                                        </c:forEach>
 
+                                        <ol class="carousel-indicators">
+                                            <li data-target="#myCarousel" data-slide-to="<c:out value="${i}"/>" class="active"></li>
+                                                <c:forEach var="i" begin="1" end="${ristorante.getFoto().size()-1}">
+                                                <li data-target="#myCarousel" data-slide-to="<c:out value="${i}"/>"></li>
+                                                </c:forEach>
+                                        </ol>
+
+                                        <!-- Wrapper for slides -->
+                                        <div class="carousel-inner" role="listbox">
+                                            <c:set var="first" value="${true}" scope="session"/>
+                                            <c:forEach var="foto" items="${ristorante.getFoto()}">
+                                                <div class="item <c:if test="${first}"> active<c:set var="first" value="${false}" scope="session"/></c:if>">
+                                                    <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
+                                                </div>
+                                            </c:forEach>
+
+                                        </div>
+
+                                        <!-- Left and right controls -->
+                                        <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                            <span class="sr-only"><fmt:message key="previous"/></span>
+                                        </a>
+                                        <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                            <span class="sr-only"><fmt:message key="next"/></span>
+                                        </a>
                                     </div>
-
-                                    <!-- Left and right controls -->
-                                    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-                                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                        <span class="sr-only"><fmt:message key="previous"/></span>
-                                    </a>
-                                    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-                                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                        <span class="sr-only"><fmt:message key="next"/></span>
-                                    </a>
-                                </div>
-                            </c:when>
+                                </c:when>
                                 <c:otherwise>
                                     <label class="control-label">Non ci sono immagini disponibili</label>
                                 </c:otherwise>
