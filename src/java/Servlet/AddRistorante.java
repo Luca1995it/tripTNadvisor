@@ -81,7 +81,7 @@ public class AddRistorante extends HttpServlet {
 
             if (fotoPath.equals("") || fotoDescr.equals("")) {
                 tornaIndietro = true;
-                request.setAttribute("errorFoto", "devi riempire anche i campi della prima fotografia");
+                request.setAttribute("errorFoto", "Devi riempire anche i campi della prima fotografia");
             }
 
             if (manager.esisteNomeRistorante(nome)) {
