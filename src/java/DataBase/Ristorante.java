@@ -158,7 +158,33 @@ public class Ristorante implements Serializable {
      * @return true se il ristorante appartiene ad un utente, false altrimenti
      */
     public boolean reclamato() {
-        return utente != null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        boolean res = true;
+        try {
+            stm = manager.con.prepareStatement("select * from richiestaristorante where id_rist = ?");
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            res = rs.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
     }
 
     public boolean addCucina(String spec) {

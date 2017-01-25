@@ -89,7 +89,7 @@ public class AddRistorante extends HttpServlet {
                 tornaIndietro = true;
             }
 
-            if (linkSito.equals("")){
+            if (!linkSito.equals("")){
                 if (manager.esisteLinkSitoRistorante(linkSito)) {
                     request.setAttribute("linkError", "Link già in uso");
                     tornaIndietro = true;

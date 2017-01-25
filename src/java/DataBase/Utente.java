@@ -264,6 +264,7 @@ public abstract class Utente implements Serializable {
         return res;
     }
 
+    
     /**
      *
      * @param ristorante ristorante per cui ci vuole controllare se l'utente ha
@@ -273,11 +274,11 @@ public abstract class Utente implements Serializable {
      */
     public boolean justRecensito(Ristorante ristorante) {
         if (ristorante == null) {
-            return false;
+            return true;
         }
         PreparedStatement stm = null;
         ResultSet rs = null;
-        boolean res = false;
+        boolean res = true;
         try {
             stm = manager.con.prepareStatement("select * from recensione where id_rist = ? AND id_utente = ?");
             stm.setInt(1, ristorante.getId());
@@ -357,7 +358,7 @@ public abstract class Utente implements Serializable {
         }
         PreparedStatement stm = null;
         ResultSet rs = null;
-        boolean res = false;
+        boolean res = true;
         Date d;
         try {
             stm = manager.con.prepareStatement("select * from votorec where id_utente = ? AND id_rec = ?");
