@@ -174,7 +174,7 @@
                             <span class="name"><fmt:message key="orari.di"/> <c:out value="${ristorante.getNome()}"/></span>
                             <hr class="star-light">
                             <label class="label-danger"><c:out value="${errOrario}"/></label>
-                            
+
                             <c:forEach var="days" items="${ristorante.getDays()}">
                                 <label class="control-label">
                                     <c:out value="${days.getGiornoString()}"/>: 
@@ -229,9 +229,18 @@
                                     </div>
                                     <br>
                                     <button class="btn btn-primary" type="submit"><fmt:message key="submit"/></button>
+
+
                                 </form>
 
+
                             </div>
+                            <form action="<%= request.getContextPath()%>/ConfigurazioneRistorante" method="get">
+                                <input type="text" name="id_rist" value="<c:out value="${ristorante.getId()}"/>" hidden/>
+                                <button class="btn btn-default" type="submit">
+                                    <fmt:message key="mod.complete"/>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

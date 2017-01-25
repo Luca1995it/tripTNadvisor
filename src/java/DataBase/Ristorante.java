@@ -158,6 +158,8 @@ public class Ristorante implements Serializable {
      * @return true se il ristorante appartiene ad un utente, false altrimenti
      */
     public boolean reclamato() {
+        if(utente != null) return true;
+        
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = true;

@@ -38,8 +38,9 @@ public class ReclamaRistoranteServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
-        
-        if (manager.newNotReclamaRistorante(ristorante, utente)) {
+        if (ristorante.reclamato()) {
+            request.setAttribute("notMessage", "Il ristorante è già stato reclamato da un altro utente");
+        } else if (manager.newNotReclamaRistorante(ristorante, utente)) {
             request.setAttribute("notMessage", "La tua richiesta sarà valutata da un amministratore");
         } else {
             request.setAttribute("notMessage", "Richiesta fallita, riprova");

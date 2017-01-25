@@ -211,6 +211,13 @@
                                 </form>
 
                             </div>
+                            <br><br>
+                            <form action="<%= request.getContextPath()%>/ConfigurazioneRistorante" method="get">
+                                <input type="text" name="id_rist" value="<c:out value="${ristorante.getId()}"/>" hidden/>
+                                <button class="btn btn-default" type="submit">
+                                    <fmt:message key="mod.complete"/>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
