@@ -321,8 +321,8 @@ public class Ristorante implements Serializable {
             stm.setString(1, nome);
             stm.setString(2, linksito);
             stm.setString(3, descr);
-            stm.setString(5, fascia);
-            stm.setInt(6, getId());
+            stm.setString(4, fascia);
+            stm.setInt(5, getId());
             stm.executeUpdate();
             res = setLuogo(address);
         } catch (SQLException ex) {

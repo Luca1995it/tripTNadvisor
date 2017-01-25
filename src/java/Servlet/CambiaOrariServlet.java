@@ -8,7 +8,6 @@ package Servlet;
 import DataBase.DBManager;
 import DataBase.Ristorante;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Time;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -52,15 +51,15 @@ public class CambiaOrariServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
-
-        Time apertura;
-        Time chiusura;
-
-        apertura = new Time(Integer.parseInt(request.getParameter("apH")), Integer.parseInt(request.getParameter("apM")), 0);
-        chiusura = new Time(Integer.parseInt(request.getParameter("chH")), Integer.parseInt(request.getParameter("chM")), 0);
-        int day = Integer.parseInt(request.getParameter("day"));
         if (ristorante != null) {
-            ristorante.addTimesToRistorante(day,apertura, chiusura);
+            int numero = Integer.parseInt(request.getParameter("numin"));
+
+            for (int i = 0; i < numero; i++) {
+                Time apertura = new Time(Integer.parseInt(request.getParameter("apH" + i)), Integer.parseInt(request.getParameter("apM" + i)), 0);
+                Time chiusura = new Time(Integer.parseInt(request.getParameter("chH" + i)), Integer.parseInt(request.getParameter("chM" + i)), 0);
+                int day = Integer.parseInt(request.getParameter("day" + i));
+                ristorante.addTimesToRistorante(day, apertura, chiusura);
+            }
         }
         request.getRequestDispatcher("/privateRistoratore/orari.jsp").forward(request, response);
     }

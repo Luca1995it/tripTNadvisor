@@ -43,11 +43,11 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery-1.8.2.min.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery.mockjax.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/src/jquery.autocomplete.js"></script>
-        <script type="text/javascript" src="<%= request.getContextPath()%>/autocomplete.txt"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
+        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/orari.js"></script>
     </head>
 
-    <body id="page-top" class="index">
+    <body id="page-top" class="index" onload="setting('<fmt:message key='monday'/>','<fmt:message key='tuesday'/>','<fmt:message key='wednesday'/>','<fmt:message key='thursday'/>','<fmt:message key='friday'/>','<fmt:message key='saturday'/>','<fmt:message key='sunday'/>','<fmt:message key='add.from'/>','<fmt:message key='add.to'/>')">
 
         <!-- Navigation -->
         <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
@@ -193,48 +193,14 @@
                             <div id="formDays" style='display: none'>
                                 <br>
                                 <form method="POST" action="<%= request.getContextPath()%>/privateRistoratore/CambiaOrariServlet">
-                                    <div class="row">
-                                        <div class="col-md-4"></div>
-                                        <div class="col-md-4">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <select class='form-group selectBar' name='day'>
-                                                        <option value='0'><fmt:message key="monday"/></option>
-                                                        <option value='1'><fmt:message key="tuesday"/></option>
-                                                        <option value='2'><fmt:message key="wednesday"/></option>
-                                                        <option value='3'><fmt:message key="thursday"/></option>
-                                                        <option value='4'><fmt:message key="friday"/></option>
-                                                        <option value='5'><fmt:message key="saturday"/></option>
-                                                        <option value='6'><fmt:message key="sunday"/></option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="row">
-                                                        <div class="col-md-2"><label class="control-form"><fmt:message key="add.from"/></label></div>
-                                                        <div class="col-md-4"><input type='text' name='apH' maxlength='2' class="form-control"/></div>
-                                                        <div class="col-md-1"><label class="control-label"> : </label></div>
-                                                        <div class="col-md-4"><input type='text' name='apM' maxlength='2' class="form-control"/></div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row">
-                                                        <div class="col-md-2"><label class="control-form"><fmt:message key="add.to"/></label></div>
-                                                        <div class="col-md-4"><input type='text' name='chH' maxlength='2' class="form-control"/></div>
-                                                        <div class="col-md-1"><label class="control-label"> : </label></div>
-                                                        <div class="col-md-4"><input type='text' name='chM' maxlength='2' class="form-control"/></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4"></div>
-                                    </div>
+                                    <label class="control-label"><fmt:message key="number.field"/>:</label> <input type="number" style="color: #666666" id="numberInputs" name="numin" onchange="aggiorna()" min="0" max="14" value="0"/>
+                                    <br><br>
+                                    <div id="contenitore"></div>
                                     <br>
                                     <button class="btn btn-primary" type="submit"><fmt:message key="submit"/></button>
-
-
                                 </form>
-
-
                             </div>
+                                <br><br>
                             <form action="<%= request.getContextPath()%>/ConfigurazioneRistorante" method="get">
                                 <input type="text" name="id_rist" value="<c:out value="${ristorante.getId()}"/>" hidden/>
                                 <button class="btn btn-default" type="submit">
