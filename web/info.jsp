@@ -174,7 +174,7 @@
                             <span class="name"><c:out value="${ristorante.getNome()}"/></span>
                             <hr class="star-light">
                             <c:choose>
-                                <c:when test="${ristorante.getFoto.size() == 0}">
+                                <c:when test="${ristorante.getFoto().size() == 0}">
                                 <div id="myCarousel" class="carousel slide" data-ride="carousel">
                                     <!-- Indicators -->
                                     <c:set var="first" value="${true}" scope="session"/>

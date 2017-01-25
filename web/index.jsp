@@ -259,7 +259,7 @@
                                     <c:if test="${ristorante.getVoto() > 0}">
                                         <c:out value="${ristorante.getVoto()}"/>
                                     </c:if><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
                                 </a>
                             </h5>
                         </div>
@@ -287,7 +287,7 @@
                                     <c:out value="${ristorante.getNome()}"/><br>
                                     <fmt:message key="ristorante.getvoto"/>
                                     <c:out value="${ristorante.getVoto()}"/><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" width="200" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
                                 </a>
                             </h5>
                         </div>
@@ -317,7 +317,7 @@
                                     (<c:out value="${rec.getUtente().getReputazione()}"/>), 
                                     <c:out value="${rec.getData()}"/><br>
                                     <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>"><br>
+                                    <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>"><br>
                                     <i><c:out value="${rec.getTesto()}"/></i><br><br>
                                     <c:if test="${rec.getCommento()!=null}">
                                         <fmt:message key="answer"/><br><c:out value="${rec.getCommento()}"/>
