@@ -227,6 +227,10 @@
                             <div class="caption-content">
                                 <label class="control-label"><a href="<c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
                                 <br>
+                                <c:if test="${ristorante.getLuogo() != null}">
+                                    <label class="control-label"><fmt:message key="address"/>: <c:out value="${ristorante.getLuogo().getAddress()}"/>"></label>
+                                    <br>
+                                </c:if>
                                 <label class="control-label"><fmt:message key="cooking.type"/>: 
                                     <c:forEach var="cucina" items="${ristorante.getCucina()}">
                                         <fmt:message key="${cucina}"/>,
@@ -271,6 +275,10 @@
                                         <c:out value="${ristorante.getVoto()}"/>
                                     </c:if>
                                 </label>
+                                <c:if test="${ristorante.getUtente() != null}">
+                                    <br>
+                                    <label class="control-label"><fmt:message key="prop"/>: <c:out value="${ristorante.getUtente().getNomeCognome()}"/></label>
+                                </c:if>
                                 <br><br>
                                 <label class="control-label"><fmt:message key="orari.apertura"/></label>
                                 <br>

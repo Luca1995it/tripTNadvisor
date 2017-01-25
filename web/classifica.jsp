@@ -176,17 +176,17 @@
                 </div>
             </div>
         </header>
-                            
+
 
         <!-- Portfolio Grid Section -->
         <section id="portfolio">
             <div class="container">
                 <c:forEach var="utente" items="${classifica}">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" alt="<fmt:message key="no.img"/>" height="200">
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label class="control-label"><fmt:message key="position.ranking"/>: <c:out value="${utente.getPosizioneClassifica()}"/></label>
                             <br>
                             <label class="control-label"><c:out value="${utente.getNome()}"/></label>
@@ -195,12 +195,26 @@
                             <br>
                             <label class="control-label"><fmt:message key="rank"/>: <c:out value="${utente.getReputazione()}"/></label>
                         </div>
-                        <div class="col-md-4">
-                            
-                        </div>
                     </div>
                 </c:forEach>
             </div>
+
+            <c:if test="${utente != null}">
+                <form action="<%= request.getContextPath()%>/ConfigurazioneProfilo" method="get">
+                    <button class="btn btn-default" type="submit">
+                        <fmt:message key="go.profile"/>
+                    </button>
+                </form>
+            </c:if>
+            <br>
+            <form action="<%= request.getContextPath()%>/HomeServlet" method="get">
+                <button class="btn btn-default" type="submit">
+                    <fmt:message key="go.home"/>
+                </button>
+            </form>
+
+
+
         </section>
 
 

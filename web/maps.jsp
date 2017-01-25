@@ -172,6 +172,12 @@
                         <div id="gmaps-canvas" style="color: black"></div>
                     </div>
                 </div>
+                <form action="<%= request.getContextPath()%>/ConfigurazioneRistorante" method="get">
+                    <input type="text" name="id_rist" value="<c:out value="${ristorante.getId()}"/>" hidden/>
+                    <button class="btn btn-default" type="submit">
+                        <fmt:message key="return.info"/>
+                    </button>
+                </form>
             </div>
         </header>
 

@@ -191,14 +191,20 @@
                                                         <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="accept"/></button></form>
                                                         <br>
                                                         <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="false" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="regret"/></button></form>
-                                                    </c:when>
-                                                    <c:when test="${utente.isRistoratore()}">
+                                                        </c:when>
+                                                        <c:when test="${utente.isRistoratore()}">
                                                         <form action="<%= request.getContextPath()%>/privateRistoratore/ApplicaNotificaServlet" method="post"><input name="accept" value="true" hidden/><input name="id_not" value="<c:out value="${notifica.getId()}"/>" hidden/><button class="btn btn-primary" type="submit"><fmt:message key="delete"/></button></form>
-                                                    </c:when>
-                                                </c:choose>
+                                                        </c:when>
+                                                    </c:choose>
                                             </div>
                                         </div>
                                     </c:forEach>
+                                    <br><br><hr><hr>
+                                    <form action="<%= request.getContextPath()%>/ConfigurazioneProfilo" method="get">
+                                        <button class="btn btn-default" type="submit">
+                                            <fmt:message key="return.profile"/>
+                                        </button>
+                                    </form>
                                 </div>
                                 <div class="col-md-2"></div>
                             </div>

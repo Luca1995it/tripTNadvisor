@@ -164,6 +164,7 @@
         <!-- Portfolio Grid Section -->
         <section>
             <div class="container">
+                <label class="label-info"><c:out value="${message}"/></label>
                 <c:forEach var="ristorante" items="${listaMyRist}">
                     <div class="row"><hr></div>
                     <div class="row">
@@ -201,8 +202,10 @@
                             <br>
                             <label class="control-label"><fmt:message key="reviews"/> <c:out value="${ristorante.getRecensioni().size()}"/></label>
                             <br>
+                            <!-- non bisogna mostrare mappe su google.com
                             <label class="control-label"><a href="http://www.google.com/maps/?q=<c:out value="${ristorante.getLuogo().getAddress()}"/>"><fmt:message key="map"/></a></label>
                             <br>
+                            -->
                             <label class="control-label"><fmt:message key="web.site"/> <a href="<c:out value="${ristorante.getLinksito()}"/>"><c:out value="${ristorante.getLinksito()}"/></a></label>
                         </div>
                         <div class="col-md-4">
