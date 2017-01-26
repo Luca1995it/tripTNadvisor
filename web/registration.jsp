@@ -68,7 +68,7 @@
                         <c:choose>
                             <c:when test="${utente == null}">
                                 <li>
-                                    <a href="<%= request.getContextPath()%>/registration.jsp"><fmt:message key="welcome.visitor"/></a>
+                                    <a href="<%= request.getContextPath()%>/registration.jsp"><fmt:message key="welcome.visitors"/></a>
                                 </li>
                             </c:when>
                             <c:when test="${utente.isAmministratore()}">
