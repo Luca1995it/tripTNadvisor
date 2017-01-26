@@ -55,10 +55,15 @@ public class CambiaOrariServlet extends HttpServlet {
             int numero = Integer.parseInt(request.getParameter("numin"));
 
             for (int i = 0; i < numero; i++) {
-                Time apertura = new Time(Integer.parseInt(request.getParameter("apH" + i)), Integer.parseInt(request.getParameter("apM" + i)), 0);
-                Time chiusura = new Time(Integer.parseInt(request.getParameter("chH" + i)), Integer.parseInt(request.getParameter("chM" + i)), 0);
-                int day = Integer.parseInt(request.getParameter("day" + i));
-                ristorante.addTimesToRistorante(day, apertura, chiusura);
+                if (!(request.getParameter("apH" + i) == null || request.getParameter("apM" + i) == null)) {
+                    if (!(request.getParameter("apH" + i).equals("") || request.getParameter("apM" + i).equals(""))) {
+                        Time apertura = new Time(Integer.parseInt(request.getParameter("apH" + i)), Integer.parseInt(request.getParameter("apM" + i)), 0);
+                        Time chiusura = new Time(Integer.parseInt(request.getParameter("chH" + i)), Integer.parseInt(request.getParameter("chM" + i)), 0);
+                        int day = Integer.parseInt(request.getParameter("day" + i));
+                        ristorante.addTimesToRistorante(day, apertura, chiusura);
+                    }
+                }
+
             }
         }
         request.getRequestDispatcher("/privateRistoratore/orari.jsp").forward(request, response);

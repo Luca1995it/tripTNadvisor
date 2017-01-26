@@ -568,83 +568,80 @@ public final class DBManager implements Serializable {
         boolean found = false;
         ArrayList<Ristorante> res = new ArrayList<>();
 
-        for (int k = 3; (k < 15) && !found; k++) {
-            res = (ArrayList<Ristorante>) original.clone();
-            Iterator i = res.iterator();
-            switch (tipo) {
-                case "all":
-                    while (i.hasNext()) {
-                        Ristorante r = (Ristorante) i.next();
-                        String name = r.getNome().toLowerCase();
-                        String addr = "";
-                        if (r.getLuogo() != null) {
-                            addr = r.getLuogo().getAddress().toLowerCase();
-                        }
-                        ArrayList<String> cucina = r.getCucina();
-                        if (!similString(name, research, k) && !similString(addr, research, k) && !similString(cucina, research, k)) {
-                            i.remove();
-                        }
-                    }
-                    break;
-
-                case "nome":
-                    while (i.hasNext()) {
-                        Ristorante r = (Ristorante) i.next();
-                        String name = r.getNome().toLowerCase();
-                        if (!similString(name, research, k)) {
-                            i.remove();
-                        }
-                    }
-                    break;
-
-                case "addr":
-                    while (i.hasNext()) {
-                        Ristorante r = (Ristorante) i.next();
-                        if (r.getLuogo() != null) {
-                            String addr = r.getLuogo().getSmallZone().toLowerCase();
-                            if (!similString(addr, research, k)) {
-                                i.remove();
-                            }
-                        }
-                    }
-                    break;
-
-                case "zona":
-                    while (i.hasNext()) {
-                        Ristorante r = (Ristorante) i.next();
-                        if (r.getLuogo() != null) {
-                            String addr = r.getLuogo().getGeographicZone().toLowerCase();
-                            if (!similString(addr, research, k)) {
-                                i.remove();
-                            }
-                        }
-                    }
-                    break;
-
-                case "spec":
-                    while (i.hasNext()) {
-                        Ristorante r = (Ristorante) i.next();
-                        ArrayList<String> cucina = r.getCucina();
-                        if (!similString(cucina, research, k)) {
-                            i.remove();
-                        }
-                    }
-                    break;
-            }
-            i = res.iterator();
-            if (!spec.toLowerCase().equals("all")) {
+        int k = 2;
+        res = (ArrayList<Ristorante>) original.clone();
+        Iterator i = res.iterator();
+        switch (tipo) {
+            case "all":
                 while (i.hasNext()) {
                     Ristorante r = (Ristorante) i.next();
+                    String name = r.getNome().toLowerCase();
+                    String addr = "";
+                    if (r.getLuogo() != null) {
+                        addr = r.getLuogo().getAddress().toLowerCase();
+                    }
                     ArrayList<String> cucina = r.getCucina();
-                    if (!similString(cucina, spec, k)) {
+                    if (!similString(name, research, k) && !similString(addr, research, k) && !similString(cucina, research, k)) {
                         i.remove();
                     }
                 }
-            }
-            if (res.size() > 0) {
-                found = true;
+                break;
+
+            case "nome":
+                while (i.hasNext()) {
+                    Ristorante r = (Ristorante) i.next();
+                    String name = r.getNome().toLowerCase();
+                    if (!similString(name, research, k)) {
+                        i.remove();
+                    }
+                }
+                break;
+
+            case "addr":
+                while (i.hasNext()) {
+                    Ristorante r = (Ristorante) i.next();
+                    if (r.getLuogo() != null) {
+                        String addr = r.getLuogo().getSmallZone().toLowerCase();
+                        if (!similString(addr, research, k)) {
+                            i.remove();
+                        }
+                    }
+                }
+                break;
+
+            case "zona":
+                while (i.hasNext()) {
+                    Ristorante r = (Ristorante) i.next();
+                    if (r.getLuogo() != null) {
+                        String addr = r.getLuogo().getGeographicZone().toLowerCase();
+                        if (!similString(addr, research, k)) {
+                            i.remove();
+                        }
+                    }
+                }
+                break;
+
+            case "spec":
+                while (i.hasNext()) {
+                    Ristorante r = (Ristorante) i.next();
+                    ArrayList<String> cucina = r.getCucina();
+                    if (!similString(cucina, research, k)) {
+                        i.remove();
+                    }
+                }
+                break;
+        }
+        i = res.iterator();
+        if (!spec.toLowerCase().equals("all")) {
+            while (i.hasNext()) {
+                Ristorante r = (Ristorante) i.next();
+                ArrayList<String> cucina = r.getCucina();
+                if (!similString(cucina, spec, k)) {
+                    i.remove();
+                }
             }
         }
+
         return res;
     }
 

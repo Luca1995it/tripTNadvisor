@@ -359,10 +359,6 @@ public class Ristorante implements Serializable {
             JSONObject json = readJsonFromUrl(req);
             if (json.getString("status").equals("OK")) {
 
-                stm = manager.con.prepareStatement("delete from Luogo where id = (select id_luogo from ristorante where id = ?)");
-                stm.setInt(1, getId());
-                stm.executeUpdate();
-
                 stm = manager.con.prepareStatement("INSERT INTO Luogo (lat,lng,state,area1,area2,city,street,street_number) VALUES (?,?,?,?,?,?,?,?)");
 
                 JSONArray faddress = json.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
