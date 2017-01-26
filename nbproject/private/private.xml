@@ -3,12 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Ristorante.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/info.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Recensione.java</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/privateRistoratore/orari.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/registration.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/WEB-INF/web.xml</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/customScript/orari.js</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Ristorante.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/NuovaPassword.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/info.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Luogo.java</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/CambiaOrariServlet.java</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/ConfigurazioneRistoranti.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/index.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/result.jsp</file>
         </group>
     </open-files>
 </project-private>

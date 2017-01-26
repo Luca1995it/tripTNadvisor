@@ -221,7 +221,7 @@
                     <div class="row">
                         <c:if test="${ristorante.getFoto().size() > 0}">
                             <div class="col-md-6">
-                                <a href="">
+                                <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>">
                                     <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="<fmt:message key="no.img"/>">
                                 </a>
                             </div>
