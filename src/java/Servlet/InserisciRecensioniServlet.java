@@ -72,16 +72,20 @@ public class InserisciRecensioniServlet extends HttpServlet {
 
         if (tornaIndietro) {
             request.getRequestDispatcher("/private/scriviRecensione.jsp").forward(request, response);
+        } else {
+            String fotoPath;
+            if (multi.getFilesystemName(name) == null || multi.getFilesystemName(name).equals("")) {
+                fotoPath = manager.defaultFolder + "/rec_default.png";
+            } else {
+                fotoPath = dirName + "/" + multi.getFilesystemName(name);
+            }
+
+            Recensione rec = ristorante.addRecensione(titolo, recensione, utente);
+            rec.addFoto(fotoPath);
+            manager.newNotNuovaRecensione(rec);
+
+            request.getRequestDispatcher("/info.jsp").forward(request, response);
         }
-        String fotoPath;
-        if(multi.getFilesystemName(name) == null || multi.getFilesystemName(name).equals("")) fotoPath = manager.defaultFolder + "/rec_default.png";
-        else fotoPath = dirName + "/" + multi.getFilesystemName(name);
-
-        Recensione rec = ristorante.addRecensione(titolo, recensione, utente);
-        rec.addFoto(fotoPath);
-        manager.newNotNuovaRecensione(rec);
-
-        request.getRequestDispatcher("/info.jsp").forward(request, response);
 
     }
 
