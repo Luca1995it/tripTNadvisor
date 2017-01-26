@@ -768,7 +768,7 @@ public class Ristorante implements Serializable {
             stm.setString(2, descr);
             Date current = Date.valueOf(LocalDate.now());
             stm.setDate(3, current);
-            stm.setInt(4, getId());
+            stm.setInt(4, id);
             stm.setInt(5, utente.getId());
             stm.executeUpdate();
 
