@@ -259,7 +259,9 @@
                                     <c:if test="${ristorante.getVoto() > 0}">
                                         <c:out value="${ristorante.getVoto()}"/>
                                     </c:if><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                    <c:if test="${ristorante.getFoto().size() > 0}">
+                                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200">
+                                    </c:if>
                                 </a>
                             </h5>
                         </div>
@@ -287,7 +289,9 @@
                                     <c:out value="${ristorante.getNome()}"/><br>
                                     <fmt:message key="ristorante.getvoto"/>
                                     <c:out value="${ristorante.getVoto()}"/><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" width="200" class="img-responsive" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                    <c:if test="${ristorante.getFoto().size() > 0}">
+                                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                    </c:if>
                                 </a>
                             </h5>
                         </div>

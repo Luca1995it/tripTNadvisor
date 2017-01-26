@@ -257,7 +257,6 @@
                             <div class="caption-content">
                                 <label class="control-label"><fmt:message key="ranking"/>:
                                     <c:choose>
-
                                         <c:when test="${ristorante.getLuogo() != null}">
                                             <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/></label>
                                         </c:when>

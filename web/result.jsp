@@ -198,7 +198,7 @@
                             <fmt:message key="filter.by.spec"/><br>
                             <select class='form-group selectBar' name='spec'>
                                 <option value='all'><fmt:message key="all"/></option>
-                                    <c:forEach var="speci" items="${cucine}">
+                                <c:forEach var="speci" items="${cucine}">
                                     <option value='<c:out value="${speci}"/>'>
                                         <fmt:message key='${speci}'/>
                                     </option>
@@ -219,11 +219,13 @@
             <div class="container">
                 <c:forEach var="ristorante" items="${result}">
                     <div class="row">
-                        <div class="col-md-6">
-                            <a href="">
-                                <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="<fmt:message key="no.img"/>">
-                            </a>
-                        </div>
+                        <c:if test="${ristorante.getFoto().size() > 0}">
+                            <div class="col-md-6">
+                                <a href="">
+                                    <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive infoCarouselImg" alt="<fmt:message key="no.img"/>">
+                                </a>
+                            </div>
+                        </c:if>
                         <div class="col-md-6">
                             <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>">
                                 <c:out value="${ristorante.getNome()}"/>

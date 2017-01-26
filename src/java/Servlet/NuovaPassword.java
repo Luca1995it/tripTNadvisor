@@ -36,25 +36,27 @@ import java.util.logging.Logger;
 public class NuovaPassword extends HttpServlet {
 
     private DBManager manager;
-    
+
     @Override
     public void init() throws ServletException {
         // inizializza il DBManager dagli attributi di Application
-        this.manager = (DBManager)super.getServletContext().getAttribute("dbmanager");
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
-        
+
         try {
             String mail = request.getParameter("mail");
             Utente utente = manager.getUtente(mail);
             System.out.println(utente);
             String newPass = generatePassword(8);
-            if(utente.cambiaPassword(newPass)){
-                sendMail("Nuova password: " + newPass, utente.getEmail(), session);
+            if (utente != null) {
+                if (utente.cambiaPassword(newPass)) {
+                    sendMail("Nuova password: " + newPass, utente.getEmail(), session);
+                }
             }
         } catch (NullPointerException | MessagingException ex) {
             Logger.getLogger(NuovaPassword.class.getName()).log(Level.SEVERE, null, ex);
@@ -73,15 +75,15 @@ public class NuovaPassword extends HttpServlet {
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
 
         String host = "smtp.gmail.com"; //mettere il vostro
-        String from = ("trippatnadvisor@gmail.com");
+        String from = ("triptnadvisor@gmail.com");
         String subject = (labels.getString("new.password"));
 
         // Here we listen indefinetely to the incoming requests
         boolean sessionDebug = false;
         //Use here the code introduced in the previous slides
         //for the case of sending e-mails with Gmail.
-        final String username = "trippatnadvisor@gmail.com";
-        final String password = "XkzfC1497zyabcKX";
+        final String username = "triptnadvisor@gmail.com";
+        final String password = "adminadmin";
         // Get a Properties object to set the mailing configuration
         // parameters
         Properties props = System.getProperties();
@@ -97,7 +99,7 @@ public class NuovaPassword extends HttpServlet {
                 return new PasswordAuthentication(username, password);
             }
         });
-        
+
         //Create a new message
         Message msg = new MimeMessage(mailsession);
         //Set the FROM and TO fields –

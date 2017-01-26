@@ -111,15 +111,15 @@ public class RegistrationServlet extends HttpServlet {
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
 
         String host = "smtp.gmail.com"; //mettere il vostro
-        String from = ("trippatnadvisor@gmail.com");
+        String from = ("triptnadvisor@gmail.com");
         String subject = (labels.getString("confirm.registration"));
 
         // Here we listen indefinetely to the incoming requests
         boolean sessionDebug = false;
         //Use here the code introduced in the previous slides
         //for the case of sending e-mails with Gmail.
-        final String username = "trippatnadvisor@gmail.com";
-        final String password = "XkzfC1497zyabcKX";
+        final String username = "triptnadvisor@gmail.com";
+        final String password = "adminadmin";
         // Get a Properties object to set the mailing configuration
         // parameters
         Properties props = System.getProperties();
