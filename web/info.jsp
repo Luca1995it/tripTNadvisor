@@ -192,6 +192,13 @@
                                             <c:forEach var="foto" items="${ristorante.getFoto()}">
                                                 <div class="item <c:if test="${first}"> active<c:set var="first" value="${false}" scope="session"/></c:if>">
                                                     <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
+                                                    <c:if test="${utente != null && utente.proprietario(ristorante) && !foto.justSegnalato()}">
+                                                        <label>
+                                                            <a href="/privateRistoratore/SegnalaFotoServlet?type=ristorante&id_foto=<c:out value="${foto.getId()}"/>">
+                                                                <fmt:message key="segnala"/>
+                                                            </a>
+                                                        </label>
+                                                    </c:if>
                                                 </div>
                                             </c:forEach>
 
@@ -460,7 +467,7 @@
                                                     </form>
                                                 </div>
                                             </c:if>
-                                            <label class="control-label"><c:out value="${messageVotoRec}"/></label>
+                                            
                                         </div>
                                     </div>
                                 </div>

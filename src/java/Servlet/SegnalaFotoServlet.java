@@ -6,6 +6,8 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Ristorante;
+import DataBase.Utente;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,14 +32,22 @@ public class SegnalaFotoServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String type = request.getParameter("type");
-        if (type.equals("ristorante")) {
-            manager.newNotSegnalaFotoRistorante(manager.getFoto(Integer.parseInt(request.getParameter("id_foto"))));
-            request.setAttribute("segnalaMessageRist", "La foto è stata segnalata ad un amministratore");
-        } else if(type.equals("rec")){
-            manager.newNotSegnalaFotoRecensione(manager.getRecensione(Integer.parseInt(request.getParameter("id_rec"))));
-            request.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
+        Utente utente = (Utente) session.getAttribute("utente");
+        Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
+        
+        if (ristorante != null && utente != null && utente.proprietario(ristorante)) {
+            String type = request.getParameter("type");
+            if (type.equals("ristorante")) {
+                manager.newNotSegnalaFotoRistorante(manager.getFoto(Integer.parseInt(request.getParameter("id_foto"))));
+                request.setAttribute("segnalaMessageRist", "La foto è stata segnalata ad un amministratore");
+            } else if (type.equals("rec")) {
+                manager.newNotSegnalaFotoRecensione(manager.getRecensione(Integer.parseInt(request.getParameter("id_rec"))));
+                request.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
+            }
+        } else{
+            request.setAttribute("segnalaMessageRec", "Non sei il proprietario del ristorante");
         }
+
         request.getRequestDispatcher("/info.jsp").forward(request, response);
 
     }
