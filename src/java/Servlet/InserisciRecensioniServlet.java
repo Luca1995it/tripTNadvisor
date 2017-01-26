@@ -81,10 +81,13 @@ public class InserisciRecensioniServlet extends HttpServlet {
             }
 
             Recensione rec = ristorante.addRecensione(titolo, recensione, utente);
-            rec.addFoto(fotoPath);
-            manager.newNotNuovaRecensione(rec);
-
-            request.getRequestDispatcher("/info.jsp").forward(request, response);
+            if (rec != null) {
+                rec.addFoto(fotoPath);
+                manager.newNotNuovaRecensione(rec);
+                request.getRequestDispatcher("/info.jsp").forward(request, response);
+            } else{
+                request.getRequestDispatcher("/private/scriviRecensione.jsp").forward(request, response);
+            }
         }
 
     }

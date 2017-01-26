@@ -71,7 +71,7 @@ public class AddRistorante extends HttpServlet {
 
         if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null || spec == null) {
             request.setAttribute("errMessageAdd", "errore interno, riprovare");
-            request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
+            request.getRequestDispatcher("/privateRistoratore/ConfigurazioneAddRistorante").forward(request, response);
         } else {
 
             if (nome.equals("") || descr.equals("")) {

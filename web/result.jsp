@@ -244,12 +244,11 @@
                                     <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
                                 </c:when>
                                 <c:otherwise>
-                                    <fmt:message key="non.disponibile"/>
+                                    <fmt:message key="not.available"/>
                                 </c:otherwise>
                             </c:choose><br>
                             <fmt:message key="reviews"/>: <c:out value="${ristorante.getRecensioni().size()}"/><br>
                         </div>
-
                     </div>
                     <div class="row"><hr></div>
                     </c:forEach>
