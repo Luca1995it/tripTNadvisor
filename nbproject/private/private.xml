@@ -3,19 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Recensione.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/privateRistoratore/orari.jsp</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/registration.jsp</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/WEB-INF/web.xml</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/customScript/orari.js</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Notify/RichiestaRistorante.java</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Ristorante.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/NuovaPassword.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/info.jsp</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/Luogo.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/CambiaOrariServlet.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/ConfigurazioneRistoranti.java</file>
-            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/index.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/AddRistorante.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/RegistrationServlet.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Notify/NuovaRecensione.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Servlet/InserisciRecensioniServlet.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Notify/Notifica.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Notify/SegnalaFotoRecensione.java</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/DataBase/DBManager.java</file>
             <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/web/result.jsp</file>
+            <file>file:/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor/src/java/Notify/NuovaFoto.java</file>
         </group>
     </open-files>
 </project-private>

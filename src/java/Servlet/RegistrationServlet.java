@@ -141,7 +141,7 @@ public class RegistrationServlet extends HttpServlet {
         msg.setText(message);
         msg.setSentDate(new Date());
 
-        Transport transport = mailsession.getTransport("smtps");
+        Transport transport = mailsession.getTransport();
         transport.connect(host, 465, username, password);
         transport.sendMessage(msg, msg.getAllRecipients());
         transport.close();
