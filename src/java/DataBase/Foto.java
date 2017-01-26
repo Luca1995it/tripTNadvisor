@@ -69,6 +69,7 @@ public class Foto implements Serializable {
     }
     
     public boolean justSegnalato() {
+        if(id == -1) return true;
         PreparedStatement stm = null;
         ResultSet rs;
         boolean res = false;

@@ -178,9 +178,11 @@
                                     <c:forEach var="notifica" items="${notifiche}">
                                         <hr>
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="<%= request.getContextPath()%><c:out value="${notifica.getFotoPath()}"/>" alt="<fmt:message key="no.image"/>" width="250">
-                                            </div>
+                                            <c:if test="${notificaristorante.getFoto().size() > 0}">
+                                                <div class="col-md-4">
+                                                    <img src="<%= request.getContextPath()%><c:out value="${notifica.getFotoPath()}"/>" alt="<fmt:message key="no.image"/>" width="250">
+                                                </div>
+                                            </c:if>
                                             <div class="col-md-4">
                                                 <label class="control-label"><c:out value="${notifica.getData()}"/></label>
                                                 <label class="control-label"><c:out value="${notifica.toString()}"/></label>
@@ -200,7 +202,7 @@
                                         </div>
                                     </c:forEach>
                                     <br><br><hr><hr>
-                                    <form action="<%= request.getContextPath()%>/ConfigurazioneProfilo" method="get">
+                                    <form action="<%= request.getContextPath()%>/private/ConfigurazioneProfilo" method="get">
                                         <button class="btn btn-default" type="submit">
                                             <fmt:message key="return.profile"/>
                                         </button>
