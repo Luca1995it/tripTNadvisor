@@ -566,11 +566,10 @@ public final class DBManager implements Serializable {
         }
 
         boolean found = false;
-        ArrayList<Ristorante> res = new ArrayList<>();
 
-        int k = 2;
-        res = (ArrayList<Ristorante>) original.clone();
-        Iterator i = res.iterator();
+        int k = 1;
+
+        Iterator i = original.iterator();
         switch (tipo) {
             case "all":
                 while (i.hasNext()) {
@@ -631,7 +630,7 @@ public final class DBManager implements Serializable {
                 }
                 break;
         }
-        i = res.iterator();
+        i = original.iterator();
         if (!spec.toLowerCase().equals("all")) {
             while (i.hasNext()) {
                 Ristorante r = (Ristorante) i.next();
@@ -642,7 +641,7 @@ public final class DBManager implements Serializable {
             }
         }
 
-        return res;
+        return original;
     }
 
     public boolean similString(ArrayList<String> a, String b, int k) {

@@ -9,5 +9,5 @@
 /web/WEB-INF/
 /build.xml
 /dist/
-
+/web/autocomplete.txt
 

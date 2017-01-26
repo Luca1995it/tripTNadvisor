@@ -876,7 +876,7 @@ public class Ristorante implements Serializable {
             }
         }
         if(res.isEmpty()){ //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
-            res.add(new Foto(-1, "/defaultItem/defaultRist.jpg","Default Image", new Date(System.currentTimeMillis()), null, this, manager));
+            res.add(new Foto(-1, "/defaultItem/defaultRist.png","Default Image", new Date(System.currentTimeMillis()), null, this, manager));
         }
         return res;
     }
