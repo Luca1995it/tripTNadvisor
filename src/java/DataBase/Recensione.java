@@ -121,6 +121,7 @@ public class Recensione implements Serializable{
     }
 
     public boolean justSegnalato() {
+        if(fotoPath.equals("/defaultItem/rec_default.png")) return true;
         PreparedStatement stm = null;
         ResultSet rs;
         boolean res = false;
