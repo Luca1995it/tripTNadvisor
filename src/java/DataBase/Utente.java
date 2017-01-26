@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 public abstract class Utente implements Serializable {
 
-    private int id;
+    private final int id;
     private String nome;
     private String cognome;
     private String email;
@@ -46,28 +46,22 @@ public abstract class Utente implements Serializable {
      */
     public abstract ArrayList<Notifica> getNotifiche();
 
-    /**
-     * Funzione per cambiare i dati registrati di un utente tranne la password,
-     * per quella di veda modificaPassword()
-     *
-     * @param nome nuovo nome
-     * @param cognome nuovo cognome
-     * @param email nuova email
-     * @param avpath nuovo path della foto del profilo
-     * @return true se è andato tutto bene, false, altrimenti
-     */
-    public boolean modificaProfilo(String nome, String cognome, String email, String avpath) {
+    public boolean updateNome(String nome) {
+        if (nome == null) {
+            return false;
+        }
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("update utente set nome = ?, cognome = ?, email = ?, avpath = ? where id = ?");
+            stm = manager.con.prepareStatement("update utente set nome = ? where id = ?");
             stm.setString(1, nome);
-            stm.setString(2, cognome);
-            stm.setString(3, email);
-            stm.setString(4, avpath);
-            stm.setInt(5, getId());
-            stm.executeUpdate();
-            res = true;
+            stm.setInt(2, id);
+            if (stm.executeUpdate() == 1) {
+                this.nome = nome;
+                res = true;
+            } else {
+                res = false;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -82,24 +76,22 @@ public abstract class Utente implements Serializable {
         return res;
     }
 
-    /**
-     * Serve a permettere ad un utente di cambiare la sua password
-     *
-     * @param nuovaPass nuova password dell'utente
-     * @return true se è andato tutto bene, false altrimenti
-     */
-    public boolean cambiaPassword(String nuovaPass) {
-        if (nuovaPass == null) {
+    public boolean updateCognome(String cognome) {
+        if (cognome == null) {
             return false;
         }
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("UPDATE utente SET password = ? where id = ?");
-            stm.setString(1, nuovaPass);
-            stm.setInt(2, getId());
-            stm.executeUpdate();
-            res = true;
+            stm = manager.con.prepareStatement("update utente set cognome = ? where id = ?");
+            stm.setString(1, cognome);
+            stm.setInt(2, id);
+            if (stm.executeUpdate() == 1) {
+                this.cognome = cognome;
+                res = true;
+            } else {
+                res = false;
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -108,6 +100,134 @@ public abstract class Utente implements Serializable {
                     stm.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean updateEmail(String email) {
+        if (email == null) {
+            return false;
+        }
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("update utente set email = ? where id = ?");
+            stm.setString(1, email);
+            stm.setInt(2, id);
+            if (stm.executeUpdate() == 1) {
+                this.email = email;
+                res = true;
+            } else {
+                res = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean updateAvpath(String avpath) {
+        if (avpath == null) {
+            return false;
+        }
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("UPDATE utente SET avpath = ? where id = ?");
+            stm.setString(1, avpath);
+            stm.setInt(2, id);
+            if (stm.executeUpdate() == 1) {
+                this.avpath = avpath;
+                res = true;
+            } else {
+                res = false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+
+    public boolean updatePassword(String oldPassword, String newPassword) {
+        if (oldPassword == null || newPassword == null) {
+            return false;
+        }
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("UPDATE utente SET password = ? where id = ? and password = ?");
+            stm.setString(1, newPassword);
+            stm.setInt(2, id);
+            stm.setString(3, oldPassword);
+            res = stm.executeUpdate() == 1;
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return res;
+    }
+    
+    /**
+     * Per ottenere la password di un utente
+     *
+     * @return
+     */
+    public String getPassword() {
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String res = null;
+        try {
+            stm = manager.con.prepareStatement("select password from Utente where id = ?");
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                res = rs.getString("password");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -264,7 +384,6 @@ public abstract class Utente implements Serializable {
         return res;
     }
 
-    
     /**
      *
      * @param ristorante ristorante per cui ci vuole controllare se l'utente ha
@@ -344,7 +463,7 @@ public abstract class Utente implements Serializable {
         }
         return res;
     }
-    
+
     /**
      * Serve a verificare se un utente ha già votato un ristorante oggi
      *
@@ -410,8 +529,11 @@ public abstract class Utente implements Serializable {
      * @return
      */
     public boolean proprietario(Recensione recensione) {
-        if(recensione == null) return false;
-        return recensione.getUtente().equals(this);
+        if (recensione == null) {
+            return false;
+        } else {
+            return recensione.getUtente().equals(this);
+        }
     }
 
     /**
@@ -511,7 +633,7 @@ public abstract class Utente implements Serializable {
      * @return true se la registrazione del ristorante sul db ha avuto successo,
      * false altrimenti
      */
-    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String [] spec, String address, String fotoPath, String fotoDescr) {
+    public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String[] spec, String address, String fotoPath, String fotoDescr) {
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
@@ -530,8 +652,8 @@ public abstract class Utente implements Serializable {
             if (rs.next()) {
                 Ristorante rist = manager.getRistorante(rs.getInt("id"));
                 rist.addFoto(fotoPath, fotoDescr, this);
-                rist.setLuogo(address);
-                for(String x: spec){
+                rist.updateLuogo(address);
+                for (String x : spec) {
                     rist.addCucina(x);
                 }
                 res = true;
@@ -601,10 +723,6 @@ public abstract class Utente implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
     }
@@ -613,32 +731,16 @@ public abstract class Utente implements Serializable {
         return nome + " " + cognome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getCognome() {
         return cognome;
-    }
-
-    public void setCognome(String cognome) {
-        this.cognome = cognome;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getAvpath() {
         return avpath;
-    }
-
-    public void setAvpath(String avpath) {
-        this.avpath = avpath;
     }
 
     /**

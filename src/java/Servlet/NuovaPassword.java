@@ -51,10 +51,10 @@ public class NuovaPassword extends HttpServlet {
         try {
             String mail = request.getParameter("mail");
             Utente utente = manager.getUtente(mail);
-            System.out.println(utente);
+
             String newPass = generatePassword(8);
             if (utente != null) {
-                if (utente.cambiaPassword(newPass)) {
+                if (utente.updatePassword(utente.getPassword(),newPass)) {
                     sendMail("Nuova password: " + newPass, utente.getEmail(), session);
                 }
             }

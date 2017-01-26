@@ -708,50 +708,6 @@ public final class DBManager implements Serializable {
     }
 
     /**
-     * Per ottenere la password di un utente
-     *
-     * @param utente utente di cui si vuole sapere la password
-     * @return
-     */
-    public String getPassUtente(Utente utente) {
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        String res = null;
-        try {
-            stm = con.prepareStatement("select * from Utente where id = ?");
-            stm.setInt(1, utente.getId());
-            rs = stm.executeQuery();
-            if (rs.next()) {
-                res = rs.getString("password");
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class
-                            .getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
      * Per recupare l'oggetto utente con quell'id. Ad esso verrà effettuato un
      * downcast ad utente Registrato, Ristoratore, Amministratore secondo le
      * informazioni contenute nel DB

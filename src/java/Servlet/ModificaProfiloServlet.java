@@ -56,76 +56,69 @@ public class ModificaProfiloServlet extends HttpServlet {
         if (utente != null) {
             MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
             Enumeration files = multi.getFileNames();
-            String name = null;
+            String fileName = null;
             while (files.hasMoreElements()) {
-                name = (String) files.nextElement();
+                fileName = (String) files.nextElement();
             }
 
             String newNome = null;
             String newCognome = null;
             String newMail = null;
+            String oldPass = null;
             String newPass = null;
-            String newAvPath;
+            String newAvPath = null;
 
             boolean tornaIndietro = false;
 
-            if (multi.getParameter("nome").length() == 0) {
-                newNome = utente.getNome();
-            } else if (multi.getParameter("nome").length() < 2) {
+            if (multi.getParameter("nome").length() < 2) {
                 request.setAttribute("message", "Nome troppo corto");
                 tornaIndietro = true;
             } else {
                 newNome = multi.getParameter("nome");
             }
 
-            if (multi.getParameter("cognome").length() == 0) {
-                newCognome = utente.getCognome();
-            } else if (multi.getParameter("cognome").length() < 3) {
+            if (multi.getParameter("cognome").length() < 3) {
                 request.setAttribute("message", "Cognome troppo corto");
                 tornaIndietro = true;
             } else {
                 newCognome = multi.getParameter("cognome");
             }
 
-            if (multi.getParameter("mail").length() == 0) {
-                newMail = utente.getEmail();
-            } else if (multi.getParameter("mail").length() < 8 || !multi.getParameter("mail").contains("@")) {
+            if (multi.getParameter("mail").length() < 8 || !multi.getParameter("mail").contains("@")) {
                 request.setAttribute("message", "Devi immettere una mail valida");
                 tornaIndietro = true;
             } else {
                 newMail = multi.getParameter("mail");
             }
 
-            if (multi.getParameter("passOld").length() == 0 && multi.getParameter("passOld").length() == 0 && multi.getParameter("passOld").length() == 0) {
-                newPass = manager.getPassUtente(utente);
-            } else if (!multi.getParameter("passOld").equals(manager.getPassUtente(utente))) {
+            if (!multi.getParameter("passOld").equals(utente.getPassword())) {
                 request.setAttribute("message", "La vecchia password è errata");
                 tornaIndietro = true;
             } else if (!(multi.getParameter("pass1").equals(multi.getParameter("pass2")))) {
-                request.setAttribute("message", "Le nuove password non corrispondono");
+                request.setAttribute("message", "Le password non corrispondono");
                 tornaIndietro = true;
             } else if (multi.getParameter("pass1").length() < 8) {
                 request.setAttribute("message", "La password deve essere lunga almeno 8 caratteri");
                 tornaIndietro = true;
             } else {
+                oldPass = multi.getParameter("passOld");
                 newPass = multi.getParameter("pass1");
             }
-            if (multi.getFilesystemName(name) == null) {
-                newAvPath = utente.getAvpath();
-            } else {
-                newAvPath = dirName + "/" + multi.getFilesystemName(name);
+            
+            if (!(multi.getFilesystemName(fileName) == null)){
+                newAvPath = dirName + "/" + multi.getFilesystemName(fileName);
             }
 
             if (tornaIndietro) {
                 rd = request.getRequestDispatcher("/private/modifica.jsp");
             } else {
+                utente.updateNome(newNome);
+                utente.updateCognome(newCognome);
+                utente.updateEmail(newMail);
+                utente.updateAvpath(newAvPath);
+                utente.updatePassword(oldPass, newPass);
 
-                utente.modificaProfilo(newNome, newCognome, newMail, newAvPath);
-                utente.cambiaPassword(newPass);
-
-                Utente utenteNew = manager.authenticate(newMail, newPass);
-                session.removeAttribute("utente");
-                session.setAttribute("utente", utenteNew);
+                session.setAttribute("utente", manager.authenticate(newMail, newPass));
             }
         }
         rd.forward(request, response);

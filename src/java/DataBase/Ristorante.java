@@ -65,6 +65,10 @@ public class Ristorante implements Serializable {
         return visite;
     }
 
+    public Luogo getLuogo() {
+        return luogo;
+    }
+
     /**
      * Per ottenere il proprietario del ristorante
      *
@@ -298,33 +302,22 @@ public class Ristorante implements Serializable {
         visite++;
         return res;
     }
-    
 
     /**
      *
      * @param nome nuovo nome
-     * @param address nuovo indirizzo
-     * @param linksito nuovo sito web
-     * @param descr nuova descrizione
-     * @param fascia nuova fascia
      * @return true se i dati sono stati aggiornati correttamente, false
      * altrimenti
      */
-    public boolean updateData(String nome, String address, String linksito, String descr, String fascia) {
-        if (!manager.okLuogo(address)) {
-            return false;
-        }
+    public boolean updateNome(String nome) {
+        if(nome == null) return false;
         PreparedStatement stm = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("update ristorante set nome = ?, linksito = ?, descr = ?, fascia = ? where id = ?");
+            stm = manager.con.prepareStatement("update ristorante set nome = ? where id = ?");
             stm.setString(1, nome);
-            stm.setString(2, linksito);
-            stm.setString(3, descr);
-            stm.setString(4, fascia);
-            stm.setInt(5, getId());
+            stm.setInt(2, id);
             stm.executeUpdate();
-            res = setLuogo(address);
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -341,7 +334,106 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-
+    
+    /**
+     *
+     * @param descr
+     * @return true se i dati sono stati aggiornati correttamente, false
+     * altrimenti
+     */
+    public boolean updateDescrizione(String descr) {
+        if(descr == null) return false;
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("update ristorante set descr = ? where id = ?");
+            stm.setString(1, descr);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        if (res) {
+            res = manager.updateAutocomplete();
+        }
+        return res;
+    }
+    
+    /**
+     *
+     * @param linksito
+     * @return true se i dati sono stati aggiornati correttamente, false
+     * altrimenti
+     */
+    public boolean updateLinkSito(String linksito) {
+        if(linksito == null) return false;
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("update ristorante set linksito = ? where id = ?");
+            stm.setString(1, linksito);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        if (res) {
+            res = manager.updateAutocomplete();
+        }
+        return res;
+    }
+    
+    
+    /**
+     *
+     * @param fascia
+     * @return true se i dati sono stati aggiornati correttamente, false
+     * altrimenti
+     */
+    public boolean updateFascia(String fascia) {
+        if(fascia == null) return false;
+        PreparedStatement stm = null;
+        boolean res = false;
+        try {
+            stm = manager.con.prepareStatement("update ristorante set fascia = ? where id = ?");
+            stm.setString(1, fascia);
+            stm.setInt(2, id);
+            stm.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        if (res) {
+            res = manager.updateAutocomplete();
+        }
+        return res;
+    }
+    
+    
+    
     /**
      * Per settare l'indirizzo del ristorante
      *
@@ -349,7 +441,8 @@ public class Ristorante implements Serializable {
      * @return true se la posizione del ristorante è stata impostata
      * correttamente, false altrimenti
      */
-    public boolean setLuogo(String address) {
+    public boolean updateLuogo(String address) {
+        if(address == null) return false;
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
@@ -591,14 +684,6 @@ public class Ristorante implements Serializable {
         return res;
     }
 
-    /**
-     * Per ricevere l'oggetto Luogo riferito a questo ristorante
-     *
-     * @return L'oggetto Luogo riferito a questo ristorante
-     */
-    public Luogo getLuogo() {
-        return luogo;
-    }
 
     /**
      * Per ottenere tutti gli orari di questo ristorante

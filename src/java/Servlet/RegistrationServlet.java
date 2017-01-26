@@ -172,6 +172,8 @@ public class RegistrationServlet extends HttpServlet {
         return result;
     }
 
+    
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

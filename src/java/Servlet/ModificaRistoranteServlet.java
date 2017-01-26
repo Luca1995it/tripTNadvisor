@@ -38,11 +38,11 @@ public class ModificaRistoranteServlet extends HttpServlet {
 
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
-        String newNome = ristorante.getNome();
-        String newAddress = ristorante.getLuogo().getAddress();
-        String newDescr = ristorante.getDescr();
-        String newLinksito = ristorante.getLinksito();
-        String newFascia = ristorante.getFascia();
+        String newNome = null;
+        String newAddress = null;
+        String newDescr = null;
+        String newLinksito = null;
+        String newFascia = null;
 
         boolean tornaIndietro = false;
 
@@ -67,7 +67,7 @@ public class ModificaRistoranteServlet extends HttpServlet {
             newDescr = request.getParameter("descr");
         }
 
-        if (request.getParameter("linksito").length() != 0) {
+        if (request.getParameter("linksito").length() > 0) {
             newLinksito = request.getParameter("linksito");
         }
 
@@ -78,7 +78,11 @@ public class ModificaRistoranteServlet extends HttpServlet {
         if (tornaIndietro) {
             request.getRequestDispatcher("/privateRistoratore/modificaRist.jsp").forward(request, response);
         } else {
-            ristorante.updateData(newNome, newAddress, newLinksito, newDescr, newFascia);
+            ristorante.updateNome(newNome);
+            ristorante.updateDescrizione(newDescr);
+            ristorante.updateFascia(newFascia);
+            ristorante.updateLinkSito(newLinksito);
+            ristorante.updateLuogo(newAddress);
         }
 
         request.getRequestDispatcher("/privateRistoratore/ConfigurazioneRistoranti").forward(request, response);
