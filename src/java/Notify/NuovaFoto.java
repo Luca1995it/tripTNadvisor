@@ -69,7 +69,8 @@ public class NuovaFoto extends Notifica {
 
     @Override
     public String toString() {
-        return "L'utente " + foto.getUtente() + " ha aggiunto una nuova foto al tuo ristorante " + foto.getRistorante().getNome();
+        String res = "Nuova foto: L'utente " + foto.getUtente() + " ha aggiunto una nuova foto al tuo ristorante " + foto.getRistorante().getNome();
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
     
     @Override

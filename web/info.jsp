@@ -232,10 +232,10 @@
                     <div class="col-sm-4">
                         <div class="caption">
                             <div class="caption-content">
-                                <label class="control-label"><a href="<%= request.getContextPath()%><c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
+                                <label class="control-label"><a href="<c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
                                 <br>
                                 <c:if test="${ristorante.getLuogo() != null}">
-                                    <label class="control-label"><fmt:message key="address"/>: <c:out value="${ristorante.getLuogo().getAddress()}"/>"></label>
+                                    <label class="control-label"><fmt:message key="address"/>: <c:out value="${ristorante.getLuogo().getAddress()}"/></label>
                                     <br>
                                 </c:if>
                                 <label class="control-label"><fmt:message key="cooking.type"/>: 

@@ -69,9 +69,10 @@ public class NuovaRecensione extends Notifica {
 
     @Override
     public String toString() {
-        return "L'utente " + recensione.getUtente().getNomeCognome() + " ha aggiunto una nuova recensione al tuo ristorante " + recensione.getRistorante().getNome() + "\n"
+        String res = "Nuova Recensione: L'utente " + recensione.getUtente().getNomeCognome() + " ha aggiunto una nuova recensione al tuo ristorante " + recensione.getRistorante().getNome() + "\n"
                 + "Titolo: " + recensione.getTitolo()
                 + "Testo: " + recensione.getTesto();
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
 
     @Override

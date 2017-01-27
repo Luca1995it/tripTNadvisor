@@ -72,9 +72,8 @@ public class SegnalaFotoRistorante extends Notifica {
     }
     @Override
     public String toString() {
-        String res = ristorante.getUtente().getNomeCognome();
-        res += ", proprietario del ristorante " + ristorante.getNome() + ", ha chiesto la rimozione della seguente fotografia";
-        return res;
+        String res = "Rimuovi foto ristorante: " + " L'utente " + ristorante.getUtente().getNomeCognome() + ", proprietario del ristorante " + ristorante.getNome() + ", ha chiesto la rimozione della seguente fotografia";
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
 
     @Override

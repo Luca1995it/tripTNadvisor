@@ -203,7 +203,7 @@
                             <label class="control-label"><fmt:message key="reviews"/> <c:out value="${ristorante.getRecensioni().size()}"/></label>
                             <br>
 
-                            <label class="control-label"><fmt:message key="web.site"/> <a href="<%= request.getContextPath()%><c:out value="${ristorante.getLinksito()}"/>"><c:out value="${ristorante.getLinksito()}"/></a></label>
+                            <label class="control-label"><fmt:message key="web.site"/> <a href="<c:out value="${ristorante.getLinksito()}"/>"><c:out value="${ristorante.getLinksito()}"/></a></label>
                         </div>
                         <div class="col-md-4">
                             <label class="control-label"><fmt:message key="actions.ristorante"/></label>

@@ -57,12 +57,14 @@ public class AddFotoServlet extends HttpServlet {
             name = (String) files.nextElement();
         }
         RequestDispatcher rd;
+        
         if (multi.getFilesystemName(name) == null) {
             request.setAttribute("errMessage", "Selezione non valida, riprova");
             rd = request.getRequestDispatcher("/private/choose.jsp");
         } else {
             String newAvPath = dirName + "/" + multi.getFilesystemName(name);
             Foto foto = ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);
+            System.out.println(foto);
             if (foto != null) {
                 manager.newNotNuovaFoto(foto);
                 rd = request.getRequestDispatcher("/ConfigurazioneRistorante?id_rist=" + ristorante.getId());

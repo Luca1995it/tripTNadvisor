@@ -41,13 +41,13 @@ public class CommentoRecensione extends Notifica {
 
     @Override
     public String toString() {
-        String res = "L'utente ristoratore " + rec.getRistorante().getUtente().getNomeCognome() + "\n"
+        String res = "Commento recensione: L'utente ristoratore " + rec.getRistorante().getUtente().getNomeCognome() + "\n"
                 + "voleva aggiungere il commento '" + commento + "' \n"
                 + "alla recensione: "
                 + rec.getTitolo() + "\n"
                 + rec.getTesto() + "\n"
                 + "lasciata da " + rec.getUtente().getNomeCognome();
-        return res;
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
 
     @Override

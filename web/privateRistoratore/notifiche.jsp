@@ -178,7 +178,7 @@
                                     <c:forEach var="notifica" items="${notifiche}">
                                         <hr>
                                         <div class="row">
-                                            <c:if test="${notificaristorante.getFoto().size() > 0}">
+                                            <c:if test="${notifica.getFotoPath() != null}">
                                                 <div class="col-md-4">
                                                     <img src="<%= request.getContextPath()%><c:out value="${notifica.getFotoPath()}"/>" alt="<fmt:message key="no.image"/>" width="250">
                                                 </div>

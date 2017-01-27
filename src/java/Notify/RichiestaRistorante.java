@@ -77,8 +77,8 @@ public class RichiestaRistorante extends Notifica {
 
     @Override
     public String toString() {
-        String res = "L'utente " + utente.getNomeCognome() + " ha chiesto il possesso del ristorante " + ristorante.getNome();
-        return res;
+        String res = "Richiesta ristorante: L'utente " + utente.getNomeCognome() + " ha chiesto il possesso del ristorante " + ristorante.getNome();
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
 
     @Override

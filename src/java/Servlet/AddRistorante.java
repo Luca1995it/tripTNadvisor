@@ -61,6 +61,7 @@ public class AddRistorante extends HttpServlet {
         String descr = multi.getParameter("desc");
         String linkSito = multi.getParameter("linkSito");
         String [] spec = multi.getParameterValues("spec");
+        System.out.println(spec);
 
         String addr = multi.getParameter("addr");
         String fascia = multi.getParameter("fascia");
@@ -69,7 +70,7 @@ public class AddRistorante extends HttpServlet {
 
         boolean tornaIndietro = false;
 
-        if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null || spec == null) {
+        if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null) {
             request.setAttribute("errMessageAdd", "errore interno, riprovare");
             request.getRequestDispatcher("/privateRistoratore/ConfigurazioneAddRistorante").forward(request, response);
         } else {
@@ -94,7 +95,7 @@ public class AddRistorante extends HttpServlet {
                 tornaIndietro = true;
             }
             
-            if(spec.length == 0){
+            if(spec == null || spec.length == 0){
                 request.setAttribute("specError", "Seleziona almeno una specialita");
                 tornaIndietro = true;
             }

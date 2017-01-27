@@ -170,6 +170,7 @@
                         <hr class="star-light">
                         <div class="col-md-4"></div>
                         <div class="col-md-4">
+                            <label class="label-danger label"><c:out value="${errMessage}"/></label>
                             <form enctype='multipart/form-data' method="POST" action="<%= request.getContextPath()%>/private/AddFotoServlet">
                                 <label class="control-label"><fmt:message key="photo.description"/></label> 
                                 <input type="text" name="descr" placeholder="Breve descrizione..." class="form-control"/><br>

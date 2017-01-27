@@ -670,7 +670,8 @@ public final class DBManager implements Serializable {
     }
 
     public String adjustLink(String link){
-        if(!link.substring(0, 7).equals("http://") || !link.substring(0, 8).equals("https://")) return "http://" + link;
+        if(link == null || link.length() < 8) return "";
+        else if(!link.substring(0, 7).equals("http://") || !link.substring(0, 8).equals("https://")) return "http://" + link;
         else return link;
     }
     

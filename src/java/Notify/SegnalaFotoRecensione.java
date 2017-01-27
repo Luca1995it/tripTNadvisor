@@ -17,12 +17,14 @@ import java.util.logging.Logger;
  *
  * @author lucadiliello
  */
-public class SegnalaFotoRecensione extends Notifica{
-     
+public class SegnalaFotoRecensione extends Notifica {
+
     private final Recensione recensione;
-    
+
     /**
-     * Crea un nuovo oggetto di tipo SegnalaFotoRecensione, che serve ad un utente ristoratore di segnalare una foto di una recensione non consona
+     * Crea un nuovo oggetto di tipo SegnalaFotoRecensione, che serve ad un
+     * utente ristoratore di segnalare una foto di una recensione non consona
+     *
      * @param manager collegamento al DBManager per operare sul DB
      * @param id id sul DB
      * @param data data di creazione
@@ -67,18 +69,18 @@ public class SegnalaFotoRecensione extends Notifica{
         return res;
     }
 
-
     @Override
     public String toString() {
-        return "L'utente ristoratore " + recensione.getRistorante().getUtente().getNomeCognome() + 
-                " proprietario del ristorante " + recensione.getRistorante().getNome() + 
-                " ha chiesto la rimozione della seguente foto dalla recensione " + 
-                recensione.getTitolo() + "\n" + recensione.getTesto();
+        String res = "Rimozione foto recensione: L'utente ristoratore " + recensione.getRistorante().getUtente().getNomeCognome()
+                + " proprietario del ristorante " + recensione.getRistorante().getNome()
+                + " ha chiesto la rimozione della seguente foto dalla recensione "
+                + recensione.getTitolo() + "\n" + recensione.getTesto();
+        return res.length() > 40 ? res.substring(0, 40) : res;
     }
 
     @Override
-    public String getFotoPath(){
+    public String getFotoPath() {
         return recensione.getFotoPath();
     }
-    
+
 }
