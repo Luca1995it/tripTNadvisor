@@ -193,7 +193,7 @@
                                                 <div class="item <c:if test="${first}"> active<c:set var="first" value="${false}" scope="session"/></c:if>">
                                                     <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
                                                     <c:if test="${utente != null && utente.proprietario(ristorante) && !foto.justSegnalato()}">
-                                                        <label>
+                                                        <label class="control-label">
                                                             <a href="<%= request.getContextPath()%>/privateRistoratore/SegnalaFotoServlet?type=ristorante&id_foto=<c:out value="${foto.getId()}"/>">
                                                                 <fmt:message key="segnala"/>
                                                             </a>

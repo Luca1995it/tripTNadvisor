@@ -200,7 +200,7 @@
             </div>
 
             <c:if test="${utente != null}">
-                <form action="<%= request.getContextPath()%>/ConfigurazioneProfilo" method="get">
+                <form action="<%= request.getContextPath()%>/private/ConfigurazioneProfilo" method="get">
                     <button class="btn btn-default" type="submit">
                         <fmt:message key="go.profile"/>
                     </button>
