@@ -6,12 +6,10 @@
 package Servlet;
 
 import java.io.IOException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -31,10 +29,7 @@ public class ConfigurazioneProfilo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session = request.getSession();
-        
-        RequestDispatcher rd = request.getRequestDispatcher("/private/profile.jsp");
-        rd.forward(request, response);
+        request.getRequestDispatcher(request.getContextPath() + "/private/profile.jsp").forward(request, response);
                 
     }
 
@@ -66,15 +61,5 @@ public class ConfigurazioneProfilo extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

@@ -105,7 +105,7 @@
                         <div class="intro-text">
                             <span class="name"><fmt:message key="not.logged.title"/></span>
                             <hr class="star-light">
-                            <span class="skills"><fmt:message key="not.logged"/>/span>
+                            <span class="skills"><fmt:message key="not.logged"/></span>
                             <br>
                             <label class="control-label"><a href="<%= request.getContextPath()%>/HomeServlet">G<fmt:message key="go.home"/></a></label>
                             <br>

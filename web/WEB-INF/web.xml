@@ -35,18 +35,6 @@
         <filter-name>LanguageFilter</filter-name>
         <filter-class>Filters.LanguageFilter</filter-class>
     </filter>
-    <filter>
-        <filter-name>FilterServer</filter-name>
-        <filter-class>Filters.FilterServer</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>FilterServer</filter-name>
-        <url-pattern>/META-INF</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-        <dispatcher>INCLUDE</dispatcher>
-        <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
     <filter-mapping>
         <filter-name>LanguageFilter</filter-name>
         <url-pattern>/*</url-pattern>

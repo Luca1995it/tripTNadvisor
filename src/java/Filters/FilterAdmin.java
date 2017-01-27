@@ -33,49 +33,6 @@ public class FilterAdmin implements Filter {
     public FilterAdmin() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession(false);
-        try {
-            Utente utente;
-
-            if (session.getAttribute("utente") == null) {
-                ((HttpServletRequest) request).getRequestDispatcher("/notLogged").forward(request, response);
-            } else {
-                utente = (Utente) session.getAttribute("utente");
-                if (!utente.isAmministratore()) {
-                    ((HttpServletRequest) request).getRequestDispatcher("/notAuthorized").forward(request, response);
-                }
-
-            }
-        } catch (NullPointerException e) {
-            ((HttpServletRequest) request).getRequestDispatcher("/notLogged").forward(request, response);
-        }
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        // Write code here to process the request and/or response after
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-        /*
-	for (Enumeration en = request.getAttributeNames(); en.hasMoreElements(); ) {
-	    String name = (String)en.nextElement();
-	    Object value = request.getAttribute(name);
-	    log("attribute: " + name + "=" + value.toString());
-
-	}
-         */
-        // For example, a filter might append something to the response.
-        /*
-	PrintWriter respOut = new PrintWriter(response.getWriter());
-	respOut.println("<P><B>This has been appended by an intrusive filter.</B>");
-         */
-    }
-
     /**
      *
      * @param request The servlet request we are processing
@@ -86,34 +43,17 @@ public class FilterAdmin implements Filter {
      * @exception ServletException if a servlet error occurs
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response,
-            FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-        doBeforeProcessing(request, response);
+        HttpServletRequest req = (HttpServletRequest) request;
+        HttpSession session = req.getSession(false);
 
-        Throwable problem = null;
-        try {
+        if (session == null || session.getAttribute("utente") == null) {
+            ((HttpServletRequest) request).getRequestDispatcher("/notLogged").forward(request, response);
+        } else if (!((Utente) session.getAttribute("utente")).isAmministratore()) {
+            ((HttpServletRequest) request).getRequestDispatcher("/notAuthorized").forward(request, response);
+        } else {
             chain.doFilter(request, response);
-        } catch (IOException | ServletException t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            problem = t;
-        }
-
-        doAfterProcessing(request, response);
-
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
         }
     }
 

@@ -33,60 +33,19 @@ public class LanguageFilter implements Filter {
     public LanguageFilter() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        
-        HttpSession session = ((HttpServletRequest) request).getSession();
-        Language lan = (Language) session.getAttribute("lan");
-        if (lan == null) {
-            lan = new Language();
-            session.setAttribute("lan", lan);
-        }
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response) throws IOException, ServletException {
-
-    }
-
-    /**
-     *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
-     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
 
-        doBeforeProcessing(request, response);
-
-        Throwable problem = null;
-        try {
-            chain.doFilter(request, response);
-        } catch (IOException | ServletException t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            problem = t;
+        HttpSession session = ((HttpServletRequest) request).getSession();
+        Language lan = (Language) session.getAttribute("lan");
+        
+        if (lan == null) {
+            lan = new Language();
+            session.setAttribute("lan", lan);
         }
-
-        doAfterProcessing(request, response);
-
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
-        }
+        chain.doFilter(request, response);
     }
 
     /**
@@ -149,7 +108,7 @@ public class LanguageFilter implements Filter {
         } else {
             try {
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                t.printStackTrace(ps);              
+                t.printStackTrace(ps);
                 response.getOutputStream().close();
             } catch (Exception ex) {
             }

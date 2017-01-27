@@ -84,6 +84,11 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("errorFoto", "Devi riempire anche i campi della prima fotografia");
             }
 
+            if(addr.equals("")){
+                tornaIndietro = true;
+                request.setAttribute("addrError", "Inserisci l'indirizzo del ristorante");
+            }
+            
             if (manager.esisteNomeRistorante(nome)) {
                 request.setAttribute("nomeError", "Nome già in uso");
                 tornaIndietro = true;

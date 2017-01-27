@@ -162,8 +162,10 @@ public class Ristorante implements Serializable {
      * @return true se il ristorante appartiene ad un utente, false altrimenti
      */
     public boolean reclamato() {
-        if(utente != null) return true;
-        
+        if (utente != null) {
+            return true;
+        }
+
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = true;
@@ -204,7 +206,7 @@ public class Ristorante implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) {
                 stm = manager.con.prepareStatement("insert into specrist (id_spec,id_rist) values (?,?)");
-                stm.setInt(1,rs.getInt("id"));
+                stm.setInt(1, rs.getInt("id"));
                 stm.setInt(2, id);
                 stm.executeUpdate();
                 res = true;
@@ -228,11 +230,11 @@ public class Ristorante implements Serializable {
                 }
             }
         }
-        
+
         return res;
     }
 
-    public boolean removeCucina(String spec){
+    public boolean removeCucina(String spec) {
         System.out.println("Remove:" + spec);
         boolean res = false;
         PreparedStatement stm = null;
@@ -243,7 +245,7 @@ public class Ristorante implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) {
                 stm = manager.con.prepareStatement("delete from specrist where id_spec = ? and id_rist = ?");
-                stm.setInt(1,rs.getInt("id"));
+                stm.setInt(1, rs.getInt("id"));
                 stm.setInt(2, id);
                 stm.executeUpdate();
                 res = true;
@@ -267,14 +269,14 @@ public class Ristorante implements Serializable {
                 }
             }
         }
-        
+
         return res;
     }
-    
-    public ArrayList<String> getTutteCucine(){
+
+    public ArrayList<String> getTutteCucine() {
         return manager.getSpecialita();
     }
-    
+
     /**
      * Aggiunge una visita al ristorante
      *
@@ -310,7 +312,9 @@ public class Ristorante implements Serializable {
      * altrimenti
      */
     public boolean updateNome(String nome) {
-        if(nome == null) return false;
+        if (nome == null) {
+            return false;
+        }
         PreparedStatement stm = null;
         boolean res = false;
         try {
@@ -334,7 +338,7 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-    
+
     /**
      *
      * @param descr
@@ -342,7 +346,9 @@ public class Ristorante implements Serializable {
      * altrimenti
      */
     public boolean updateDescrizione(String descr) {
-        if(descr == null) return false;
+        if (descr == null) {
+            return false;
+        }
         PreparedStatement stm = null;
         boolean res = false;
         try {
@@ -366,7 +372,7 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-    
+
     /**
      *
      * @param linksito
@@ -374,8 +380,11 @@ public class Ristorante implements Serializable {
      * altrimenti
      */
     public boolean updateLinkSito(String linksito) {
-        if(linksito == null) return false;
-        else linksito = manager.adjustLink(linksito);
+        if (linksito == null) {
+            return false;
+        } else {
+            linksito = manager.adjustLink(linksito);
+        }
         PreparedStatement stm = null;
         boolean res = false;
         try {
@@ -399,8 +408,7 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-    
-    
+
     /**
      *
      * @param fascia
@@ -408,7 +416,9 @@ public class Ristorante implements Serializable {
      * altrimenti
      */
     public boolean updateFascia(String fascia) {
-        if(fascia == null) return false;
+        if (fascia == null) {
+            return false;
+        }
         PreparedStatement stm = null;
         boolean res = false;
         try {
@@ -432,9 +442,7 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-    
-    
-    
+
     /**
      * Per settare l'indirizzo del ristorante
      *
@@ -443,8 +451,12 @@ public class Ristorante implements Serializable {
      * correttamente, false altrimenti
      */
     public boolean updateLuogo(String address) {
-        if(address == null) return false;
-        if(!manager.okLuogo(address)) return false;
+        if (address == null) {
+            return false;
+        }
+        if (!manager.okLuogo(address)) {
+            return false;
+        }
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
@@ -648,8 +660,7 @@ public class Ristorante implements Serializable {
             stm = manager.con.prepareStatement("insert into days (giorno, id_rist) values (?,?)");
             stm.setInt(1, giorno);
             stm.setInt(2, getId());
-            stm.executeUpdate();
-            res = true;
+            res = stm.executeUpdate() == 1;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -670,8 +681,7 @@ public class Ristorante implements Serializable {
         try {
             stm = manager.con.prepareStatement("delete from times where id = ?");
             stm.setInt(1, id_times);
-            stm.executeUpdate();
-            res = true;
+            res = stm.executeUpdate() == 1;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -685,7 +695,6 @@ public class Ristorante implements Serializable {
         }
         return res;
     }
-
 
     /**
      * Per ottenere tutti gli orari di questo ristorante
@@ -900,8 +909,7 @@ public class Ristorante implements Serializable {
         try {
             stm = manager.con.prepareStatement("DELETE FROM FOTO WHERE id = ?");
             stm.setInt(1, foto.getId());
-            stm.executeUpdate();
-            res = true;
+            res = stm.executeUpdate() == 1;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -962,8 +970,8 @@ public class Ristorante implements Serializable {
                 }
             }
         }
-        if(res.isEmpty()){ //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
-            res.add(new Foto(-1, "/defaultItem/defaultRist.png","Default Image", new Date(System.currentTimeMillis()), null, this, manager));
+        if (res.isEmpty()) { //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
+            res.add(new Foto(-1, "/defaultItem/defaultRist.png", "Default Image", new Date(System.currentTimeMillis()), null, this, manager));
         }
         return res;
     }

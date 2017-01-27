@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -32,13 +33,7 @@ public class FilterUser implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
-        try {
-            if (session.getAttribute("utente") == null) {
-                ((HttpServletRequest) request).getRequestDispatcher("/notAuthorized.jsp").forward(request, response);
-            }
-        } catch (NullPointerException e) {
-            ((HttpServletRequest) request).getRequestDispatcher("/notLogged.jsp").forward(request, response);
-        }
+        System.out.println("Filtro utente: " + session.getAttribute("utente"));
 
     }
 
@@ -49,41 +44,27 @@ public class FilterUser implements Filter {
 
     /**
      *
-     * @param request The servlet request we are processing
-     * @param response The servlet response we are creating
+     * @param req
+     * @param res
      * @param chain The filter chain we are processing
      *
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 
-        doBeforeProcessing(request, response);
+        HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpSession session = request.getSession(false);
+        String loginURI = request.getContextPath() + "/login";
 
-        Throwable problem = null;
-        try {
+        if (session == null || session.getAttribute("utente") == null) {
+            response.sendRedirect(request.getContextPath() + "/notLogged.jsp");
+        } else {
             chain.doFilter(request, response);
-        } catch (IOException | ServletException t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            problem = t;
         }
 
-        doAfterProcessing(request, response);
-
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
-        }
     }
 
     /**
@@ -113,7 +94,7 @@ public class FilterUser implements Filter {
                 try (PrintStream ps = new PrintStream(response.getOutputStream())) {
                     PrintWriter pw = new PrintWriter(ps);
                     pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
-                    
+
                     // PENDING! Localize this for next official release
                     pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
                     pw.print(stackTrace);
