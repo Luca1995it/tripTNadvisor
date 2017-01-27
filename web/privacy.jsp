@@ -179,7 +179,7 @@
                                 </div>
                                 <div class="col-md-2"></div>
                             </div>
-                            <form method="get" action="PrivacyServlet">
+                            <form method="get" action="<%= request.getContextPath()%>/PrivacyServlet">
                                 <button type="submit" class="btn btn-primary"><fmt:message key="accept"/></button>
                                 <button type="reset" id="user" class="btn btn-primary" onclick="history.go(-1);"><fmt:message key="cancel"/></button>
                             </form>

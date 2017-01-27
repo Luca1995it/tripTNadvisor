@@ -194,7 +194,7 @@
                                                     <img class="peopleCarouselImg" src="<%= request.getContextPath()%><c:out value="${foto.getFotopath()}"/>" alt="<fmt:message key="no.img"/>">
                                                     <c:if test="${utente != null && utente.proprietario(ristorante) && !foto.justSegnalato()}">
                                                         <label>
-                                                            <a href="/privateRistoratore/SegnalaFotoServlet?type=ristorante&id_foto=<c:out value="${foto.getId()}"/>">
+                                                            <a href="<%= request.getContextPath()%>/privateRistoratore/SegnalaFotoServlet?type=ristorante&id_foto=<c:out value="${foto.getId()}"/>">
                                                                 <fmt:message key="segnala"/>
                                                             </a>
                                                         </label>
@@ -232,7 +232,7 @@
                     <div class="col-sm-4">
                         <div class="caption">
                             <div class="caption-content">
-                                <label class="control-label"><a href="<c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
+                                <label class="control-label"><a href="<%= request.getContextPath()%><c:out value="${ristorante.getLinksito()}"/>"><fmt:message key="web.site"/></a></label>
                                 <br>
                                 <c:if test="${ristorante.getLuogo() != null}">
                                     <label class="control-label"><fmt:message key="address"/>: <c:out value="${ristorante.getLuogo().getAddress()}"/>"></label>
@@ -387,9 +387,10 @@
                                             <c:if test="${utente.proprietario(ristorante) && !rec.justSegnalato()}">
                                                 <label class="control-form">
                                                     <a href="<%= request.getContextPath()%>/privateRistoratore/SegnalaFotoServlet?id_rec=<c:out value="${rec.getId()}"/>&type=rec">
+                                                    </a>
                                                 </label>
                                                 <label class="label-warning"><fmt:message key="photo.report"/></label>
-                                                </a>
+
                                             </c:if>
                                         </div>
                                     </div>
@@ -467,7 +468,7 @@
                                                     </form>
                                                 </div>
                                             </c:if>
-                                            
+
                                         </div>
                                     </div>
                                 </div>

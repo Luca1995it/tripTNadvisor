@@ -173,7 +173,7 @@
                             <hr class="star-light">
                             <div class="col-md-4"></div>
                             <div class=" col-md-4">
-                                <form method="POST" action="LoginServlet">
+                                <form method="POST" action="<%= request.getContextPath()%>/LoginServlet">
                                     <label class="label-danger label"><c:out value="${message}"/></label>
                                     <h5><fmt:message key="email"/></h5>
                                     <input type="text" name="mail" size="50" placeholder="Email" class="form-control"/>
