@@ -375,6 +375,7 @@ public class Ristorante implements Serializable {
      */
     public boolean updateLinkSito(String linksito) {
         if(linksito == null) return false;
+        else linksito = manager.adjustLink(linksito);
         PreparedStatement stm = null;
         boolean res = false;
         try {
@@ -443,6 +444,7 @@ public class Ristorante implements Serializable {
      */
     public boolean updateLuogo(String address) {
         if(address == null) return false;
+        if(!manager.okLuogo(address)) return false;
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;

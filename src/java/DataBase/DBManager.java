@@ -312,44 +312,6 @@ public final class DBManager implements Serializable {
     }
 
     /**
-     * Per controllare se esiste già un ristorante con quel link al sito web nel
-     * portale
-     *
-     * @param link link da controllare
-     * @return true se esiste già nel portale un ristorante con quel link al
-     * sito web, false altrimenti
-     */
-    public boolean esisteLinkSitoRistorante(String link) {
-        PreparedStatement stm = null;
-        ResultSet rs = null;
-        boolean res = false;
-        try {
-            stm = con.prepareStatement("select * from Ristorante where linksito = ?");
-            stm.setString(1, link);
-            rs = stm.executeQuery();
-            res = rs.next();
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            if (stm != null) {
-                try {
-                    stm.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }
-        return res;
-    }
-
-    /**
      * Aggiunte un nuovo utente al portale
      *
      * @param nome nome del nuovo utente
@@ -658,7 +620,7 @@ public final class DBManager implements Serializable {
         }
     }
 
-    public int Levenshtein_distance(String x, String y) {
+    int Levenshtein_distance(String x, String y) {
         int m = x.length();
         int n = y.length();
 
@@ -707,6 +669,12 @@ public final class DBManager implements Serializable {
         return res;
     }
 
+    public String adjustLink(String link){
+        if(!link.substring(0, 7).equals("http://") || !link.substring(0, 8).equals("https://")) return "http://" + link;
+        else return link;
+    }
+    
+    
     /**
      * Per recupare l'oggetto utente con quell'id. Ad esso verrà effettuato un
      * downcast ad utente Registrato, Ristoratore, Amministratore secondo le
@@ -721,26 +689,11 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
         ResultSet rs2 = null;
         try {
-            stm = con.prepareStatement("select * from Utente where email = ?");
+            stm = con.prepareStatement("select id from Utente where email = ?");
             stm.setString(1, mail);
             rs = stm.executeQuery();
             if (rs.next()) {
-                if (rs.getBoolean("amministratore")) {
-                    res = new Amministratore(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("avpath"), this);
-                } else {
-                    stm = con.prepareStatement("SELECT COUNT(*) as res FROM RISTORANTE WHERE id_utente = ?");
-                    stm.setInt(1, rs.getInt("id"));
-                    rs2 = stm.executeQuery();
-                    if (rs2.next()) {
-                        //Ristoratore(int id, String nome, String cognome, String email, String avpath){
-                        if (rs2.getInt("res") > 0) {
-                            res = new Ristoratore(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("avpath"), rs.getBoolean("attivato"), rs.getBoolean("accettato"), this);
-                        } else {
-                            res = new Registrato(rs.getInt("id"), rs.getString("nome"), rs.getString("cognome"), rs.getString("email"), rs.getString("avpath"), rs.getBoolean("attivato"), rs.getBoolean("accettato"), this);
-
-                        }
-                    }
-                }
+                res = getUtente(rs.getInt("id"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class
@@ -821,7 +774,7 @@ public final class DBManager implements Serializable {
      * @param utente che riceverà la proprietà del ristorante
      * @return
      */
-    public boolean linkRistorante(Ristorante ristorante, Utente utente) {
+    public boolean assegnaRistorante(Ristorante ristorante, Utente utente) {
         PreparedStatement stm = null;
         boolean res = false;
         try {

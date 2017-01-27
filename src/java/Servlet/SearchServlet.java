@@ -77,8 +77,10 @@ public class SearchServlet extends HttpServlet {
                                         return 1;
                                     case "Normale":
                                         return 2;
-                                    default:
+                                    case "Lussuoso":
                                         return 3;
+                                    default: 
+                                        return 0;
                                 }
                             }
 

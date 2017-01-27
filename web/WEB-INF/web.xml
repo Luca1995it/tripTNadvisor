@@ -268,6 +268,10 @@
         <servlet-name>ConfiguraCucine</servlet-name>
         <servlet-class>Servlet.ConfiguraCucine</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>NuovaMailAttivazione</servlet-name>
+        <servlet-class>Servlet.NuovaMailAttivazione</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ConfigurazioneProfilo</servlet-name>
         <url-pattern>/private/ConfigurazioneProfilo</url-pattern>
@@ -403,6 +407,10 @@
     <servlet-mapping>
         <servlet-name>ConfiguraCucine</servlet-name>
         <url-pattern>/privateRistoratore/ConfiguraCucine</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NuovaMailAttivazione</servlet-name>
+        <url-pattern>/NuovaMailAttivazione</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

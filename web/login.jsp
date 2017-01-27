@@ -43,7 +43,7 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery-1.8.2.min.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/jquery.mockjax.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/src/jquery.autocomplete.js"></script>
-        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/newPass.js"></script>
+        <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/newPassEmail.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/customScript/privacy.js"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
 
@@ -185,8 +185,14 @@
                                 <br><br><br>
                                 <button class="btn btn-primary" id="setButton"><fmt:message key="pass.forgotten"/></button>
                                 <div id="newpassform" hidden>
-                                    <label class="control-label"><fmt:message key="insert.mail"/>: </label><input type="text" id="email" class="form-control" size="50"/>
+                                    <label class="control-label"><fmt:message key="insert.mail"/>: </label><input type="text" id="email1" class="form-control" size="70"/>
                                     <button id="sendButton" onclick="send('<%= request.getContextPath()%>')" class="btn btn-primary"><fmt:message key="rec.new.pass"/></button> 
+                                </div>
+                                <br><br><br>
+                                <button class="btn btn-primary" id="openButton"><fmt:message key="new.email"/></button>
+                                <div id="newemailform" hidden>
+                                    <label class="control-label"><fmt:message key="insert.mail"/>: </label><input type="text" id="email2" class="form-control" size="70"/>
+                                    <button id="sendButton" onclick="launch('<%= request.getContextPath()%>')" class="btn btn-primary"><fmt:message key="rec.new.email"/></button> 
                                 </div>
 
                             </div>

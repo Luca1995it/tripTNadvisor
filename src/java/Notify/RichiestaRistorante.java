@@ -48,7 +48,7 @@ public class RichiestaRistorante extends Notifica {
 
     @Override
     public boolean accetta() {
-        manager.linkRistorante(ristorante, utente);
+        manager.assegnaRistorante(ristorante, utente);
         return done();
     }
 

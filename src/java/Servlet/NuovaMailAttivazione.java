@@ -5,61 +5,39 @@
  */
 package Servlet;
 
-import DataBase.DBManager;
-import DataBase.Utente;
+import DataBase.Language;
 import Mail.EmailSessionBean;
 import java.io.IOException;
+import java.util.ResourceBundle;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ejb.EJB;
 
 /**
  *
  * @author lucadiliello
  */
-public class NuovaPassword extends HttpServlet {
+public class NuovaMailAttivazione extends HttpServlet {
 
     @EJB
     private final EmailSessionBean emailSessionBean = new EmailSessionBean();
 
-    private DBManager manager;
-
-    @Override
-    public void init() throws ServletException {
-        // inizializza il DBManager dagli attributi di Application
-        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-    }
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
+        System.out.println("Hyy guys");
+        String mail = request.getParameter("mail");
+        if (!(mail == null || mail.equals(""))) {
+            String cfr = EmailSessionBean.encrypt(mail);
+            Language lan = (Language) session.getAttribute("lan");
 
-        try {
-            String mail = request.getParameter("mail");
-            Utente utente = manager.getUtente(mail);
-
-            String newPass = generatePassword(8);
-            if (utente != null) {
-                if (utente.updatePassword(utente.getPassword(),newPass)) {
-                    emailSessionBean.sendEmail(utente.getEmail(), "La tua nuova password", "Nuova password: " + newPass);
-                }
-            }
-        } catch (NullPointerException ex) {
-            Logger.getLogger(NuovaPassword.class.getName()).log(Level.SEVERE, null, ex);
+            ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
+            emailSessionBean.sendEmail(mail, "Registration confirm", labels.getString("click.link.mail") + " http://localhost:2000" + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
         }
 
-    }
-
-    private String generatePassword(int length) {
-        String uuid = UUID.randomUUID().toString();
-        return uuid.substring(0, length);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
