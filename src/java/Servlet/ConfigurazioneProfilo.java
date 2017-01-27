@@ -29,7 +29,7 @@ public class ConfigurazioneProfilo extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        request.getRequestDispatcher(request.getContextPath() + "/private/profile.jsp").forward(request, response);
+        request.getRequestDispatcher("/private/profile.jsp").forward(request, response);
                 
     }
 

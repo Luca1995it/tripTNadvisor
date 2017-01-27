@@ -110,6 +110,11 @@
                             </c:when>
                         </c:choose>
                     </ul>
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <label class="label label-success"><c:out value="${message}"/></label>
+                        </li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <c:choose>
                             <c:when test="${utente == null}">

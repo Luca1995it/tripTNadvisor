@@ -209,6 +209,7 @@
                                     <input type="checkbox" name="spec" value="<c:out value="${speci}"/>"/> <fmt:message key='${speci}'/><br>
                                 </c:forEach>
                             </div>
+                            <label class="label label-warning"><c:out value="${specError}"/></label>
                             <hr>
                             <br>
                             <label class="control-label"><fmt:message key="economy.zone"/></label>:

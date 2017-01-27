@@ -70,42 +70,50 @@ public class ModificaProfiloServlet extends HttpServlet {
 
             boolean tornaIndietro = false;
 
-            if (multi.getParameter("nome").length() < 2) {
-                request.setAttribute("message", "Nome troppo corto");
-                tornaIndietro = true;
-            } else {
-                newNome = multi.getParameter("nome");
+            if (!multi.getParameter("nome").equals("")) {
+                if (multi.getParameter("nome").length() < 2) {
+                    request.setAttribute("message", "Nome troppo corto");
+                    tornaIndietro = true;
+                } else {
+                    newNome = multi.getParameter("nome");
+                }
             }
 
-            if (multi.getParameter("cognome").length() < 3) {
-                request.setAttribute("message", "Cognome troppo corto");
-                tornaIndietro = true;
-            } else {
-                newCognome = multi.getParameter("cognome");
+            if (!multi.getParameter("cognome").equals("")) {
+                if (multi.getParameter("cognome").length() < 3) {
+                    request.setAttribute("message", "Cognome troppo corto");
+                    tornaIndietro = true;
+                } else {
+                    newCognome = multi.getParameter("cognome");
+                }
             }
 
-            if (multi.getParameter("mail").length() < 8 || !multi.getParameter("mail").contains("@")) {
-                request.setAttribute("message", "Devi immettere una mail valida");
-                tornaIndietro = true;
-            } else {
-                newMail = multi.getParameter("mail");
+            if (!multi.getParameter("mail").equals("")) {
+                if (multi.getParameter("mail").length() < 8 || !multi.getParameter("mail").contains("@")) {
+                    request.setAttribute("message", "Devi immettere una mail valida");
+                    tornaIndietro = true;
+                } else {
+                    newMail = multi.getParameter("mail");
+                }
             }
 
-            if (!multi.getParameter("passOld").equals(utente.getPassword())) {
-                request.setAttribute("message", "La vecchia password è errata");
-                tornaIndietro = true;
-            } else if (!(multi.getParameter("pass1").equals(multi.getParameter("pass2")))) {
-                request.setAttribute("message", "Le password non corrispondono");
-                tornaIndietro = true;
-            } else if (multi.getParameter("pass1").length() < 8) {
-                request.setAttribute("message", "La password deve essere lunga almeno 8 caratteri");
-                tornaIndietro = true;
-            } else {
-                oldPass = multi.getParameter("passOld");
-                newPass = multi.getParameter("pass1");
+            if (!multi.getParameter("passOld").equals("") || !multi.getParameter("pass1").equals("") || !multi.getParameter("pass2").equals("")) {
+                if (!multi.getParameter("passOld").equals(utente.getPassword())) {
+                    request.setAttribute("message", "La vecchia password è errata");
+                    tornaIndietro = true;
+                } else if (!(multi.getParameter("pass1").equals(multi.getParameter("pass2")))) {
+                    request.setAttribute("message", "Le password non corrispondono");
+                    tornaIndietro = true;
+                } else if (multi.getParameter("pass1").length() < 8) {
+                    request.setAttribute("message", "La password deve essere lunga almeno 8 caratteri");
+                    tornaIndietro = true;
+                } else {
+                    oldPass = multi.getParameter("passOld");
+                    newPass = multi.getParameter("pass1");
+                }
             }
-            
-            if (!(multi.getFilesystemName(fileName) == null)){
+
+            if (!(multi.getFilesystemName(fileName) == null) && !multi.getFilesystemName(fileName).equals("")) {
                 newAvPath = dirName + "/" + multi.getFilesystemName(fileName);
             }
 
@@ -117,8 +125,7 @@ public class ModificaProfiloServlet extends HttpServlet {
                 utente.updateEmail(newMail);
                 utente.updateAvpath(newAvPath);
                 utente.updatePassword(oldPass, newPass);
-
-                session.setAttribute("utente", manager.authenticate(newMail, newPass));
+                session.setAttribute("utente", manager.authenticate(utente.getEmail(), utente.getPassword()));
             }
         }
         rd.forward(request, response);

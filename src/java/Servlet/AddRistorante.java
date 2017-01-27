@@ -93,13 +93,18 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("nomeError", "Nome già in uso");
                 tornaIndietro = true;
             }
+            
+            if(spec.length == 0){
+                request.setAttribute("specError", "Seleziona almeno una specialita");
+                tornaIndietro = true;
+            }
 
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
                 utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, fotoPath, fotoDescr);
                 request.setAttribute("message", "Ristorante aggiunto correttamente");
-                request.getRequestDispatcher("/privateRistoratore/ConfigurazioneRistoranti").forward(request, response);
+                request.getRequestDispatcher("/HomeServlet").forward(request, response);
             }
         }
     }

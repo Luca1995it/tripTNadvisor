@@ -91,6 +91,7 @@ public class RegistrationServlet extends HttpServlet {
             String cfr = EmailSessionBean.encrypt(mail1);
             manager.addKey(user, cfr);
             emailSessionBean.sendEmail(mail1, "Registration confirm", labels.getString("click.link.mail") + " http://localhost:2000" + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
+            request.setAttribute("message", "Registrazione effettuata, controlla la mail");
             request.getRequestDispatcher("/HomeServlet").forward(request, response);
         } else {
             request.setAttribute("problemMessage", labels.getString("error.message"));
