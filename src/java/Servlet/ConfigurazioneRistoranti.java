@@ -38,8 +38,8 @@ public class ConfigurazioneRistoranti extends HttpServlet {
         HttpSession session = request.getSession();
         Utente utente = (Utente) session.getAttribute("utente");
         ArrayList<Ristorante> listaMyRist;
-        if(utente.isRistoratore()) listaMyRist = ((Ristoratore) utente).getRistoranti();
-        else listaMyRist = null;
+        if(utente != null && utente.isRistoratore()) listaMyRist = ((Ristoratore) utente).getRistoranti();
+        else listaMyRist = new ArrayList<>();
         session.setAttribute("listaMyRist", listaMyRist);
         
         request.getRequestDispatcher("/private/myRistoranti.jsp").forward(request, response);

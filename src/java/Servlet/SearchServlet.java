@@ -79,7 +79,7 @@ public class SearchServlet extends HttpServlet {
                                         return 2;
                                     case "Lussuoso":
                                         return 3;
-                                    default: 
+                                    default:
                                         return 0;
                                 }
                             }
@@ -150,8 +150,9 @@ public class SearchServlet extends HttpServlet {
         ArrayList<Ristorante> resOriginal;
 
         res = manager.search(research, tipo, spec, lat, lng);
+        
         resOriginal = (ArrayList<Ristorante>) res.clone();
-
+        
         session.setAttribute("result", res);
         session.setAttribute("originalResult", resOriginal);
         request.getRequestDispatcher("/result.jsp").forward(request, response);

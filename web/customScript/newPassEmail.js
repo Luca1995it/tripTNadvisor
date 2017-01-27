@@ -1,10 +1,25 @@
+var h1, h2;
+h1 = false;
+h2 = false;
+
 $(document).ready(function (){
     document.getElementById('setButton').addEventListener('click',function (){
-        document.getElementById('newpassform').style.display = 'block';
+        if(h1){
+            document.getElementById('newpassform').style.display = 'block';
+        }
+        else {
+            document.getElementById('newpassform').style.display = 'none';
+        }
+        h1 = !h1;
     }, true);
     
     document.getElementById('openButton').addEventListener('click',function() {
-        document.getElementById('newemailform').style.display = 'block';
+        if(h2){
+            document.getElementById('newemailform').style.display = 'block';
+        } else{
+            document.getElementById('newemailform').style.display = 'none';
+        }
+        h2 = !h2;
     }, true);
 });
 

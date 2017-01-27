@@ -42,8 +42,7 @@ public class SegnalaFotoRecensione extends Notifica {
 
     @Override
     public boolean accetta() {
-        recensione.removeFoto();
-        return done();
+        return done() && recensione.removeFoto();
     }
 
     @Override

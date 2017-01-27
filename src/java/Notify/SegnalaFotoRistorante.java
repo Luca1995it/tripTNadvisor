@@ -44,8 +44,7 @@ public class SegnalaFotoRistorante extends Notifica {
 
     @Override
     public boolean accetta() {
-        ristorante.removeFoto(foto);
-        return done();
+        return done() && ristorante.removeFoto(foto);
     }
 
     @Override

@@ -33,6 +33,7 @@ public class Ristoratore extends Utente {
     
     @Override
     public ArrayList<Notifica> getNotifiche() {
+        if(manager == null) return new ArrayList<>();
         ArrayList<Notifica> res = new ArrayList<>();
         res.addAll(getNuovaFotoNotifiche());
         res.addAll(getNuovaRecensioneNotifiche());

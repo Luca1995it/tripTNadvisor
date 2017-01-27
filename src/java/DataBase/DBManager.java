@@ -493,6 +493,7 @@ public final class DBManager implements Serializable {
     public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng) {
 
         ArrayList<Ristorante> original;
+        ArrayList<Ristorante> res = new ArrayList<>();
         PreparedStatement stm = null;
         ResultSet rs = null;
 
@@ -528,81 +529,70 @@ public final class DBManager implements Serializable {
         }
 
         boolean found = false;
-
-        int k = 1;
-
-        Iterator i = original.iterator();
-        switch (tipo) {
-            case "all":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String name = r.getNome().toLowerCase();
-                    String addr = "";
-                    if (r.getLuogo() != null) {
-                        addr = r.getLuogo().getAddress().toLowerCase();
-                    }
-                    ArrayList<String> cucina = r.getCucina();
-                    if (!similString(name, research, k) && !similString(addr, research, k) && !similString(cucina, research, k)) {
-                        i.remove();
-                    }
-                }
-                break;
-
-            case "nome":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    String name = r.getNome().toLowerCase();
-                    if (!similString(name, research, k)) {
-                        i.remove();
-                    }
-                }
-                break;
-
-            case "addr":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    if (r.getLuogo() != null) {
-                        String addr = r.getLuogo().getSmallZone().toLowerCase();
-                        if (!similString(addr, research, k)) {
-                            i.remove();
+        String name;
+        String addr;
+        ArrayList<String> cucina;
+        int k = 0;
+        while (res.size() < 20) {
+            for (Ristorante r : original) {
+                switch (tipo) {
+                    case "all":
+                        name = r.getNome().toLowerCase();
+                        if (r.getLuogo() != null) {
+                            addr = r.getLuogo().getAddress().toLowerCase();
+                        } else {
+                            addr = "";
                         }
-                    }
-                }
-                break;
-
-            case "zona":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    if (r.getLuogo() != null) {
-                        String addr = r.getLuogo().getGeographicZone().toLowerCase();
-                        if (!similString(addr, research, k)) {
-                            i.remove();
+                        cucina = r.getCucina();
+                        if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
+                            res.add(r);
                         }
-                    }
-                }
-                break;
+                        break;
 
-            case "spec":
-                while (i.hasNext()) {
-                    Ristorante r = (Ristorante) i.next();
-                    ArrayList<String> cucina = r.getCucina();
-                    if (!similString(cucina, research, k)) {
-                        i.remove();
-                    }
+                    case "nome":
+                        name = r.getNome().toLowerCase();
+                        if (similString(name, research, k)) {
+                            res.add(r);
+                        }
+                        break;
+
+                    case "addr":
+                        if (r.getLuogo() != null) {
+                            addr = r.getLuogo().getSmallZone().toLowerCase();
+                            if (similString(addr, research, k)) {
+                                res.add(r);
+                            }
+                        }
+
+                        break;
+
+                    case "zona":
+                        if (r.getLuogo() != null) {
+                            addr = r.getLuogo().getGeographicZone().toLowerCase();
+                            if (!similString(addr, research, k)) {
+                                res.add(r);
+                            }
+                        }
+                        break;
+
+                    case "spec":
+                        cucina = r.getCucina();
+                        if (!similString(cucina, research, k)) {
+                            res.add(r);
+                        }
+                        break;
                 }
-                break;
-        }
-        i = original.iterator();
-        if (!spec.toLowerCase().equals("all")) {
-            while (i.hasNext()) {
-                Ristorante r = (Ristorante) i.next();
-                ArrayList<String> cucina = r.getCucina();
-                if (!similString(cucina, spec, k)) {
-                    i.remove();
+                if (!spec.toLowerCase().equals("all")) {
+                    cucina = r.getCucina();
+                    if (!similString(cucina, spec, k)) {
+                        res.remove(r);
+                    }
+
                 }
             }
-        }
 
+        }
+        k++;
         return original;
     }
 
@@ -669,13 +659,16 @@ public final class DBManager implements Serializable {
         return res;
     }
 
-    public String adjustLink(String link){
-        if(link == null || link.length() < 8) return "";
-        else if(!link.substring(0, 7).equals("http://") || !link.substring(0, 8).equals("https://")) return "http://" + link;
-        else return link;
+    public String adjustLink(String link) {
+        if (link == null || link.length() < 8) {
+            return "";
+        } else if (!link.substring(0, 7).equals("http://") || !link.substring(0, 8).equals("https://")) {
+            return "http://" + link;
+        } else {
+            return link;
+        }
     }
-    
-    
+
     /**
      * Per recupare l'oggetto utente con quell'id. Ad esso verrà effettuato un
      * downcast ad utente Registrato, Ristoratore, Amministratore secondo le

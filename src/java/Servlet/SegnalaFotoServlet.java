@@ -45,7 +45,7 @@ public class SegnalaFotoServlet extends HttpServlet {
                 request.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
             }
         } else{
-            request.setAttribute("segnalaMessageRec", "Non sei il proprietario del ristorante");
+            request.setAttribute("message", "Non sei il proprietario del ristorante");
         }
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);

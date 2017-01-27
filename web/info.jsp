@@ -105,6 +105,11 @@
                             </c:when>
                         </c:choose>
                     </ul>
+                    <ul class="nav navbar-nav">
+                        <li>
+                            <label class="label label-success"><c:out value="${message}"/></label>
+                        </li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <c:choose>
                             <c:when test="${utente == null}">
@@ -187,6 +192,7 @@
                                         </ol>
 
                                         <!-- Wrapper for slides -->
+                                        <label class="label label-warning"><c:out value="${segnalaMessageRist}"/></label>
                                         <div class="carousel-inner" role="listbox">
                                             <c:set var="first" value="${true}" scope="session"/>
                                             <c:forEach var="foto" items="${ristorante.getFoto()}">
@@ -372,25 +378,25 @@
                 </div>
                 <c:set var="recensioni" value="${ristorante.getRecensioni()}"/>
                 <c:choose>
-                    <c:when test="${recensioni.size()<=0}">
+                    <c:when test="${recensioni.size() == 0}">
                         <label class="control-form"><fmt:message key="rev.disp"/></label>
                     </c:when>
                     <c:otherwise>
                         <c:forEach var="rec" items="${recensioni}">
+                            <hr>
                             <div class="row">
-                                <hr>
                                 <div class="col-md-4">
                                     <div class="caption">
                                         <div class="caption-content">
-                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt="<fmt:message key="no.img"/>" height="200"/>
+                                            <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" alt="<fmt:message key="no.img"/>" width="200"/>
                                             <br>
                                             <c:if test="${utente.proprietario(ristorante) && !rec.justSegnalato()}">
-                                                <label class="control-form">
+                                                <label class="label-warning">
                                                     <a href="<%= request.getContextPath()%>/privateRistoratore/SegnalaFotoServlet?id_rec=<c:out value="${rec.getId()}"/>&type=rec">
+                                                        <fmt:message key="photo.report"/>
                                                     </a>
                                                 </label>
-                                                <label class="label-warning"><fmt:message key="photo.report"/></label>
-
+                                                <label class="label-warning"><c:out value="${segnalaMessageRec}"/></label>
                                             </c:if>
                                         </div>
                                     </div>
@@ -455,7 +461,7 @@
                                             </c:if>
                                             <br><br>
                                             <c:if test="${utente != null && !utente.proprietario(rec) && !utente.justVotato(rec)}">
-                                                <button type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
+                                                <button class="btn btn-primary" type="submit" value="Pulsante" onClick="visualizza('nomediv<c:out value="${rec.getId()}"/>2');"><fmt:message key="vote"/></button>
                                                 <div id='nomediv<c:out value="${rec.getId()}"/>2' hidden>
                                                     <form method="post" action="<%= request.getContextPath()%>/private/VotaRecensioneServlet?id_rec=<c:out value="${rec.getId()}"/>">
                                                         <label><input type="radio" name="rating" value="1"> 1 |</label>

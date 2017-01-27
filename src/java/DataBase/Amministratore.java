@@ -30,6 +30,7 @@ public class Amministratore extends Utente {
 
     @Override
     public ArrayList<Notifica> getNotifiche() {
+        if(manager == null) return new ArrayList<>();
         ArrayList<Notifica> res = new ArrayList<>();
         res.addAll(getCommentoRecensioneNotifiche());
         res.addAll(getReclamaRistoranteNotifiche());
