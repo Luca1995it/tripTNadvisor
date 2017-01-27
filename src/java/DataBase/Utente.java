@@ -634,6 +634,7 @@ public abstract class Utente implements Serializable {
      * false altrimenti
      */
     public boolean addRistorante(String nome, String desc, String linkSito, String fascia, String[] spec, String address, String fotoPath, String fotoDescr) {
+        System.out.println("Fotopath: " + fotoPath);
         linkSito = manager.adjustLink(linkSito);
         PreparedStatement stm = null;
         ResultSet rs = null;
