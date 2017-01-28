@@ -137,7 +137,7 @@
                                                 <c:forEach var="notifica" items="${utente.getNotifiche()}">
                                                     <li>
                                                         <a href="<%=request.getContextPath()%>/private/PrepareNotificheServlet?id_not=<c:out value="${notifica.getId()}"/>">
-                                                            <c:out value="${notifica.toString()}"/>
+                                                            <c:out value="${notifica.toStringReduced()}"/>
                                                         </a>
                                                     </li>
                                                 </c:forEach>
@@ -292,7 +292,7 @@
                             <h5>
                                 <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>" class="portfolio-link" data-toggle="modal">
                                     <c:out value="${ristorante.getNome()}"/><br>
-                                    <fmt:message key="visite"/>
+                                    <fmt:message key="visits"/>
                                     <c:out value="${ristorante.getVisite()}"/><br><br>
                                     <c:if test="${ristorante.getFoto().size() > 0}">
                                         <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
@@ -320,19 +320,29 @@
                     <c:forEach var="rec" items="${lastRec}">
                         <div class="col-md-4">
                             <h5>
-                                <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${rec.getRistorante().getId()}"/>" class="portfolio-link" data-toggle="modal">
-                                    <fmt:message key="by"/> 
-                                    <c:out value="${rec.getUtente().getNomeCognome()}"/>
-                                    (<c:out value="${rec.getUtente().getReputazione()}"/>), 
-                                    <c:out value="${rec.getData()}"/><br>
-                                    <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/><br><br>
-                                    <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>"><br>
-                                    <i><c:out value="${rec.getTesto()}"/></i><br><br>
+                                <label class="label control-label">
+                                    <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${rec.getRistorante().getId()}"/>" class="portfolio-link" data-toggle="modal">
+                                        <fmt:message key="by"/> 
+                                        <c:out value="${rec.getUtente().getNomeCognome()}"/>
+                                        (<c:out value="${rec.getUtente().getReputazione()}"/>), 
+                                        <c:out value="${rec.getData()}"/><br>
+                                        <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/>
+                                    </a>
+                                </label>
+                                <br><br>
+                                <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>">
+                                <br>
+                                <label class="control-label">
+                                    <c:out value="${rec.getTesto()}"/>
+                                </label>
+                                <br>
+                                <label class="control-label">
                                     <c:if test="${rec.getCommento()!=null}">
                                         <fmt:message key="answer"/><br><c:out value="${rec.getCommento()}"/>
                                     </c:if>
-                                </a>
+                                </label>
                             </h5>
+
                         </div>
                     </c:forEach>
                 </div>

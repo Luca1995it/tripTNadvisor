@@ -10,7 +10,6 @@ import DataBase.Utente;
 import Mail.EmailSessionBean;
 import Support.Encoding;
 import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
 import java.io.IOException;
@@ -140,6 +139,7 @@ public class AddRistorante extends HttpServlet {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
                 utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, dirName + "/" + fotoPath, fotoDescr);
+                session.setAttribute("utente", manager.getUtente(utente.getId()));
                 request.setAttribute("message", "Ristorante aggiunto correttamente");
                 request.getRequestDispatcher("/HomeServlet").forward(request, response);
             }

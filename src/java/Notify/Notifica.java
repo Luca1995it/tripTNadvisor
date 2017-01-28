@@ -75,7 +75,12 @@ public abstract class Notifica implements Serializable{
     
     @Override
     public abstract String toString();
-
+    
+    public String toStringReduced() {
+        String res = toString();
+        return res.length() > not_length ? res.substring(0, not_length-3) + "..." : res;
+    }
+    
     /**
      * Per le notifiche che contengono foto ritorna il path relativo
      * @return il path relativo della foto se la notifica contiene una foto, null altrimenti

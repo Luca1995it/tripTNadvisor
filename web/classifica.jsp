@@ -125,7 +125,7 @@
                                                 <c:forEach var="notifica" items="${utente.getNotifiche()}">
                                                     <li>
                                                         <a href="<%=request.getContextPath()%>/private/PrepareNotificheServlet?id_not=<c:out value="${notifica.getId()}"/>">
-                                                            <c:out value="${notifica.toString()}"/>
+                                                            <c:out value="${notifica.toStringReduced()}"/>
                                                         </a>
                                                     </li>
                                                 </c:forEach>
@@ -197,22 +197,23 @@
                         </div>
                     </div>
                 </c:forEach>
-            </div>
-
-            <c:if test="${utente != null}">
-                <form action="<%= request.getContextPath()%>/private/ConfigurazioneProfilo" method="get">
-                    <button class="btn btn-default" type="submit">
-                        <fmt:message key="go.profile"/>
+                <br><br>
+                
+                <c:if test="${utente != null}">
+                    <form action="<%= request.getContextPath()%>/private/ConfigurazioneProfilo" method="get">
+                        <button class="btn btn-primary" type="submit">
+                            <fmt:message key="go.profile"/>
+                        </button>
+                    </form>
+                </c:if>
+                <br>
+                <form action="<%= request.getContextPath()%>/HomeServlet" method="get">
+                    <button class="btn btn-primary" type="submit">
+                        <fmt:message key="go.home"/>
                     </button>
                 </form>
-            </c:if>
-            <br>
-            <form action="<%= request.getContextPath()%>/HomeServlet" method="get">
-                <button class="btn btn-default" type="submit">
-                    <fmt:message key="go.home"/>
-                </button>
-            </form>
 
+            </div>
 
 
         </section>

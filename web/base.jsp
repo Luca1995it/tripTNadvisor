@@ -125,7 +125,7 @@
                                                 <c:forEach var="notifica" items="${utente.getNotifiche()}">
                                                     <li>
                                                         <a href="<%=request.getContextPath()%>/private/PrepareNotificheServlet?id_not=<c:out value="${notifica.getId()}"/>">
-                                                            <c:out value="${notifica.toString()}"/>
+                                                            <c:out value="${notifica.toStringReduced()}"/>
                                                         </a>
                                                     </li>
                                                 </c:forEach>

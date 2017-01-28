@@ -47,7 +47,7 @@ public class CommentoRecensione extends Notifica {
                 + rec.getTitolo() + "\n"
                 + rec.getTesto() + "\n"
                 + "lasciata da " + rec.getUtente().getNomeCognome();
-        return res.length() > not_length ? res.substring(0, not_length-3) + "..." : res;
+        return res;
     }
 
     @Override

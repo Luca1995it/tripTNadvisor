@@ -72,11 +72,12 @@ public class NuovaRecensione extends Notifica {
         String res = "Nuova Recensione: L'utente " + recensione.getUtente().getNomeCognome() + " ha aggiunto una nuova recensione al tuo ristorante " + recensione.getRistorante().getNome() + "\n"
                 + "Titolo: " + recensione.getTitolo()
                 + "Testo: " + recensione.getTesto();
-        return res.length() > not_length ? res.substring(0, not_length-3) + "..." : res;
+        return res;
     }
 
     @Override
     public String getFotoPath() {
         return recensione.getFotoPath();
     }
+    
 }
