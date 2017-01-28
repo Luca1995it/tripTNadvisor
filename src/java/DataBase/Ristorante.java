@@ -75,7 +75,13 @@ public class Ristorante implements Serializable {
      * @return
      */
     public Ristoratore getUtente() {
-        return (Ristoratore) utente;
+        if (utente == null) {
+            return null;
+        } else if (utente.isAmministratore()) {
+            return (Ristoratore) utente;
+        } else {
+            return (Ristoratore) utente;
+        }
     }
 
     private final int id;

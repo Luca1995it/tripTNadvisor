@@ -532,26 +532,35 @@ public final class DBManager implements Serializable {
         String name;
         String addr;
         ArrayList<String> cucina;
-        int k = 0;
-        while (res.size() < 20) {
-            for (Ristorante r : original) {
+        
+        for (int k = 0; k < 15 && res.size() < 20; k++) {
+            Iterator i = original.iterator();
+            while (i.hasNext()) {
+                Ristorante r = (Ristorante) i.next();
                 switch (tipo) {
                     case "all":
                         name = r.getNome().toLowerCase();
                         if (r.getLuogo() != null) {
                             addr = r.getLuogo().getAddress().toLowerCase();
                         } else {
-                            addr = "";
+                            addr = null;
                         }
                         cucina = r.getCucina();
+                        System.out.println("-----------------------");
+                        System.out.println("Nome: " + name);
+                        System.out.print(similString(name, research, k) + " " + similString(addr, research, k) + " " + similString(cucina, research, k));
                         if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
+                            i.remove();
                             res.add(r);
-                        }
+                            System.out.print(" - Aggiungo");
+                        }System.out.println();
                         break;
 
                     case "nome":
+                        
                         name = r.getNome().toLowerCase();
                         if (similString(name, research, k)) {
+                            i.remove();
                             res.add(r);
                         }
                         break;
@@ -560,6 +569,7 @@ public final class DBManager implements Serializable {
                         if (r.getLuogo() != null) {
                             addr = r.getLuogo().getSmallZone().toLowerCase();
                             if (similString(addr, research, k)) {
+                                i.remove();
                                 res.add(r);
                             }
                         }
@@ -570,6 +580,7 @@ public final class DBManager implements Serializable {
                         if (r.getLuogo() != null) {
                             addr = r.getLuogo().getGeographicZone().toLowerCase();
                             if (!similString(addr, research, k)) {
+                                i.remove();
                                 res.add(r);
                             }
                         }
@@ -578,6 +589,7 @@ public final class DBManager implements Serializable {
                     case "spec":
                         cucina = r.getCucina();
                         if (!similString(cucina, research, k)) {
+                            i.remove();
                             res.add(r);
                         }
                         break;
@@ -585,18 +597,19 @@ public final class DBManager implements Serializable {
                 if (!spec.toLowerCase().equals("all")) {
                     cucina = r.getCucina();
                     if (!similString(cucina, spec, k)) {
+                        original.add(r);
                         res.remove(r);
                     }
 
                 }
             }
-
         }
-        k++;
-        return original;
+
+        return res;
     }
 
     public boolean similString(ArrayList<String> a, String b, int k) {
+        if(a == null || b == null) return false;
         return a.stream().anyMatch((x) -> (similString(x, b, k)));
     }
 
@@ -606,7 +619,7 @@ public final class DBManager implements Serializable {
         } else {
             a = a.toLowerCase();
             b = b.toLowerCase();
-            return a.contains((CharSequence) b) || b.contains((CharSequence) a) || (Levenshtein_distance(a, b) < k);
+            return Levenshtein_distance(a, b) <= k;
         }
     }
 
