@@ -10,6 +10,7 @@ import DataBase.Recensione;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
+import Support.Encoding;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
@@ -55,15 +56,35 @@ public class InserisciRecensioniServlet extends HttpServlet {
         MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
+                String filename = file.getName();
+                int dot = filename.lastIndexOf(".");
+                String ext = filename.substring(dot);
+                String name = filename.substring(dot, filename.length());
+                String newname;
                 try {
-                    return new File(file.getName() + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()));
+                    newname = (name + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(AddFotoServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    return file;
+                    newname = (name + (new Date()).toString() + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+                }
+                File f = new File(file.getParent(), newname);
+                if (createNewFile(f)) {
+                    session.setAttribute("newName", newname);
+                    return f;
+                } else {
+                    session.setAttribute("newName", null);
+                    return null;
+                }
+            }
+
+            private boolean createNewFile(File f) {
+                try {
+                    return f.createNewFile();
+                } catch (IOException ex) {
+                    return false;
                 }
             }
         });
-        
+
         Enumeration files = multi.getFileNames();
         String name = null;
         while (files.hasMoreElements()) {
@@ -89,10 +110,10 @@ public class InserisciRecensioniServlet extends HttpServlet {
             request.getRequestDispatcher("/private/scriviRecensione.jsp").forward(request, response);
         } else {
             String fotoPath;
-            if (multi.getFilesystemName(name) == null || multi.getFilesystemName(name).equals("")) {
+            if (session.getAttribute("newName") == null) {
                 fotoPath = manager.defaultFolder + "/rec_default.png";
             } else {
-                fotoPath = dirName + "/" + multi.getFilesystemName(name);
+                fotoPath = dirName + "/" + session.getAttribute("newName");
             }
 
             Recensione rec = ristorante.addRecensione(titolo, recensione, utente);

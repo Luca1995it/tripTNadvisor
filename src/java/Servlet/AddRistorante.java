@@ -8,6 +8,7 @@ package Servlet;
 import DataBase.DBManager;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
+import Support.Encoding;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
@@ -58,15 +59,35 @@ public class AddRistorante extends HttpServlet {
         MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
+                String filename = file.getName();
+                int dot = filename.lastIndexOf(".");
+                String ext = filename.substring(dot);
+                String name = filename.substring(dot, filename.length());
+                String newname;
                 try {
-                    return new File(file.getName() + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()));
+                    newname = (name + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(AddFotoServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    return file;
+                    newname = (name + (new Date()).toString() + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+                }
+                File f = new File(file.getParent(), newname);
+                if (createNewFile(f)) {
+                    session.setAttribute("newName", newname);
+                    return f;
+                } else {
+                    session.setAttribute("newName", null);
+                    return null;
+                }
+            }
+
+            private boolean createNewFile(File f) {
+                try {
+                    return f.createNewFile();
+                } catch (IOException ex) {
+                    return false;
                 }
             }
         });
-        
+
         Enumeration files = multi.getFileNames();
         String name = null;
         while (files.hasMoreElements()) {
@@ -76,12 +97,11 @@ public class AddRistorante extends HttpServlet {
         String nome = multi.getParameter("nome");
         String descr = multi.getParameter("desc");
         String linkSito = multi.getParameter("linkSito");
-        String [] spec = multi.getParameterValues("spec");
-        System.out.println(spec);
+        String[] spec = multi.getParameterValues("spec");
 
         String addr = multi.getParameter("addr");
         String fascia = multi.getParameter("fascia");
-        String fotoPath = dirName + "/" + multi.getFilesystemName(name);
+        String fotoPath =  (String) session.getAttribute("newName");
         String fotoDescr = multi.getParameter("fotoDescr");
 
         boolean tornaIndietro = false;
@@ -101,17 +121,17 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("errorFoto", "Devi riempire anche i campi della prima fotografia");
             }
 
-            if(!manager.okLuogo(addr)){
+            if (!manager.okLuogo(addr)) {
                 tornaIndietro = true;
                 request.setAttribute("addrError", "Inserisci un indirizzo del ristorante valido");
             }
-            
+
             if (manager.esisteNomeRistorante(nome)) {
                 request.setAttribute("nomeError", "Nome già in uso");
                 tornaIndietro = true;
             }
-            
-            if(spec == null || spec.length == 0){
+
+            if (spec == null || spec.length == 0) {
                 request.setAttribute("specError", "Seleziona almeno una specialita");
                 tornaIndietro = true;
             }
@@ -119,7 +139,7 @@ public class AddRistorante extends HttpServlet {
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
-                utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, fotoPath, fotoDescr);
+                utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, dirName + "/" + fotoPath, fotoDescr);
                 request.setAttribute("message", "Ristorante aggiunto correttamente");
                 request.getRequestDispatcher("/HomeServlet").forward(request, response);
             }

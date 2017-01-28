@@ -10,6 +10,7 @@ import DataBase.Foto;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
+import Support.Encoding;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
@@ -56,11 +57,31 @@ public class AddFotoServlet extends HttpServlet {
         MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
+                String filename = file.getName();
+                int dot = filename.lastIndexOf(".");
+                String ext = filename.substring(dot);
+                String name = filename.substring(dot, filename.length());
+                String newname;
                 try {
-                    return new File(file.getName() + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()));
+                    newname = (name + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
                 } catch (UnsupportedEncodingException ex) {
-                    Logger.getLogger(AddFotoServlet.class.getName()).log(Level.SEVERE, null, ex);
-                    return file;
+                    newname = (name + (new Date()).toString() + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+                }
+                File f = new File(file.getParent(), newname);
+                if (createNewFile(f)) {
+                    session.setAttribute("newName", newname);
+                    return f;
+                } else {
+                    session.setAttribute("newName", null);
+                    return null;
+                }
+            }
+
+            private boolean createNewFile(File f) {
+                try {
+                    return f.createNewFile();
+                } catch (IOException ex) {
+                    return false;
                 }
             }
         });
@@ -71,12 +92,11 @@ public class AddFotoServlet extends HttpServlet {
             name = (String) files.nextElement();
         }
         RequestDispatcher rd;
-        
-        if (multi.getFilesystemName(name) == null) {
-            request.setAttribute("errMessage", "Selezione non valida, riprova");
-            rd = request.getRequestDispatcher("/private/choose.jsp");
-        } else {
-            String newAvPath = dirName + "/" + multi.getFilesystemName(name);
+
+        if (session.getAttribute("newName") != null) {
+            String newAvPath = dirName + "/" + session.getAttribute("newName");
+            session.removeAttribute("newName");
+
             Foto foto = ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);
             System.out.println(foto);
             if (foto != null) {
@@ -87,8 +107,13 @@ public class AddFotoServlet extends HttpServlet {
                 request.setAttribute("errMessage", "Errore nel caricamento, riprova");
                 rd = request.getRequestDispatcher("/private/choose.jsp");
             }
+
+        } else {
+            rd = request.getRequestDispatcher("/private/choose.jsp");
+            request.setAttribute("errMessage", "Errore nel caricamento, riprova");
         }
         rd.forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

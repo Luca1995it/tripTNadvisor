@@ -75,9 +75,10 @@ public class ModificaProfiloServlet extends HttpServlet {
                     }
                     File f = new File(file.getParent(), newname);
                     if (createNewFile(f)) {
-                        System.out.println("Namone: " + f.getName());
+                        session.setAttribute("newName", newname);
                         return f;
                     } else {
+                        session.setAttribute("newName", null);
                         return null;
                     }
                 }
@@ -149,17 +150,9 @@ public class ModificaProfiloServlet extends HttpServlet {
                 }
             }
             
-            System.out.println("------------");
-            System.out.println("1: " + multi.getContentType(fileName));
-            System.out.println("1: " + multi.getFilesystemName(fileName));
-            System.out.println("1: " + multi.getFile(fileName).getAbsolutePath());
-            System.out.println("1: " + multi.getFile(fileName).getCanonicalPath());
-            System.out.println("1: " + multi.getFile(fileName).getName());
-            
-            System.out.println("------------");
-
-            if (!(multi.getFilesystemName(fileName) == null) && !multi.getFilesystemName(fileName).equals("")) {
-                newAvPath = dirName + "/" + multi.getFilesystemName(fileName);
+            if (!(session.getAttribute("newName") == null)) {
+                newAvPath = dirName + "/" + session.getAttribute("newName");
+                session.removeAttribute("newName");
             }
 
             if (tornaIndietro) {
