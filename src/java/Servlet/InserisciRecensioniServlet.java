@@ -9,10 +9,14 @@ import DataBase.DBManager;
 import DataBase.Recensione;
 import DataBase.Ristorante;
 import DataBase.Utente;
+import Mail.EmailSessionBean;
 import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,7 +52,18 @@ public class InserisciRecensioniServlet extends HttpServlet {
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
+        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+            @Override
+            public File rename(File file) {
+                try {
+                    return new File(file.getName() + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()));
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(AddFotoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    return file;
+                }
+            }
+        });
+        
         Enumeration files = multi.getFileNames();
         String name = null;
         while (files.hasMoreElements()) {
@@ -85,7 +100,7 @@ public class InserisciRecensioniServlet extends HttpServlet {
                 rec.addFoto(fotoPath);
                 manager.newNotNuovaRecensione(rec);
                 request.getRequestDispatcher("/info.jsp").forward(request, response);
-            } else{
+            } else {
                 request.getRequestDispatcher("/private/scriviRecensione.jsp").forward(request, response);
             }
         }

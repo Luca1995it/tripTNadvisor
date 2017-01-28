@@ -33,7 +33,7 @@ public class ConfiguraOrariApertura extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Ristorante ristorante = null;
+        Ristorante ristorante;
         try {
             ristorante = manager.getRistorante(Integer.parseInt(request.getParameter("id_rist")));
             if (ristorante != null) {

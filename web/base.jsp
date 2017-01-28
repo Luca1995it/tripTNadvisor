@@ -44,7 +44,7 @@
         <script type="text/javascript" src="<%= request.getContextPath()%>/autocomplete.txt"></script>
         <script type="text/javascript" src="<%= request.getContextPath()%>/scripts/demo.js"></script>
     </head>
-    
+
     <body id="page-top" class="index">
 
         <!-- Navigation -->

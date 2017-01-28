@@ -7,11 +7,16 @@ package Servlet;
 
 import DataBase.DBManager;
 import DataBase.Utente;
+import Mail.EmailSessionBean;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,7 +55,18 @@ public class AddRistorante extends HttpServlet {
         response.setContentType("text/plain"); //tipo di file di upload
         Utente utente = (Utente) session.getAttribute("utente");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
+        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+            @Override
+            public File rename(File file) {
+                try {
+                    return new File(file.getName() + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()));
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(AddFotoServlet.class.getName()).log(Level.SEVERE, null, ex);
+                    return file;
+                }
+            }
+        });
+        
         Enumeration files = multi.getFileNames();
         String name = null;
         while (files.hasMoreElements()) {

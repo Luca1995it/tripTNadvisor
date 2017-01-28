@@ -19,6 +19,7 @@ public abstract class Notifica implements Serializable{
     protected final DBManager manager;
     int id;
     Date data;
+    int not_length = 60;
 
     public int getId() {
         return id;

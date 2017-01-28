@@ -4,18 +4,26 @@
  * and open the template in the editor.
  */
 package DataBase;
+
 /**
  *
  * @author bazza
  */
-public class Language {
+public final class Language {
 
     private String lanSelected;
+    private final String [] language = {"it_IT","en_GB"};
+
+    public String[] getLanguage() {
+        return language;
+    }
+    
     
     public Language() {
-        this.lanSelected = "en_GB";
+        setDefault();
     }
 
+    
     /**
      * @return the firstLanguage
      */
@@ -27,7 +35,7 @@ public class Language {
      * Set en_GB as language
      */
     public void setDefault(){
-        lanSelected = "en_GB";
+        lanSelected = language[0];
     }
     /**
      * @param lanSelected

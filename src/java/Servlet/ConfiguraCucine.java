@@ -8,7 +8,6 @@ package Servlet;
 import DataBase.DBManager;
 import DataBase.Ristorante;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +33,7 @@ public class ConfiguraCucine extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Ristorante ristorante = null;
+        Ristorante ristorante;
         try {
             ristorante = manager.getRistorante(Integer.parseInt(request.getParameter("id_rist")));
             if (ristorante != null) {

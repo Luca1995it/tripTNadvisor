@@ -61,7 +61,7 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-                   
+
                     <ul class="nav navbar-nav navbar-right">
                         <c:choose>
                             <c:when test="${utente == null}">
@@ -74,7 +74,7 @@
                                     </a>
                                 </li>
                             </c:when>
-                             
+
                         </c:choose>
                         <li>
                             <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -112,7 +112,7 @@
             </div>
         </header>
 
-        
+
         <!-- Footer -->
         <footer class="text-center">
             <div class="footer-above">
@@ -150,7 +150,7 @@
             </a>
         </div>
 
-       
+
 
         <!-- jQuery -->
         <script src="<%= request.getContextPath()%>/vendor/jquery/jquery.min.js"></script>

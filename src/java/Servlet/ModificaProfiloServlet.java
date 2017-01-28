@@ -7,6 +7,9 @@ package Servlet;
 
 import DataBase.DBManager;
 import DataBase.Utente;
+import Mail.EmailSessionBean;
+import Notify.Notifica;
+import Support.Encoding;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.oreilly.servlet.MultipartRequest;
 
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.oreilly.servlet.multipart.FileRenamePolicy;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +61,37 @@ public class ModificaProfiloServlet extends HttpServlet {
         Utente utente = (Utente) session.getAttribute("utente");
         RequestDispatcher rd = request.getRequestDispatcher("/private/ConfigurazioneProfilo");
         if (utente != null) {
-            MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new DefaultFileRenamePolicy());
+
+            MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+                @Override
+                public File rename(File file) {
+                    String filename = file.getName();
+                    int dot = filename.lastIndexOf(".");
+                    String ext = filename.substring(dot);
+                    String name = filename.substring(dot, filename.length());
+                    String newname;
+                    try {
+                        newname = (name + (new Date()).toString() + EmailSessionBean.encrypt(file.getName()) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+                    } catch (UnsupportedEncodingException ex) {
+                        newname = (name + (new Date()).toString() + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+                    }
+                    File f = new File(file.getParent(), newname);
+                    if (createNewFile(f)) {
+                        return f;
+                    } else {
+                        return null;
+                    }
+                }
+
+                private boolean createNewFile(File f) {
+                    try {
+                        return f.createNewFile();
+                    } catch (IOException ex) {
+                        return false;
+                    }
+                }
+            });
+
             Enumeration files = multi.getFileNames();
             String fileName = null;
             while (files.hasMoreElements()) {

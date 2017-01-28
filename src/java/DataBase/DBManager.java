@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.Arrays;
+import java.util.ResourceBundle;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -488,9 +490,10 @@ public final class DBManager implements Serializable {
      * @param spec
      * @param lat
      * @param lng
+     * @param labels
      * @return un ArrayList dei Ristoranti trovati
      */
-    public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng) {
+    public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng, ResourceBundle labels) {
 
         ArrayList<Ristorante> original;
         ArrayList<Ristorante> res = new ArrayList<>();
@@ -532,7 +535,7 @@ public final class DBManager implements Serializable {
         String name;
         String addr;
         ArrayList<String> cucina;
-        
+
         for (int k = 0; k < 15 && res.size() < 20; k++) {
             Iterator i = original.iterator();
             while (i.hasNext()) {
@@ -545,19 +548,16 @@ public final class DBManager implements Serializable {
                         } else {
                             addr = null;
                         }
-                        cucina = r.getCucina();
-                        System.out.println("-----------------------");
-                        System.out.println("Nome: " + name);
-                        System.out.print(similString(name, research, k) + " " + similString(addr, research, k) + " " + similString(cucina, research, k));
+                        cucina = parseCucina(r.getCucina(), labels);
+
                         if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
                             i.remove();
                             res.add(r);
-                            System.out.print(" - Aggiungo");
-                        }System.out.println();
+                        }
                         break;
 
                     case "nome":
-                        
+
                         name = r.getNome().toLowerCase();
                         if (similString(name, research, k)) {
                             i.remove();
@@ -587,7 +587,8 @@ public final class DBManager implements Serializable {
                         break;
 
                     case "spec":
-                        cucina = r.getCucina();
+                        cucina = parseCucina(r.getCucina(), labels);
+
                         if (!similString(cucina, research, k)) {
                             i.remove();
                             res.add(r);
@@ -595,7 +596,8 @@ public final class DBManager implements Serializable {
                         break;
                 }
                 if (!spec.toLowerCase().equals("all")) {
-                    cucina = r.getCucina();
+                    cucina = parseCucina(r.getCucina(), labels);
+
                     if (!similString(cucina, spec, k)) {
                         original.add(r);
                         res.remove(r);
@@ -608,8 +610,19 @@ public final class DBManager implements Serializable {
         return res;
     }
 
+    ArrayList<String> parseCucina(ArrayList<String> a, ResourceBundle labels) {
+        ArrayList<String> res = new ArrayList<>();
+        for (String l : a) {
+            res.add(l);
+            res.add(labels.getString(l));
+        }
+        return res;
+    }
+
     public boolean similString(ArrayList<String> a, String b, int k) {
-        if(a == null || b == null) return false;
+        if (a == null || b == null) {
+            return false;
+        }
         return a.stream().anyMatch((x) -> (similString(x, b, k)));
     }
 
@@ -619,7 +632,11 @@ public final class DBManager implements Serializable {
         } else {
             a = a.toLowerCase();
             b = b.toLowerCase();
-            return Levenshtein_distance(a, b) <= k;
+            if (k > 3) {
+                return (Levenshtein_distance(a, b) <= k) || a.contains(b.subSequence(0, b.length())) || b.contains(a.subSequence(0, a.length()));
+            } else {
+                return Levenshtein_distance(a, b) <= k;
+            }
         }
     }
 
@@ -873,11 +890,16 @@ public final class DBManager implements Serializable {
             }
 
             stm = con.prepareStatement("select nome from specialita");
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                content += rs.getString("nome") + ",";
+            
+            Language lan = new Language();
+            for (String a : lan.getLanguage()) {
+                ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + a);
+                rs = stm.executeQuery();
+                while (rs.next()) {
+                    content += labels.getString(rs.getString("nome")) + ",";
+                }
             }
-            content += "ristorante, cucina";
+
 
             // if file doesn't exists, then create it
             try (FileOutputStream fop = new FileOutputStream(file)) {

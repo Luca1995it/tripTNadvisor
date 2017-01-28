@@ -74,7 +74,7 @@ public class SegnalaFotoRecensione extends Notifica {
                 + " proprietario del ristorante " + recensione.getRistorante().getNome()
                 + " ha chiesto la rimozione della seguente foto dalla recensione "
                 + recensione.getTitolo() + "\n" + recensione.getTesto();
-        return res.length() > 40 ? res.substring(0, 40) : res;
+        return res.length() > not_length ? res.substring(0, not_length-3) + "..." : res;
     }
 
     @Override

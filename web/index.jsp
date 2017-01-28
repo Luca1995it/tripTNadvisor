@@ -292,8 +292,8 @@
                             <h5>
                                 <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>" class="portfolio-link" data-toggle="modal">
                                     <c:out value="${ristorante.getNome()}"/><br>
-                                    <fmt:message key="ristorante.getvoto"/>
-                                    <c:out value="${ristorante.getVoto()}"/><br><br>
+                                    <fmt:message key="visite"/>
+                                    <c:out value="${ristorante.getVisite()}"/><br><br>
                                     <c:if test="${ristorante.getFoto().size() > 0}">
                                         <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
                                     </c:if>

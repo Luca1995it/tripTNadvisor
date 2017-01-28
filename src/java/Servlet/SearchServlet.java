@@ -6,12 +6,14 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -148,8 +150,11 @@ public class SearchServlet extends HttpServlet {
 
         ArrayList<Ristorante> res;
         ArrayList<Ristorante> resOriginal;
+        
+        Language lan = (Language) session.getAttribute("lan");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
 
-        res = manager.search(research, tipo, spec, lat, lng);
+        res = manager.search(research, tipo, spec, lat, lng, labels);
         
         resOriginal = (ArrayList<Ristorante>) res.clone();
         
