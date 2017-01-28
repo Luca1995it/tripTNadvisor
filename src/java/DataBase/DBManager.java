@@ -15,7 +15,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import org.json.JSONException;

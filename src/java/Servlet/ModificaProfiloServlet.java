@@ -8,7 +8,6 @@ package Servlet;
 import DataBase.DBManager;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
-import Notify.Notifica;
 import Support.Encoding;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -21,7 +20,6 @@ import com.oreilly.servlet.multipart.FileRenamePolicy;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.logging.Level;
@@ -77,6 +75,7 @@ public class ModificaProfiloServlet extends HttpServlet {
                     }
                     File f = new File(file.getParent(), newname);
                     if (createNewFile(f)) {
+                        System.out.println("Namone: " + f.getName());
                         return f;
                     } else {
                         return null;
@@ -149,6 +148,15 @@ public class ModificaProfiloServlet extends HttpServlet {
                     newPass = multi.getParameter("pass1");
                 }
             }
+            
+            System.out.println("------------");
+            System.out.println("1: " + multi.getContentType(fileName));
+            System.out.println("1: " + multi.getFilesystemName(fileName));
+            System.out.println("1: " + multi.getFile(fileName).getAbsolutePath());
+            System.out.println("1: " + multi.getFile(fileName).getCanonicalPath());
+            System.out.println("1: " + multi.getFile(fileName).getName());
+            
+            System.out.println("------------");
 
             if (!(multi.getFilesystemName(fileName) == null) && !multi.getFilesystemName(fileName).equals("")) {
                 newAvPath = dirName + "/" + multi.getFilesystemName(fileName);
