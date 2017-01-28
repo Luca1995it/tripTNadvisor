@@ -7,8 +7,6 @@ package Support;
 
 import Mail.EmailSessionBean;
 import java.io.UnsupportedEncodingException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
