@@ -16,6 +16,7 @@ import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ResourceBundle;
+import java.util.SortedSet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -495,7 +496,7 @@ public final class DBManager implements Serializable {
     public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng, ResourceBundle labels) {
 
         ArrayList<Ristorante> original;
-        ArrayList<Ristorante> res = new ArrayList<>();
+        ArrayList<Ristorante> res;
         PreparedStatement stm = null;
         ResultSet rs = null;
 
@@ -534,76 +535,71 @@ public final class DBManager implements Serializable {
         String name;
         String addr;
         ArrayList<String> cucina;
+        res = new ArrayList<>();
 
         for (int k = 0; k < 15 && res.size() < 20; k++) {
-            Iterator i = original.iterator();
-            while (i.hasNext()) {
-                Ristorante r = (Ristorante) i.next();
-                switch (tipo) {
-                    case "all":
-                        name = r.getNome().toLowerCase();
-                        if (r.getLuogo() != null) {
-                            addr = r.getLuogo().getAddress().toLowerCase();
-                        } else {
-                            addr = null;
-                        }
-                        cucina = parseCucina(r.getCucina(), labels);
 
-                        if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
-                            i.remove();
-                            res.add(r);
-                        }
-                        break;
+            for (Ristorante r : original) {
 
-                    case "nome":
+                cucina = parseCucina(r.getCucina(), labels);
+                if (spec.toLowerCase().equals("all") || similString(cucina, spec, k)) {
 
-                        name = r.getNome().toLowerCase();
-                        if (similString(name, research, k)) {
-                            i.remove();
-                            res.add(r);
-                        }
-                        break;
+                    switch (tipo) {
+                        case "all":
+                            name = r.getNome().toLowerCase();
+                            if (r.getLuogo() != null) {
+                                addr = r.getLuogo().getAddress().toLowerCase();
+                            } else {
+                                addr = null;
+                            }
+                            cucina = parseCucina(r.getCucina(), labels);
 
-                    case "addr":
-                        if (r.getLuogo() != null) {
-                            addr = r.getLuogo().getSmallZone().toLowerCase();
-                            if (similString(addr, research, k)) {
-                                i.remove();
+                            if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
                                 res.add(r);
                             }
-                        }
+                            break;
 
-                        break;
-
-                    case "zona":
-                        if (r.getLuogo() != null) {
-                            addr = r.getLuogo().getGeographicZone().toLowerCase();
-                            if (!similString(addr, research, k)) {
-                                i.remove();
+                        case "nome":
+                            name = r.getNome().toLowerCase();
+                            if (similString(name, research, k)) {
                                 res.add(r);
                             }
-                        }
-                        break;
+                            break;
 
-                    case "spec":
-                        cucina = parseCucina(r.getCucina(), labels);
+                        case "addr":
+                            if (r.getLuogo() != null) {
+                                addr = r.getLuogo().getSmallZone().toLowerCase();
+                                if (similString(addr, research, k)) {
+                                    res.add(r);
+                                }
+                            }
 
-                        if (!similString(cucina, research, k)) {
-                            i.remove();
-                            res.add(r);
-                        }
-                        break;
-                }
-                if (!spec.toLowerCase().equals("all")) {
-                    cucina = parseCucina(r.getCucina(), labels);
+                            break;
 
-                    if (!similString(cucina, spec, k)) {
-                        original.add(r);
-                        res.remove(r);
+                        case "zona":
+                            if (r.getLuogo() != null) {
+                                addr = r.getLuogo().getGeographicZone().toLowerCase();
+                                if (!similString(addr, research, k)) {
+                                    res.add(r);
+                                }
+                            }
+                            break;
+
+                        case "spec":
+                            cucina = parseCucina(r.getCucina(), labels);
+
+                            if (!similString(cucina, research, k)) {
+                                res.add(r);
+                            }
+                            break;
                     }
 
                 }
+
             }
+            res.stream().forEach((l) -> {
+                original.remove(l);
+            });
         }
 
         return res;
@@ -611,10 +607,12 @@ public final class DBManager implements Serializable {
 
     ArrayList<String> parseCucina(ArrayList<String> a, ResourceBundle labels) {
         ArrayList<String> res = new ArrayList<>();
-        for (String l : a) {
+        a.stream().map((l) -> {
             res.add(l);
+            return l;
+        }).forEach((l) -> {
             res.add(labels.getString(l));
-        }
+        });
         return res;
     }
 
@@ -889,7 +887,7 @@ public final class DBManager implements Serializable {
             }
 
             stm = con.prepareStatement("select nome from specialita");
-            
+
             Language lan = new Language();
             for (String a : lan.getLanguage()) {
                 ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + a);
@@ -898,7 +896,6 @@ public final class DBManager implements Serializable {
                     content += labels.getString(rs.getString("nome")) + ",";
                 }
             }
-
 
             // if file doesn't exists, then create it
             try (FileOutputStream fop = new FileOutputStream(file)) {
