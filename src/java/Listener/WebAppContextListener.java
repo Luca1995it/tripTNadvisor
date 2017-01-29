@@ -18,7 +18,9 @@ public class WebAppContextListener implements ServletContextListener {
         String defaultFolder = sce.getServletContext().getInitParameter("defaultFolder");
         String user = sce.getServletContext().getInitParameter("user");
         String password = sce.getServletContext().getInitParameter("password");
-        DBManager manager = new DBManager(dburl, user, password, completePath, defaultFolder);
+        int port = Integer.parseInt(sce.getServletContext().getInitParameter("port"));
+        
+        DBManager manager = new DBManager(port, dburl, user, password, completePath, defaultFolder);
         manager.updateAutocomplete();
         sce.getServletContext().setAttribute("dbmanager", manager);
     }

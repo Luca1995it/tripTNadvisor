@@ -30,7 +30,7 @@ var send = function(source){
 
 var launch = function(source){
     $.get(source + '/NuovaMailAttivazione' + '?' + 'mail=' + document.getElementById("email2").value);
-    alert("Ti è stata inviata una nuova mail per attivare il tuo account");
+    alert("Ti e' stata inviata una nuova mail per attivare il tuo account");
 };
 
 exports.send = send;

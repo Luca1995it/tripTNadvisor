@@ -5,6 +5,7 @@
  */
 package Servlet;
 
+import DataBase.DBManager;
 import DataBase.Language;
 import Mail.EmailSessionBean;
 import java.io.IOException;
@@ -23,7 +24,14 @@ import javax.servlet.http.HttpSession;
 public class NuovaMailAttivazione extends HttpServlet {
 
     @EJB
-    private final EmailSessionBean emailSessionBean = new EmailSessionBean();
+    private final EmailSessionBean emailSessionBean = new EmailSessionBean();private DBManager manager;
+
+    @Override
+    public void init() throws ServletException {
+        // inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,7 +43,7 @@ public class NuovaMailAttivazione extends HttpServlet {
             Language lan = (Language) session.getAttribute("lan");
 
             ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
-            emailSessionBean.sendEmail(mail, "Registration confirm", labels.getString("click.link.mail") + " http://localhost:2000" + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
+            emailSessionBean.sendEmail(mail, "Registration confirm", labels.getString("click.link.mail") + " https://" + manager.getCurrentIp().getHostAddress() + ":" + manager.port + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
         }
 
     }

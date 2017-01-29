@@ -58,6 +58,7 @@ public class AddRistorante extends HttpServlet {
         MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
+
                 String filename = file.getName();
                 int dot = filename.lastIndexOf(".");
                 String ext = filename.substring(dot);
@@ -100,14 +101,14 @@ public class AddRistorante extends HttpServlet {
 
         String addr = multi.getParameter("addr");
         String fascia = multi.getParameter("fascia");
-        String fotoPath =  (String) session.getAttribute("newName");
+        String fotoPath = (String) session.getAttribute("newName");
         String fotoDescr = multi.getParameter("fotoDescr");
 
         boolean tornaIndietro = false;
 
-        if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoPath == null || fotoDescr == null) {
+        if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoDescr == null) {
             request.setAttribute("errMessageAdd", "errore interno, riprovare");
-            request.getRequestDispatcher("/privateRistoratore/ConfigurazioneAddRistorante").forward(request, response);
+            request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
         } else {
 
             if (nome.equals("") || descr.equals("")) {
@@ -115,7 +116,7 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("error", "devi riempire almeno nome e descrizione");
             }
 
-            if (fotoPath.equals("") || fotoDescr.equals("")) {
+            if (fotoPath == null || fotoPath.equals("") || fotoDescr.equals("")) {
                 tornaIndietro = true;
                 request.setAttribute("errorFoto", "Devi riempire anche i campi della prima fotografia");
             }
@@ -134,7 +135,7 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("specError", "Seleziona almeno una specialita");
                 tornaIndietro = true;
             }
-
+            
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {

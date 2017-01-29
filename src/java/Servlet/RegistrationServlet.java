@@ -12,10 +12,6 @@ import Mail.EmailSessionBean;
 import java.io.IOException;
 import java.sql.SQLException;
 import javax.servlet.ServletException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -90,13 +86,14 @@ public class RegistrationServlet extends HttpServlet {
         } else if ((user = manager.addRegistrato(name, surname, mail1, pass1, privacy)) != null) {
             String cfr = EmailSessionBean.encrypt(mail1);
             manager.addKey(user, cfr);
-            emailSessionBean.sendEmail(mail1, "Registration confirm", labels.getString("click.link.mail") + " http://localhost:2000" + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
+            emailSessionBean.sendEmail(mail1, "Registration confirm", labels.getString("click.link.mail") + " https://" + manager.getCurrentIp().getHostAddress() + ":" + manager.port + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
             request.setAttribute("message", "Registrazione effettuata, controlla la mail");
             request.getRequestDispatcher("/HomeServlet").forward(request, response);
         } else {
             request.setAttribute("problemMessage", labels.getString("error.message"));
             request.getRequestDispatcher("/registration.jsp").forward(request, response);
         }
+        
     }
 
     

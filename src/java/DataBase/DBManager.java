@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.BufferedReader;
@@ -13,10 +12,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ResourceBundle;
-import java.util.SortedSet;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,13 +25,17 @@ public final class DBManager implements Serializable {
 
     //transient == non viene serializzato
     public transient Connection con;
-    protected String googleKey = "AIzaSyA7spDhgAtLeyh6b0F6MQI2I5fldqrR6oM";
-    public String completePath;
-    public String defaultFolder;
+    protected final String googleKey;
+    public final String completePath;
+    public final String defaultFolder;
+    public final int port;
 
-    public DBManager(String dburl, String user, String password, String completePath, String defaultFolder) {
+    public DBManager(int port, String dburl, String user, String password, String completePath, String defaultFolder) {
+        this.googleKey = "AIzaSyA7spDhgAtLeyh6b0F6MQI2I5fldqrR6oM";
         this.completePath = completePath;
         this.defaultFolder = defaultFolder;
+        this.port = port;
+
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver", true, getClass().getClassLoader());
         } catch (Exception e) {
@@ -60,6 +64,16 @@ public final class DBManager implements Serializable {
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
+    
+    public InetAddress getCurrentIp() {
+        InetAddress ip;
+        try {
+            return InetAddress.getLocalHost();
+        } catch (UnknownHostException ex) {
+            return null;
+        }
+    }
+
     /**
      * Metodo per verificare l'autenticazione di un utente
      *

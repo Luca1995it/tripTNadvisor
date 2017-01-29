@@ -35,6 +35,7 @@ public class SearchServlet extends HttpServlet {
             throws ServletException, IOException, SQLException {
 
     }
+    
 
     @Override
     @SuppressWarnings("empty-statement")

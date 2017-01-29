@@ -33,6 +33,7 @@ public class ConfirmServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         manager.activate(request.getParameter("hash"));
         RequestDispatcher rd = request.getRequestDispatcher("/HomeServlet");
+        request.setAttribute("message", "Account attivato, esegui il login");
         rd.forward(request, response);
     }
 
