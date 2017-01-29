@@ -6,9 +6,11 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,23 +47,25 @@ public class ModificaRistoranteServlet extends HttpServlet {
         String newFascia = null;
 
         boolean tornaIndietro = false;
+        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (request.getParameter("nome").length() == 0); else if (request.getParameter("nome").length() < 2) {
             tornaIndietro = true;
-            request.setAttribute("message", "Nome troppo corto");
+            request.setAttribute("message", labels.getString("name.corto"));
         } else {
             newNome = request.getParameter("nome");
         }
 
         if (request.getParameter("address").length() == 0); else if (!manager.okLuogo(request.getParameter("address"))) {
             tornaIndietro = true;
-            request.setAttribute("message", "Indirizzo invalido, provare con via, citta', CAP, stato");
+            request.setAttribute("message", labels.getString("missing.addr"));
         } else {
             newAddress = request.getParameter("address");
         }
 
-        if (request.getParameter("descr").length() == 0); else if (request.getParameter("descr").length() < 50) {
-            request.setAttribute("message", "La descrizione è troppo breve");
+        if (request.getParameter("descr").length() == 0); else if (request.getParameter("descr").length() < 10) {
+            request.setAttribute("message", labels.getString("descr.corto"));
             tornaIndietro = true;
         } else {
             newDescr = request.getParameter("descr");
@@ -69,10 +73,6 @@ public class ModificaRistoranteServlet extends HttpServlet {
 
         if (request.getParameter("linksito").length() > 0) {
             newLinksito = request.getParameter("linksito");
-        }
-
-        if (!request.getParameter("fascia").equals("nothing")) {
-            newFascia = request.getParameter("fascia");
         }
 
         if (tornaIndietro) {
@@ -83,9 +83,9 @@ public class ModificaRistoranteServlet extends HttpServlet {
             ristorante.updateFascia(newFascia);
             ristorante.updateLinkSito(newLinksito);
             ristorante.updateLuogo(newAddress);
+            request.getRequestDispatcher("/privateRistoratore/ConfigurazioneRistoranti").forward(request, response);
         }
-
-        request.getRequestDispatcher("/privateRistoratore/ConfigurazioneRistoranti").forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

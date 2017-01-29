@@ -6,10 +6,12 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -38,12 +40,14 @@ public class ReclamaRistoranteServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+            
         if (ristorante.reclamato()) {
-            request.setAttribute("notMessage", "Il ristorante è già stato reclamato da un altro utente");
+            request.setAttribute("notMessage", labels.getString("just.recl"));
         } else if (manager.newNotReclamaRistorante(ristorante, utente)) {
-            request.setAttribute("notMessage", "La tua richiesta sarà valutata da un amministratore");
+            request.setAttribute("notMessage", labels.getString("recl.ok"));
         } else {
-            request.setAttribute("notMessage", "Richiesta fallita, riprova");
+            request.setAttribute("notMessage", labels.getString("error.internal"));
         }
         request.getRequestDispatcher("/info.jsp").forward(request, response);
     }

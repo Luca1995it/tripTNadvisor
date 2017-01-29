@@ -28,8 +28,7 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter("password");
         HttpSession session = req.getSession();
         
-        Language lan = (Language) session.getAttribute("lan");
-        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if ((mail == null) || (password == null)) {
             req.setAttribute("message", labels.getString("insert.mail.password"));

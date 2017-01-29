@@ -6,8 +6,10 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -32,8 +34,10 @@ public class ConfirmServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         manager.activate(request.getParameter("hash"));
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) request.getSession().getAttribute("lan")).getLanSelected());
+
         RequestDispatcher rd = request.getRequestDispatcher("/HomeServlet");
-        request.setAttribute("message", "Account attivato, esegui il login");
+        request.setAttribute("message", labels.getString("act.log"));
         rd.forward(request, response);
     }
 

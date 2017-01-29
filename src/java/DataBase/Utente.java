@@ -624,7 +624,7 @@ public abstract class Utente implements Serializable {
      * @param nome nome completo del ristorante
      * @param desc descrizione del ristorante
      * @param linkSito link al sito web del ristorante
-     * @param fascia fascia del ristorante ("Economica","Normale","Lussuoso")
+     * @param fascia fascia del ristorante ("eco","mid","lux")
      * @param spec
      * @param address indirizzo del ristorante
      * @param fotoPath prima foto del ristorante (sarà possibile aggiungerne

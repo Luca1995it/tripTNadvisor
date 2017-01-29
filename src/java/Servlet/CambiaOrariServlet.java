@@ -6,9 +6,11 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import java.io.IOException;
 import java.sql.Time;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,11 +38,14 @@ public class CambiaOrariServlet extends HttpServlet {
         int id_times = Integer.parseInt(request.getParameter("id_orario"));
         HttpSession session = request.getSession();
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
+
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+        
         if (ristorante != null) {
             ristorante.removeTimes(id_times);
             request.getRequestDispatcher("/privateRistoratore/orari.jsp").forward(request, response);
         } else {
-            request.setAttribute("errOrario", "Errore interno, riprova");
+            request.setAttribute("errOrario", labels.getString("error.internal"));
             request.getRequestDispatcher("/privateRistoratore/orari.jsp").forward(request, response);
         }
 

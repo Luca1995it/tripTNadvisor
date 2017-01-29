@@ -6,9 +6,11 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +42,7 @@ public class NuovaPassword extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         HttpSession session = request.getSession();
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         try {
             String mail = request.getParameter("mail");
@@ -47,8 +50,8 @@ public class NuovaPassword extends HttpServlet {
 
             String newPass = generatePassword(8);
             if (utente != null) {
-                if (utente.updatePassword(utente.getPassword(),newPass)) {
-                    emailSessionBean.sendEmail(utente.getEmail(), "La tua nuova password", "Nuova password: " + newPass);
+                if (utente.updatePassword(utente.getPassword(), newPass)) {
+                    emailSessionBean.sendEmail(utente.getEmail(), labels.getString("new.pass.mail"), labels.getString("new.password")  + newPass);
                 }
             }
         } catch (NullPointerException ex) {

@@ -6,6 +6,7 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
 import Support.Encoding;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
@@ -105,34 +107,41 @@ public class AddRistorante extends HttpServlet {
         String fotoDescr = multi.getParameter("fotoDescr");
 
         boolean tornaIndietro = false;
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
 
         if (nome == null || descr == null || linkSito == null || addr == null || fascia == null || fotoDescr == null) {
-            request.setAttribute("errMessageAdd", "errore interno, riprovare");
+            request.setAttribute("errMessageAdd", labels.getString("error.internal"));
             request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
         } else {
 
-            if (nome.equals("") || descr.equals("")) {
+            if (nome.length() < 3) {
                 tornaIndietro = true;
-                request.setAttribute("error", "devi riempire almeno nome e descrizione");
+                request.setAttribute("nomeError", labels.getString("missing.name"));
+            }
+            
+            if (descr.length() < 10){
+                tornaIndietro = true;
+                request.setAttribute("errorDescr", labels.getString("missing.descr"));
             }
 
             if (fotoPath == null || fotoPath.equals("") || fotoDescr.equals("")) {
                 tornaIndietro = true;
-                request.setAttribute("errorFoto", "Devi riempire anche i campi della prima fotografia");
+                request.setAttribute("errorFoto", labels.getString("missing.foto"));
             }
 
             if (!manager.okLuogo(addr)) {
                 tornaIndietro = true;
-                request.setAttribute("addrError", "Inserisci un indirizzo del ristorante valido");
+                request.setAttribute("addrError", labels.getString("missing.addr"));
             }
 
             if (manager.esisteNomeRistorante(nome)) {
-                request.setAttribute("nomeError", "Nome già in uso");
+                request.setAttribute("nomeError", labels.getString("nome.uso"));
                 tornaIndietro = true;
             }
 
             if (spec == null || spec.length == 0) {
-                request.setAttribute("specError", "Seleziona almeno una specialita");
+                request.setAttribute("specError", labels.getString("missing.spec"));
                 tornaIndietro = true;
             }
             
@@ -141,7 +150,7 @@ public class AddRistorante extends HttpServlet {
             } else {
                 utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, dirName + "/" + fotoPath, fotoDescr);
                 session.setAttribute("utente", manager.getUtente(utente.getId()));
-                request.setAttribute("message", "Ristorante aggiunto correttamente");
+                request.setAttribute("message", labels.getString("restaurant.added"));
                 request.getRequestDispatcher("/HomeServlet").forward(request, response);
             }
         }

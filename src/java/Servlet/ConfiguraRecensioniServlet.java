@@ -5,10 +5,12 @@
  */
 package Servlet;
 
+import DataBase.Language;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -26,21 +28,27 @@ public class ConfiguraRecensioniServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
-        
+
         HttpSession session = request.getSession();
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
         Utente utente = (Utente) session.getAttribute("utente");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
         RequestDispatcher rd;
         if (ristorante != null && utente != null) {
             if (ristorante.getUtente() != null) {
                 if (utente.getId() == ristorante.getUtente().getId()) {
                     //controllo di 1 recensione per utente
-                    request.setAttribute("messConfiguraRecensioni", "Non puoi recensire un tuo ristorante");
+                    request.setAttribute("messConfiguraRecensioni", labels.getString("rec.your"));
                     rd = request.getRequestDispatcher("/info.jsp");
-                } else rd = request.getRequestDispatcher("/private/scriviRecensione.jsp");
-            } else rd = request.getRequestDispatcher("/private/scriviRecensione.jsp");
-        } else{
-            request.setAttribute("messConfiguraRecensioni", "Errore interno, riprova");
+                } else {
+                    rd = request.getRequestDispatcher("/private/scriviRecensione.jsp");
+                }
+            } else {
+                rd = request.getRequestDispatcher("/private/scriviRecensione.jsp");
+            }
+        } else {
+            request.setAttribute("messConfiguraRecensioni", labels.getString("error.internal"));
             rd = request.getRequestDispatcher("/info.jsp");
         }
         rd.forward(request, response);

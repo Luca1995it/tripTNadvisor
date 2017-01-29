@@ -6,6 +6,7 @@ package Servlet;
  * and open the template in the editor.
  */
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Recensione;
 import DataBase.Ristorante;
 import DataBase.Utente;
@@ -19,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletConfig;
@@ -93,16 +95,17 @@ public class InserisciRecensioniServlet extends HttpServlet {
 
         String titolo = multi.getParameter("titolo");
         String recensione = multi.getParameter("rec");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         boolean tornaIndietro = false;
 
         if (titolo.length() < 3) {
-            request.setAttribute("recMessage1", "Titolo troppo corto");
+            request.setAttribute("recMessage1", labels.getString("tit.short"));
             tornaIndietro = true;
         }
 
         if (recensione.length() < 10) {
-            request.setAttribute("recMessage2", "Recensione troppo corta");
+            request.setAttribute("recMessage2", labels.getString("rec.short"));
             tornaIndietro = true;
         }
 

@@ -5,9 +5,11 @@
  */
 package Servlet;
 
+import DataBase.Language;
 import Notify.Notifica;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +37,11 @@ public class ApplicaNotificaServlet extends HttpServlet {
         
         String sc = request.getParameter("accept");
         String id = request.getParameter("id_not");
-        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
         ArrayList<Notifica> res = (ArrayList<Notifica>) session.getAttribute("notifiche");
         if (id == null || sc == null || res == null) {
-            request.setAttribute("errMessageNotifica", "errore applicazione notifica, riprova");
+            request.setAttribute("errMessageNotifica", labels.getString("error.not"));
         } else {
             boolean scelta = Boolean.parseBoolean(sc);
             int id_not = Integer.parseInt(request.getParameter("id_not"));

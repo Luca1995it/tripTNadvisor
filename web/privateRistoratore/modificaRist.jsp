@@ -179,34 +179,23 @@
                                 <form method="POST" action="<%= request.getContextPath()%>/privateRistoratore/ModificaRistoranteServlet">
 
                                     <label class="control-label"><fmt:message key="insert.new.name"/></label>
-                                    <input name="nome" type="text" placeholder="Nuovo nome" class="form-control" /> 
+                                    <input name="nome" type="text" class="form-control" /> 
                                     <br>
                                     <label class="control-label"><fmt:message key="insert.new.address"/></label>
-                                    <input name="address" type="text" placeholder="Nuovo indirizzo" class="form-control"/> 
+                                    <input name="address" type="text" class="form-control"/> 
                                     <br>
                                     <label class="control-label"><fmt:message key="insert.new.website"/></label>
-                                    <input name="linksito" type="text" placeholder="Nuovo sito web" class="form-control"/> 
+                                    <input name="linksito" type="text" class="form-control"/> 
                                     <br>
                                     <label class="control-label"><fmt:message key="insert.new.description"/></label>
-                                    <textarea class="form-control" cols="80" rows="5" name="descr" placeholder="Inserisci una breve descrizione del ristorante"></textarea>
-                                    <br>
-                                    <label class="control-label"><fmt:message key="insert.new.specialty"/></label>
-                                    <select class="form-group selectBar" name="cucina">
-                                        <option value="nothing"><fmt:message key="no.edit"/></option>
-                                        <option value="Ristorante"><fmt:message key="restaurant"/></option>
-                                        <option value="Pizzeria"><fmt:message key="pizzeria"/></option>
-                                        <option value="Trattoria"><fmt:message key="tavern"/></option>
-                                        <option value="Polleria"><fmt:message key="polleria"/></option>
-                                        <option value="Chinese"><fmt:message key="chinese"/></option>
-                                        <option value="Japanese"><fmt:message key="japanese"/></option>                                                    
-                                    </select>
+                                    <textarea class="form-control" cols="80" rows="5" name="descr"></textarea>
                                     <br>
                                     <label class="control-label"><fmt:message key="insert.new.economyzone"/></label>
                                     <select class="form-group selectBar" name="fascia">
                                         <option value="nothing"><fmt:message key="no.edit"/></option>
-                                        <option value="Economico"><fmt:message key="economy"/></option>
-                                        <option value="Normale"><fmt:message key="normal"/></option>
-                                        <option value="Lussuoso"><fmt:message key="luxury"/></option>                                                    
+                                        <option value="eco"><fmt:message key="eco"/></option>
+                                        <option value="mid"><fmt:message key="mid"/></option>
+                                        <option value="lux"><fmt:message key="lux"/></option>                                                    
                                     </select>
                                     <br>
                                     <button  class="btn btn-primary" type='submit' ><fmt:message key="submit"/></button>

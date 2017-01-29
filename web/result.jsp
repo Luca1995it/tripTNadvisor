@@ -176,21 +176,21 @@
                             <fmt:message key="order.by"/><br>
                             <select class="form-group selectBar" name="tipo">
                                 <option value="NoOrdine">NessunOrdine</option>
-                                <option value="pos">Posizione in classifica</option>
-                                <option value="pre">Fascia di prezzo</option>
-                                <option value="alf">Alfabeticamente</option>
+                                <option value="pos"><fmt:message key="users.posClass"/></option>
+                                <option value="pre"><fmt:message key="economy.zone"/></option>
+                                <option value="alf"><fmt:message key="alphabetically"/></option>
                             </select><br>
-                            <input type="radio" name="ordine" value="1" checked>Crescente
-                            <input type="radio" name="ordine" value="2">Decrescente
+                            <input type="radio" name="ordine" value="1" checked><fmt:message key="rescent"/>
+                            <input type="radio" name="ordine" value="2"><fmt:message key="decreasing"/>
                         </div>
 
                         <div class="col-md-3">
                             <fmt:message key="filter.by.money"/><br>
                             <select class="form-group selectBar" name="fascia">
                                 <option value="TuttiFascia">Tutti</option>
-                                <option value="Economico">Economico</option>
-                                <option value="Normale">Normale</option>
-                                <option value="Lussuoso">Lussuoso</option>                                                    
+                                <option value="eco"><fmt:message key="eco"/></option>
+                                <option value="mid"><fmt:message key="mid"/></option>
+                                <option value="lux"><fmt:message key="lux"/></option>                                                    
                             </select>
                         </div>
 

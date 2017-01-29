@@ -213,7 +213,6 @@
                                                 <label><input type="radio" name="spec" value="<c:out value="${speci}"/>"><fmt:message key='${speci}'/></label>
                                                 </c:forEach>
                                         </h5>
-
                                     </div>
                                     <br>
                                     <button type="submit" class="btn btn-primary"><fmt:message key="search"/></button>
@@ -295,7 +294,7 @@
                                     <fmt:message key="visits"/>
                                     <c:out value="${ristorante.getVisite()}"/><br><br>
                                     <c:if test="${ristorante.getFoto().size() > 0}">
-                                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>" height="200" width="300">
+                                        <img src="<%= request.getContextPath()%><c:out value="${ristorante.getFoto().get(0).getFotopath()}"/>" class="img-responsive" alt="<fmt:message key="no.img"/>" width="200">
                                     </c:if>
                                 </a>
                             </h5>
@@ -320,20 +319,22 @@
                     <c:forEach var="rec" items="${lastRec}">
                         <div class="col-md-4">
                             <h5>
-                                <label class="label control-label">
-                                    <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${rec.getRistorante().getId()}"/>" class="portfolio-link" data-toggle="modal">
-                                        <fmt:message key="by"/> 
-                                        <c:out value="${rec.getUtente().getNomeCognome()}"/>
-                                        (<c:out value="${rec.getUtente().getReputazione()}"/>), 
-                                        <c:out value="${rec.getData()}"/><br>
-                                        <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/>
-                                    </a>
-                                </label>
+
+                                <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${rec.getRistorante().getId()}"/>" class="portfolio-link" data-toggle="modal">
+                                    <fmt:message key="by"/> 
+                                    <c:out value="${rec.getUtente().getNomeCognome()}"/>
+                                    (<c:out value="${rec.getUtente().getReputazione()}"/>), 
+                                    <c:out value="${rec.getData()}"/><br>
+                                    <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/>
+                                </a>
+
                                 <br><br>
                                 <img src="<%= request.getContextPath()%><c:out value="${rec.getFotoPath()}"/>" class="img-responsive" width="200" alt="<fmt:message key="no.img"/>">
                                 <br>
                                 <label class="control-label">
+
                                     <c:out value="${rec.getTesto()}"/>
+
                                 </label>
                                 <br>
                                 <label class="control-label">

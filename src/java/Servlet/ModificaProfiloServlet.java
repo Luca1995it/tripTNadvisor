@@ -6,6 +6,7 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
 import Support.Encoding;
@@ -22,6 +23,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -98,6 +100,8 @@ public class ModificaProfiloServlet extends HttpServlet {
                 fileName = (String) files.nextElement();
             }
 
+            ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+            
             String newNome = null;
             String newCognome = null;
             String newMail = null;
@@ -109,7 +113,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 
             if (!multi.getParameter("nome").equals("")) {
                 if (multi.getParameter("nome").length() < 2) {
-                    request.setAttribute("message", "Nome troppo corto");
+                    request.setAttribute("message", labels.getString("name.corto"));
                     tornaIndietro = true;
                 } else {
                     newNome = multi.getParameter("nome");
@@ -118,7 +122,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 
             if (!multi.getParameter("cognome").equals("")) {
                 if (multi.getParameter("cognome").length() < 3) {
-                    request.setAttribute("message", "Cognome troppo corto");
+                    request.setAttribute("message", labels.getString("cognome.corto"));
                     tornaIndietro = true;
                 } else {
                     newCognome = multi.getParameter("cognome");
@@ -127,7 +131,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 
             if (!multi.getParameter("mail").equals("")) {
                 if (multi.getParameter("mail").length() < 8 || !multi.getParameter("mail").contains("@")) {
-                    request.setAttribute("message", "Devi immettere una mail valida");
+                    request.setAttribute("message", labels.getString("invalid.mail"));
                     tornaIndietro = true;
                 } else {
                     newMail = multi.getParameter("mail");
@@ -136,13 +140,13 @@ public class ModificaProfiloServlet extends HttpServlet {
 
             if (!multi.getParameter("passOld").equals("") || !multi.getParameter("pass1").equals("") || !multi.getParameter("pass2").equals("")) {
                 if (!multi.getParameter("passOld").equals(utente.getPassword())) {
-                    request.setAttribute("message", "La vecchia password è errata");
+                    request.setAttribute("message", labels.getString("old.psw.inv"));
                     tornaIndietro = true;
                 } else if (!(multi.getParameter("pass1").equals(multi.getParameter("pass2")))) {
-                    request.setAttribute("message", "Le password non corrispondono");
+                    request.setAttribute("message", labels.getString("psw.corr"));
                     tornaIndietro = true;
                 } else if (multi.getParameter("pass1").length() < 8) {
-                    request.setAttribute("message", "La password deve essere lunga almeno 8 caratteri");
+                    request.setAttribute("message", labels.getString("min.length"));
                     tornaIndietro = true;
                 } else {
                     oldPass = multi.getParameter("passOld");

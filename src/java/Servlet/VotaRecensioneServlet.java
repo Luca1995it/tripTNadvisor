@@ -6,9 +6,11 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Recensione;
 import DataBase.Utente;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,15 +37,16 @@ public class VotaRecensioneServlet extends HttpServlet {
         int id_rec = Integer.parseInt(request.getParameter("id_rec"));
         Recensione rec = manager.getRecensione(id_rec);
         Utente utente = (Utente) session.getAttribute("utente");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (!utente.justVotato(rec)) {
             if (rec.addVoto(utente, Integer.parseInt(request.getParameter("rating")))) {
-                request.setAttribute("messageVotoRec", "Voto registrato correttamente");
+                request.setAttribute("messageVotoRec", labels.getString("vote.reg"));
             } else {
-                request.setAttribute("messageVotoRec", "Errore nell'inserimento del voto");
+                request.setAttribute("messageVotoRec", labels.getString("err.ins.vote"));
             }
         }
-        request.setAttribute("messageVotoRec", "Non puoi rivotare questa recensione");
+        request.setAttribute("messageVotoRec", labels.getString("non.rec"));
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);
     }

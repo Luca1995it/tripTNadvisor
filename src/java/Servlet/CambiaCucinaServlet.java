@@ -6,8 +6,10 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,14 +34,16 @@ public class CambiaCucinaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         String spec = request.getParameter("spec");
         HttpSession session = request.getSession();
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
-        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
         if (ristorante != null) {
             ristorante.removeCucina(spec);
         } else {
-            request.setAttribute("errSpec", "Errore interno, riprova");
+            request.setAttribute("errSpec", labels.getString("error.internal"));
         }
         request.getRequestDispatcher("/privateRistoratore/spec.jsp").forward(request, response);
 
@@ -51,11 +55,12 @@ public class CambiaCucinaServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
         String spec = request.getParameter("spec");
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (ristorante != null) {
             ristorante.addCucina(spec);
         } else {
-            request.setAttribute("errSpec", "Errore interno, riprova");
+            request.setAttribute("errSpec", labels.getString("error.internal"));
         }
         request.getRequestDispatcher("/privateRistoratore/spec.jsp").forward(request, response);
     }

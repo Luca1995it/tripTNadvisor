@@ -7,6 +7,7 @@ package Servlet;
 
 import DataBase.*;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,10 +35,13 @@ public class VotaRistoranteServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Utente user = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
+        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
         int rating = Integer.parseInt(request.getParameter("rating"));
-        System.out.println(user.justVotatoOggi(ristorante));
-        if(!ristorante.addVoto(user, rating)) request.setAttribute("errMessageVoto", "Non puoi rivotare oggi, torna domani");
-        else request.setAttribute("messageVoto","Il tuo voto è stato registrato");
+        
+        if(!ristorante.addVoto(user, rating)) request.setAttribute("errMessageVoto", labels.getString("not.revote.today"));
+        else request.setAttribute("messageVoto", labels.getString("vote.reg"));
         
         request.getRequestDispatcher("/info.jsp").forward(request, response);
     }

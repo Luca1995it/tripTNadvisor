@@ -7,6 +7,7 @@ package Servlet;
 
 import DataBase.DBManager;
 import DataBase.Foto;
+import DataBase.Language;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import Mail.EmailSessionBean;
@@ -19,6 +20,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
@@ -92,6 +94,9 @@ public class AddFotoServlet extends HttpServlet {
             name = (String) files.nextElement();
         }
         RequestDispatcher rd;
+        
+        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (session.getAttribute("newName") != null) {
             String newAvPath = dirName + "/" + session.getAttribute("newName");
@@ -104,13 +109,13 @@ public class AddFotoServlet extends HttpServlet {
                 rd = request.getRequestDispatcher("/ConfigurazioneRistorante?id_rist=" + ristorante.getId());
 
             } else {
-                request.setAttribute("errMessage", "Errore nel caricamento, riprova");
+                request.setAttribute("errMessage", labels.getString("error.loading"));
                 rd = request.getRequestDispatcher("/private/choose.jsp");
             }
 
         } else {
             rd = request.getRequestDispatcher("/private/choose.jsp");
-            request.setAttribute("errMessage", "Errore nel caricamento, riprova");
+            request.setAttribute("errMessage", labels.getString("error.loading"));
         }
         rd.forward(request, response);
 

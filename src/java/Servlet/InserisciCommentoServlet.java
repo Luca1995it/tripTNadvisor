@@ -6,7 +6,9 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -33,13 +35,14 @@ public class InserisciCommentoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         String commento = request.getParameter("commento");
         int id_rec = Integer.parseInt(request.getParameter("id_rec"));
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (commento == null) {
-            request.setAttribute("commentoErrMessage1", "Nessun testo inserito");
+            request.setAttribute("commentoErrMessage1", labels.getString("rec1"));
         } else if (manager.newNotCommentoRecensione(manager.getRecensione(id_rec), commento)) {
-            request.setAttribute("commentoErrMessage1", "Il commento sarà approvato da un amministratore");
+            request.setAttribute("commentoErrMessage1", labels.getString("rec2"));
         } else {
-            request.setAttribute("commentoErrMessage1", "Richiesta fallita, riprova");
+            request.setAttribute("commentoErrMessage1", labels.getString("error.internal"));
         }
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);

@@ -6,9 +6,11 @@
 package Servlet;
 
 import DataBase.DBManager;
+import DataBase.Language;
 import DataBase.Ristorante;
 import DataBase.Utente;
 import java.io.IOException;
+import java.util.ResourceBundle;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,18 +36,18 @@ public class SegnalaFotoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
-        
+        ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
+
         if (ristorante != null && utente != null && utente.proprietario(ristorante)) {
             String type = request.getParameter("type");
             if (type.equals("ristorante")) {
                 manager.newNotSegnalaFotoRistorante(manager.getFoto(Integer.parseInt(request.getParameter("id_foto"))));
-                request.setAttribute("segnalaMessageRist", "La foto è stata segnalata ad un amministratore");
             } else if (type.equals("rec")) {
                 manager.newNotSegnalaFotoRecensione(manager.getRecensione(Integer.parseInt(request.getParameter("id_rec"))));
-                request.setAttribute("segnalaMessageRec", "La foto è stata segnalata ad un amministratore");
             }
-        } else{
-            request.setAttribute("message", "Non sei il proprietario del ristorante");
+            request.setAttribute("segnalaMessageRist", labels.getString("foto.segnalata"));
+        } else {
+            request.setAttribute("message", labels.getString("not.prop.rist"));
         }
 
         request.getRequestDispatcher("/info.jsp").forward(request, response);

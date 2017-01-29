@@ -76,11 +76,11 @@ public class SearchServlet extends HttpServlet {
                         c = new Comparator<Ristorante>() {
                             int toInt(String s) {
                                 switch (s) {
-                                    case "Economica":
+                                    case "eco":
                                         return 1;
-                                    case "Normale":
+                                    case "mid":
                                         return 2;
-                                    case "Lussuoso":
+                                    case "lux":
                                         return 3;
                                     default:
                                         return 0;

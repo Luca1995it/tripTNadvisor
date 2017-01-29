@@ -180,7 +180,6 @@
                     <div class="col-md-6">
                         <form enctype='multipart/form-data' method="POST" action="<%= request.getContextPath()%>/private/AddRistorante">
                             <label class="label label-warning"><c:out value="${errMessageAdd}"/></label>
-                            <label class="label label-warning"><c:out value="${error}"/></label>
                             <hr>
                             <br>
                             
@@ -191,11 +190,11 @@
                             <br>
                             <label class="control-label"><fmt:message key="description"/></label>
                             <textarea class="form-control" cols="80" rows="5" name="desc"></textarea>
+                            <label class="label label-warning"><c:out value="${errorDescr}"/></label>
                             <hr>
                             <br>
                             <label class="control-label"><fmt:message key="web.site"/></label>
                             <input type="text" name="linkSito" class="form-control"/> 
-                            <label class="label label-warning"><c:out value="${linkError}"/></label>
                             <hr>
                             <br>
                             <label class="control-label"><fmt:message key="address"/></label>
@@ -214,9 +213,9 @@
                             <br>
                             <label class="control-label"><fmt:message key="economy.zone"/></label>:
                             <select class="form-group selectBar" name="fascia">
-                                <option value="Economico"><fmt:message key="economy"/></option>
-                                <option value="Normale"><fmt:message key="normal"/></option>
-                                <option value="Lussuoso"><fmt:message key="luxury"/></option>                                                    
+                                <option value="eco"><fmt:message key="eco"/></option>
+                                <option value="mid"><fmt:message key="mid"/></option>
+                                <option value="lux"><fmt:message key="lux"/></option>                                                    
                             </select>
                             <hr>
                             <br>
