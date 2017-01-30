@@ -181,6 +181,7 @@
         <!-- Portfolio Grid Section -->
         <section id="portfolio">
             <div class="container">
+                <hr>
                 <c:forEach var="utente" items="${classifica}">
                     <div class="row">
                         <div class="col-md-6">
@@ -196,6 +197,7 @@
                             <label class="control-label"><fmt:message key="rank"/>: <c:out value="${utente.getReputazione()}"/></label>
                         </div>
                     </div>
+                        <hr>
                 </c:forEach>
                 <br><br>
                 

@@ -55,7 +55,7 @@ public class InserisciRecensioniServlet extends HttpServlet {
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+        MultipartRequest multi = new MultipartRequest(request, manager.completePath + manager.fotoFolder, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
                 String filename = file.getName();
@@ -114,9 +114,9 @@ public class InserisciRecensioniServlet extends HttpServlet {
         } else {
             String fotoPath;
             if (session.getAttribute("newName") == null) {
-                fotoPath = manager.defaultFolder + "/rec_default.png";
+                fotoPath = "/rec_default.png";
             } else {
-                fotoPath = dirName + "/" + session.getAttribute("newName");
+                fotoPath = (String) session.getAttribute("newName");
             }
 
             Recensione rec = ristorante.addRecensione(titolo, recensione, utente);

@@ -56,7 +56,7 @@ public class AddFotoServlet extends HttpServlet {
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/photo" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
                 String filename = file.getName();
@@ -94,8 +94,7 @@ public class AddFotoServlet extends HttpServlet {
             name = (String) files.nextElement();
         }
         RequestDispatcher rd;
-        
-        
+
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (session.getAttribute("newName") != null) {
@@ -103,7 +102,6 @@ public class AddFotoServlet extends HttpServlet {
             session.removeAttribute("newName");
 
             Foto foto = ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);
-            System.out.println(foto);
             if (foto != null) {
                 manager.newNotNuovaFoto(foto);
                 rd = request.getRequestDispatcher("/ConfigurazioneRistorante?id_rist=" + ristorante.getId());

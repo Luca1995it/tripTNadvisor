@@ -19,7 +19,7 @@
     </context-param>
     <context-param>
         <param-name>completePath</param-name>
-        <param-value>/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor</param-value>
+        <param-value>${basedir}</param-value>
     </context-param>
     <!-- FINE PARAMETRI DA CONFIGURARE -->
     <!-- inizializzatori -->
@@ -80,8 +80,8 @@
         <listener-class>Listener.WebAppContextListener</listener-class>
     </listener>
     <context-param>
-        <param-name>defaultFolder</param-name>
-        <param-value>/defaultItem</param-value>
+        <param-name>photoFolder</param-name>
+        <param-value>/photo</param-value>
     </context-param>
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
@@ -114,14 +114,6 @@
     <servlet>
         <servlet-name>ModificaProfiloServlet</servlet-name>
         <servlet-class>Servlet.ModificaProfiloServlet</servlet-class>
-        <init-param>
-            <param-name>
-                uploadDir
-            </param-name>
-            <param-value>
-                /fotoUtenti
-            </param-value>
-        </init-param>
     </servlet>
     <servlet>
         <servlet-name>RegistrationServlet</servlet-name>
@@ -135,14 +127,6 @@
     <servlet>
         <servlet-name>AddRistorante</servlet-name>
         <servlet-class>Servlet.AddRistorante</servlet-class>
-        <init-param>
-            <param-name>
-                uploadDir
-            </param-name>
-            <param-value>
-                /fotoRistoranti
-            </param-value>
-        </init-param>
     </servlet>
     <servlet>
         <servlet-name>SearchServlet</servlet-name>
@@ -163,14 +147,6 @@
     <servlet>
         <servlet-name>AddFotoServlet</servlet-name>
         <servlet-class>Servlet.AddFotoServlet</servlet-class>
-        <init-param>
-            <param-name>
-                uploadDir
-            </param-name>
-            <param-value>
-                /fotoRistoranti
-            </param-value>
-        </init-param>
     </servlet>
     <servlet>
         <servlet-name>ModificaRistoranteServlet</servlet-name>
@@ -183,14 +159,6 @@
     <servlet>
         <servlet-name>InserisciRecensioniServlet</servlet-name>
         <servlet-class>Servlet.InserisciRecensioniServlet</servlet-class>
-        <init-param>
-            <param-name>
-                uploadDir
-            </param-name>
-            <param-value>
-                /fotoRecensioni
-            </param-value>
-        </init-param>
     </servlet>
     <servlet>
         <servlet-name>InserisciCommentoServlet</servlet-name>
@@ -263,6 +231,10 @@
     <servlet>
         <servlet-name>NuovaMailAttivazione</servlet-name>
         <servlet-class>Servlet.NuovaMailAttivazione</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FotoServlet</servlet-name>
+        <servlet-class>Servlet.FotoServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ConfigurazioneProfilo</servlet-name>
@@ -403,6 +375,11 @@
     <servlet-mapping>
         <servlet-name>NuovaMailAttivazione</servlet-name>
         <url-pattern>/NuovaMailAttivazione</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FotoServlet</servlet-name>
+        <url-pattern>/FotoServlet</url-pattern>
+        <!--<url-pattern>/FotoServlet/*</url-pattern>-->
     </servlet-mapping>
     <session-config>
         <session-timeout>

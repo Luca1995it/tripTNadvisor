@@ -27,13 +27,13 @@ public final class DBManager implements Serializable {
     public transient Connection con;
     protected final String googleKey;
     public final String completePath;
-    public final String defaultFolder;
     public final int port;
+    public String fotoFolder;
 
-    public DBManager(int port, String dburl, String user, String password, String completePath, String defaultFolder) {
+    public DBManager(int port, String dburl, String user, String password, String completePath, String fotoFolder) {
         this.googleKey = "AIzaSyA7spDhgAtLeyh6b0F6MQI2I5fldqrR6oM";
         this.completePath = completePath;
-        this.defaultFolder = defaultFolder;
+        this.fotoFolder = fotoFolder;
         this.port = port;
 
         try {
@@ -348,7 +348,7 @@ public final class DBManager implements Serializable {
             stm.setString(3, email);
             stm.setString(4, password);
             stm.setBoolean(5, privacy);
-            stm.setString(6, defaultFolder + "/default.jpg");
+            stm.setString(6, "/default.jpg");
             stm.executeUpdate();
 
             stm = con.prepareStatement("select * from utente where email = ?");

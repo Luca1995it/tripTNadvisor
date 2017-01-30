@@ -1,10 +1,7 @@
 /Libraries/
-/web/fotoRecensioni/
-/web/fotoUtenti/
-/web/fotoRistoranti/
-/web/qr/
 /build/
 /test/
+/photo
 /nbproject/
 /web/WEB-INF/
 /build.xml
