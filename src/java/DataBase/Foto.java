@@ -45,7 +45,7 @@ public class Foto implements Serializable {
     }
 
     public String getFotopath() {
-        return fotopath;
+        return "/FotoServlet" + fotopath;
     }
 
     public String getDescr() {

@@ -56,7 +56,7 @@ public class Recensione implements Serializable{
     }
 
     public String getFotoPath() {
-        return fotoPath;
+        return "/FotoServlet" + fotoPath;
     }
 
     
@@ -121,7 +121,7 @@ public class Recensione implements Serializable{
     }
 
     public boolean justSegnalato() {
-        if(fotoPath.equals("/defaultItem/rec_default.png")) return true;
+        if(fotoPath.equals("/rec_default.png")) return true;
         PreparedStatement stm = null;
         ResultSet rs;
         boolean res = false;
@@ -185,10 +185,10 @@ public class Recensione implements Serializable{
         boolean res = false;
         try {
             stm = manager.con.prepareStatement("UPDATE RECENSIONE SET fotoPath = ? WHERE id = ?");
-            stm.setString(1, manager.defaultFolder + "/rec_default.png");
+            stm.setString(1, "/rec_default.png");
             stm.setInt(2, getId());
             stm.executeUpdate();
-            fotoPath = manager.defaultFolder + "/rec_default.png";
+            fotoPath = "/rec_default.png";
             res = true;
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);

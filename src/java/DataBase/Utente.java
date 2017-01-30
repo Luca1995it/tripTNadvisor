@@ -742,7 +742,7 @@ public abstract class Utente implements Serializable {
     }
 
     public String getAvpath() {
-        return avpath;
+        return "/FotoServlet" + avpath;
     }
 
     /**

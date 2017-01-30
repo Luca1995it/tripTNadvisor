@@ -19,7 +19,11 @@
     </context-param>
     <context-param>
         <param-name>completePath</param-name>
-        <param-value>${basedir}</param-value>
+        <param-value>/Users/lucadiliello/Desktop/Progetti/Programmazione_web/tripTNadvisor</param-value>
+    </context-param>
+    <context-param>
+        <param-name>photoFolder</param-name>
+        <param-value>/photo</param-value>
     </context-param>
     <!-- FINE PARAMETRI DA CONFIGURARE -->
     <!-- inizializzatori -->
@@ -79,10 +83,7 @@
     <listener>
         <listener-class>Listener.WebAppContextListener</listener-class>
     </listener>
-    <context-param>
-        <param-name>photoFolder</param-name>
-        <param-value>/photo</param-value>
-    </context-param>
+    
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>Resources.string</param-value>
@@ -378,8 +379,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FotoServlet</servlet-name>
-        <url-pattern>/FotoServlet</url-pattern>
-        <!--<url-pattern>/FotoServlet/*</url-pattern>-->
+        <url-pattern>/FotoServlet/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

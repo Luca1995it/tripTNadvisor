@@ -33,18 +33,11 @@ import javax.servlet.http.HttpSession;
 public class InserisciRecensioniServlet extends HttpServlet {
 
     private DBManager manager;
-    private String dirName;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -116,7 +109,8 @@ public class InserisciRecensioniServlet extends HttpServlet {
             if (session.getAttribute("newName") == null) {
                 fotoPath = "/rec_default.png";
             } else {
-                fotoPath = (String) session.getAttribute("newName");
+                fotoPath = "/" + session.getAttribute("newName");
+                session.removeAttribute("newName");
             }
 
             Recensione rec = ristorante.addRecensione(titolo, recensione, utente);

@@ -7,9 +7,12 @@ package Servlet;
 
 import DataBase.DBManager;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,30 +26,31 @@ import javax.servlet.http.HttpServletResponse;
 public class FotoServlet extends HttpServlet {
 
     private DBManager manager;
-    private String dirName;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String filename = URLDecoder.decode(request.getPathInfo().substring(1), "UTF-8");
-        File file = new File(manager.completePath + "/photo", filename);
-        if (!file.exists()) file = new File(manager.fotoFolder, "default.jpg");
+
+        File file = new File(manager.completePath + manager.fotoFolder, filename);
+        if (!file.exists()) {
+            file = new File(manager.completePath + manager.fotoFolder, "/no_image.jpg");
+        }
         response.setHeader("Content-Type", getServletContext().getMimeType(filename));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "inline; filename=\"" + file.getName() + "\"");
-        Files.copy(file.toPath(), response.getOutputStream());
+        OutputStream out = response.getOutputStream();
+        try{
+            Files.copy(file.toPath(), out);
+        } catch(NoSuchFileException ex){
+            
+        }
         
     }
 

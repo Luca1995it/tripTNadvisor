@@ -39,18 +39,11 @@ import javax.servlet.http.HttpSession;
 public class ModificaProfiloServlet extends HttpServlet {
 
     private DBManager manager;
-    private String dirName;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
     }
 
     @SuppressWarnings("empty-statement")
@@ -62,7 +55,7 @@ public class ModificaProfiloServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("/private/ConfigurazioneProfilo");
         if (utente != null) {
 
-            MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+            MultipartRequest multi = new MultipartRequest(request, manager.completePath + manager.fotoFolder, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
                 @Override
                 public File rename(File file) {
                     String filename = file.getName();
@@ -155,7 +148,7 @@ public class ModificaProfiloServlet extends HttpServlet {
             }
             
             if (!(session.getAttribute("newName") == null)) {
-                newAvPath = dirName + "/" + session.getAttribute("newName");
+                newAvPath = "/" + session.getAttribute("newName");
                 session.removeAttribute("newName");
             }
 

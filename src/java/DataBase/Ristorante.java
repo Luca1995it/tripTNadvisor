@@ -57,10 +57,6 @@ public class Ristorante implements Serializable {
         return cucina;
     }
 
-    public String getDirName() {
-        return dirName;
-    }
-
     public int getVisite() {
         return visite;
     }
@@ -90,7 +86,6 @@ public class Ristorante implements Serializable {
     private final String linksito;
     private final String fascia;
     private final ArrayList<String> cucina;
-    public String dirName;
     private final Utente utente;
     private int visite;
     private Luogo luogo;
@@ -977,7 +972,7 @@ public class Ristorante implements Serializable {
             }
         }
         if (res.isEmpty()) { //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
-            res.add(new Foto(-1, "/defaultItem/defaultRist.png", "Default Image", new Date(System.currentTimeMillis()), null, this, manager));
+            res.add(new Foto(-1, "/defaultRist.png", "Default Image", new Date(System.currentTimeMillis()), null, this, manager));
         }
         return res;
     }
@@ -990,8 +985,8 @@ public class Ristorante implements Serializable {
      */
     public String creaQR() {
 
-        String pos = "/qr/" + this.getNome().replace(' ', '_') + ".jpg";
-        String savePath = manager.completePath + "/web" + pos;
+        String name = "/" + this.getNome().replace(' ', '-').replace('/','-') + ".jpg";
+        String savePath = manager.completePath + manager.fotoFolder + name;
 
         ArrayList<Days> days = getDays();
 
@@ -1008,20 +1003,22 @@ public class Ristorante implements Serializable {
                 }
             }
         }
-
+        System.out.println("RistQrpath: " + savePath);
         ByteArrayOutputStream out = QRCode.from(forQR).to(ImageType.JPG).stream();
         FileOutputStream fout;
         try {
+
             fout = new FileOutputStream(new File(savePath));
             fout.write(out.toByteArray());
-
             fout.flush();
             fout.close();
+
         } catch (IOException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            pos = null;
+            name = "/FotoServlet" + "/default.jpg";
         }
-        return pos;
+        return "/FotoServlet" + name;
+
     }
 
     /**

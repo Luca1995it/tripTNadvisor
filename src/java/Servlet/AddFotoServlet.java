@@ -34,18 +34,11 @@ import javax.servlet.http.HttpSession;
 public class AddFotoServlet extends HttpServlet {
 
     private DBManager manager;
-    private String dirName;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -56,7 +49,7 @@ public class AddFotoServlet extends HttpServlet {
         Utente utente = (Utente) session.getAttribute("utente");
         Ristorante ristorante = (Ristorante) session.getAttribute("ristorante");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/photo" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+        MultipartRequest multi = new MultipartRequest(request,  manager.completePath + manager.fotoFolder, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
                 String filename = file.getName();
@@ -98,7 +91,7 @@ public class AddFotoServlet extends HttpServlet {
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         if (session.getAttribute("newName") != null) {
-            String newAvPath = dirName + "/" + session.getAttribute("newName");
+            String newAvPath = "/" + session.getAttribute("newName");
             session.removeAttribute("newName");
 
             Foto foto = ristorante.addFoto(newAvPath, multi.getParameter("descr"), utente);

@@ -36,18 +36,11 @@ import javax.servlet.http.HttpSession;
 public class AddRistorante extends HttpServlet {
 
     private DBManager manager;
-    private String dirName;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-
-        // read the uploadDir from the servlet parameters
-        dirName = config.getInitParameter("uploadDir");
-        if (dirName == null) {
-            throw new ServletException("Please supply uploadDir parameter");
-        }
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParseException, SQLException {
@@ -57,7 +50,7 @@ public class AddRistorante extends HttpServlet {
         response.setContentType("text/plain"); //tipo di file di upload
         Utente utente = (Utente) session.getAttribute("utente");
 
-        MultipartRequest multi = new MultipartRequest(request, manager.completePath + "/web" + dirName, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
+        MultipartRequest multi = new MultipartRequest(request, manager.completePath + manager.fotoFolder, 10 * 1024 * 1024, "ISO-8859-1", new FileRenamePolicy() {
             @Override
             public File rename(File file) {
 
@@ -104,6 +97,7 @@ public class AddRistorante extends HttpServlet {
         String addr = multi.getParameter("addr");
         String fascia = multi.getParameter("fascia");
         String fotoPath = (String) session.getAttribute("newName");
+        session.removeAttribute("newName");
         String fotoDescr = multi.getParameter("fotoDescr");
 
         boolean tornaIndietro = false;
@@ -125,7 +119,7 @@ public class AddRistorante extends HttpServlet {
                 request.setAttribute("errorDescr", labels.getString("missing.descr"));
             }
 
-            if (fotoPath == null || fotoPath.equals("") || fotoDescr.equals("")) {
+            if (fotoPath == null || fotoPath.equals("/") || fotoDescr.equals("")) {
                 tornaIndietro = true;
                 request.setAttribute("errorFoto", labels.getString("missing.foto"));
             }
@@ -148,7 +142,7 @@ public class AddRistorante extends HttpServlet {
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
-                utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, dirName + "/" + fotoPath, fotoDescr);
+                utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, "/" + fotoPath, fotoDescr);
                 session.setAttribute("utente", manager.getUtente(utente.getId()));
                 request.setAttribute("message", labels.getString("restaurant.added"));
                 request.getRequestDispatcher("/HomeServlet").forward(request, response);
