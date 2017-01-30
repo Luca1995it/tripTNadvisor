@@ -24,11 +24,13 @@ public class SegnalaFotoRistorante extends Notifica {
     private final Foto foto;
 
     /**
-     * Crea un nuovo oggetto di tipo SegnalaFotoRistorante, che serve ad un utente ristoratore per segnalare una foto al suo ristorante non consona
+     * Crea un nuovo oggetto di tipo SegnalaFotoRistorante, che serve ad un
+     * utente ristoratore per segnalare una foto al suo ristorante non consona
+     *
      * @param manager collegamento al DBManager per operare sul DB
-     * @param id id sul DB 
+     * @param id id sul DB
      * @param data data di creazione
-     * @param ristorante ristorante dell'utente 
+     * @param ristorante ristorante dell'utente
      * @param foto foto da segnalare
      */
     public SegnalaFotoRistorante(int id, Date data, Ristorante ristorante, Foto foto, DBManager manager) {
@@ -43,8 +45,14 @@ public class SegnalaFotoRistorante extends Notifica {
     }
 
     @Override
+    @SuppressWarnings("empty-statement")
     public boolean accetta() {
-        return done() && ristorante.removeFoto(foto);
+        if (done()) {
+            return ristorante.removeFoto(foto);
+        } else {
+            return false;
+        }
+
     }
 
     @Override
@@ -69,6 +77,7 @@ public class SegnalaFotoRistorante extends Notifica {
         }
         return res;
     }
+
     @Override
     public String toString() {
         String res = "Rimuovi foto ristorante: " + " L'utente " + ristorante.getUtente().getNomeCognome() + ", proprietario del ristorante " + ristorante.getNome() + ", ha chiesto la rimozione della seguente fotografia";
