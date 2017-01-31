@@ -40,7 +40,7 @@ public class SearchServlet extends HttpServlet {
     @SuppressWarnings("empty-statement")
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        System.out.println("Eccomi sono martina");
         HttpSession session = request.getSession();
         if (request.getParameter("tipo") == null || request.getParameter("ordine") == null
                 || request.getParameter("fascia") == null || request.getParameter("spec") == null

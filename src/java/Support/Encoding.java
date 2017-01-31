@@ -36,7 +36,7 @@ public class Encoding {
     }
 
     public static String Parsifica(String testo) {
-        String res = null;
+        String res = "";
         String[] parole = testo.split(" ");
 
         for (String a : parole) {

@@ -15,7 +15,7 @@ public class Luogo implements Serializable {
 
     private final double lat;
     private final double lng;
-    private final int street_number;
+    private final String street_number;
     private final String street;
     private final String city;
     private final String area1;
@@ -23,7 +23,7 @@ public class Luogo implements Serializable {
     private final String state;
     private final int id;
 
-    public int getStreet_number() {
+    public String getStreet_number() {
         return street_number;
     }
 
@@ -52,7 +52,7 @@ public class Luogo implements Serializable {
     }
 
 
-    public Luogo(int id, double lat, double lng, int street_number, String street, String city, String area1, String area2, String state) {
+    public Luogo(int id, double lat, double lng, String street_number, String street, String city, String area1, String area2, String state) {
         this.id = id;
         this.lat = lat;
         this.lng = lng;
@@ -65,15 +65,23 @@ public class Luogo implements Serializable {
     }
 
     public String getAddress() {
-        return street + " " + street_number + ", " + city + ", " + area1 + ", " + area2 + ", " + state;
+        return getSmallZone() + " " + getGeographicZone();
     }
     
     public String getGeographicZone(){
-        return area1 + ", " + area2 + ", " + state;
+        String res = "";
+        if(area1 != null) res += area1 + ", ";
+        if(area2 != null) res += area2 + ", ";
+        if(state != null) res += state;
+        return res;
     }
     
     public String getSmallZone(){
-        return street + " " + street_number + ", " + city;
+        String res = "";
+        if(street != null) res += street + " ";
+        if(street_number != null) res += street_number + ", ";
+        if(city != null) res += city;
+        return res;
     }
 
     public double getLat() {

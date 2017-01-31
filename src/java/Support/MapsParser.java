@@ -25,6 +25,7 @@ public class MapsParser {
         String req = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address.replace(' ', '+') + "&key=" + googleKey;
         try {
             json = readJsonFromUrl(req);
+            if(!json.get("status").equals("OK")) throw new InvalidAddresException();
         } catch (IOException | JSONException ex) {
             throw new InvalidAddresException();
         }

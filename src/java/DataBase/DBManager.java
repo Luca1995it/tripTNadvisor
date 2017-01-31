@@ -18,10 +18,8 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import org.json.JSONArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -524,15 +522,16 @@ public final class DBManager implements Serializable {
         ResultSet rs = null;
 
         if ((lat != null) && (lng != null) && !lat.equals("") && !lng.equals("")) {
+            System.out.println("Entro primo if");
             for (int k = 4; k < 10; k++) {
-
+                System.out.println("Entro nel for con lat: "+lat+" e lng: "+lng);
                 original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), k * 10);
                 if (spec != null && !spec.equals("") && !spec.equals("all")) {
                     for (Iterator i = original.iterator(); i.hasNext();) {
                         Ristorante r = (Ristorante) i.next();
-                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 1));
 
-                        if (!similString(r.getCucina(), spec, 2)) {
+                        if (!similString(r.getCucina(), spec, 1)) {
                             i.remove();
                         }
                     }
@@ -548,6 +547,7 @@ public final class DBManager implements Serializable {
                 for (int k = 4; k < 10; k++) {
                     try {
                         MapsParser mp = new MapsParser(place, googleKey);
+                        System.out.println("MP: " + mp.getCity() + " " + mp.getState());
                         original = searchVicini(mp.getLat(), mp.getLat(), k * 10);
 
                     } catch (InvalidAddresException ex) {
@@ -581,8 +581,8 @@ public final class DBManager implements Serializable {
                         for (Iterator i = original.iterator(); i.hasNext();) {
 
                             Ristorante r = (Ristorante) i.next();
-                            System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
-                            if (!similString(r.getCucina(), spec, 2)) {
+                            System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 1));
+                            if (!similString(r.getCucina(), spec, 1)) {
                                 i.remove();
                             }
                         }
@@ -621,8 +621,8 @@ public final class DBManager implements Serializable {
                 if (spec != null && !spec.equals("") && !spec.equals("all")) {
                     for (Iterator i = original.iterator(); i.hasNext();) {
                         Ristorante r = (Ristorante) i.next();
-                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
-                        if (!similString(r.getCucina(), spec, 2)) {
+                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 1));
+                        if (!similString(r.getCucina(), spec, 1)) {
                             i.remove();
                         }
                     }
@@ -915,10 +915,12 @@ public final class DBManager implements Serializable {
     }
 
     public ArrayList<Ristorante> searchVicini(double lat, double lng, int k) {
+        System.out.println("Entro in searchVicini con lat: "+lat+" e lng: "+lng);
         ArrayList<Ristorante> res = new ArrayList<>();
         ResultSet rs = null;
         PreparedStatement stm = null;
         try {
+            System.out.println("Entro pre query");
             stm = con.prepareStatement("select * from ristorante, (SELECT ristorante.id , sqrt((?-l.LAT)*(?-l.lat) + (?-l.LNG)*(?-l.LNG)) as distance FROM RISTORANTE as ristorante, Luogo as l where ristorante.id_luogo = l.id) as res where res.id = ristorante.id order by distance asc nulls last { limit ? }");
             stm.setDouble(1, lat);
             stm.setDouble(2, lat);
@@ -927,8 +929,9 @@ public final class DBManager implements Serializable {
             stm.setInt(5, k);
             rs = stm.executeQuery();
             while (rs.next()) {
+                System.out.println("Ho trovato un ristorante");
                 res.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
-
+                System.out.println("id: "+rs.getInt("id")+" nome: "+rs.getString("nome"));
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class
@@ -1496,7 +1499,7 @@ public final class DBManager implements Serializable {
             stm.setInt(1, id);
             rs = stm.executeQuery();
             if (rs.next()) {
-                res = new Luogo(rs.getInt("id"), rs.getDouble("lat"), rs.getDouble("lng"), rs.getInt("street_number"), rs.getString("street"), rs.getString("city"), rs.getString("area1"), rs.getString("area2"), rs.getString("state"));
+                res = new Luogo(rs.getInt("id"), rs.getDouble("lat"), rs.getDouble("lng"), rs.getString("street_number"), rs.getString("street"), rs.getString("city"), rs.getString("area1"), rs.getString("area2"), rs.getString("state"));
 
             }
         } catch (SQLException ex) {

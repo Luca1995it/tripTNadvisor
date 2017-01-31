@@ -7,6 +7,8 @@ package DataBase;
 
 import static DataBase.DBManager.readJsonFromUrl;
 import Support.Encoding;
+import Support.InvalidAddresException;
+import Support.MapsParser;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -465,42 +467,36 @@ public class Ristorante implements Serializable {
         boolean res = false;
         try {
 
-            String req = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address.replace(' ', '+') + "&key=" + manager.googleKey;
-            JSONObject json = readJsonFromUrl(req);
-            if (json.getString("status").equals("OK")) {
+            MapsParser mp = new MapsParser(address, manager.googleKey);
 
-                stm = manager.con.prepareStatement("INSERT INTO Luogo (lat,lng,state,area1,area2,city,street,street_number) VALUES (?,?,?,?,?,?,?,?)");
+            stm = manager.con.prepareStatement("INSERT INTO Luogo (lat,lng,state,area1,area2,city,street,street_number) VALUES (?,?,?,?,?,?,?,?)");
 
-                JSONArray faddress = json.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
-                JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+            stm.setDouble(1, mp.getLat());
+            stm.setDouble(2, mp.getLng());
+            stm.setString(3, mp.getState());
+            stm.setString(4, mp.getArea1());
+            stm.setString(5, mp.getArea2());
+            stm.setString(6, mp.getCity());
+            stm.setString(7, mp.getStreet());
+            stm.setString(8, mp.getStreetNumber());
 
-                stm.setDouble(1, location.getDouble("lat"));
-                stm.setDouble(2, location.getDouble("lng"));
-                stm.setString(3, faddress.getJSONObject(5).getString("long_name"));
-                stm.setString(4, faddress.getJSONObject(3).getString("long_name"));
-                stm.setString(5, faddress.getJSONObject(4).getString("long_name"));
-                stm.setString(6, faddress.getJSONObject(2).getString("long_name"));
-                stm.setString(7, faddress.getJSONObject(1).getString("long_name"));
-                stm.setInt(8, Integer.parseInt(faddress.getJSONObject(0).getString("long_name")));
+            stm.executeUpdate();
 
+            stm = manager.con.prepareStatement("select * from Luogo where lat = ? AND lng = ?");
+            stm.setDouble(1, mp.getLat());
+            stm.setDouble(2, mp.getLng());
+            rs = stm.executeQuery();
+
+            if (rs.next()) {
+                luogo = new Luogo(rs.getInt("id"), rs.getDouble("lat"), rs.getDouble("lng"), rs.getString("street_number"), rs.getString("street"), rs.getString("city"), rs.getString("area1"), rs.getString("area2"), rs.getString("state"));
+                stm = manager.con.prepareStatement("update ristorante set id_luogo = ? where id = ?");
+                stm.setInt(1, luogo.getId());
+                stm.setInt(2, getId());
                 stm.executeUpdate();
-
-                stm = manager.con.prepareStatement("select * from Luogo where lat = ? AND lng = ?");
-                stm.setDouble(1, location.getDouble("lat"));
-                stm.setDouble(2, location.getDouble("lng"));
-                rs = stm.executeQuery();
-
-                if (rs.next()) {
-                    luogo = new Luogo(rs.getInt("id"), rs.getDouble("lat"), rs.getDouble("lng"), rs.getInt("street_number"), rs.getString("street"), rs.getString("city"), rs.getString("area1"), rs.getString("area2"), rs.getString("state"));
-                    stm = manager.con.prepareStatement("update ristorante set id_luogo = ? where id = ?");
-                    stm.setInt(1, luogo.getId());
-                    stm.setInt(2, getId());
-                    stm.executeUpdate();
-                    res = true;
-                }
+                res = true;
             }
 
-        } catch (SQLException | JSONException | IOException ex) {
+        } catch (SQLException | InvalidAddresException ex) {
             Logger.getLogger(Ristorante.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
@@ -518,6 +514,7 @@ public class Ristorante implements Serializable {
                 }
             }
         }
+
         return true;
     }
 
@@ -537,22 +534,28 @@ public class Ristorante implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) {
                 res = rs.getFloat("mediavoto");
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -581,23 +584,29 @@ public class Ristorante implements Serializable {
                     break;
                 } else {
                     res++;
+
                 }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -635,21 +644,27 @@ public class Ristorante implements Serializable {
                 }
             }
             res = true;
+
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -664,14 +679,18 @@ public class Ristorante implements Serializable {
             stm.setInt(1, giorno);
             stm.setInt(2, getId());
             res = stm.executeUpdate() == 1;
+
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -700,6 +719,7 @@ public class Ristorante implements Serializable {
                             stm = manager.con.prepareStatement("delete from days where id = ?");
                             stm.setInt(1, id_day);
                             res = stm.executeUpdate() == 1;
+
                         }
                     }
                 }
@@ -707,13 +727,16 @@ public class Ristorante implements Serializable {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -736,22 +759,28 @@ public class Ristorante implements Serializable {
 
             while (rs.next()) {
                 res.add(new Days(rs.getInt("id"), rs.getInt("giorno"), this, manager));
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -793,21 +822,27 @@ public class Ristorante implements Serializable {
                 }
             };
             res.sort(c);
+
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -845,22 +880,28 @@ public class Ristorante implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) {
                 res = new Recensione(rs.getInt("id"), rs.getString("titolo"), rs.getString("testo"), rs.getDate("data"), rs.getString("commento"), rs.getString("fotopath"), this, utente, manager);
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -898,22 +939,28 @@ public class Ristorante implements Serializable {
             rs = stm.executeQuery();
             if (rs.next()) { //int id, String fotopath, String descr, Date data, Utente utente, Ristorante ristorante, DBManager manager
                 res = new Foto(rs.getInt("id"), rs.getString("fotopath"), rs.getString("descr"), rs.getDate("data"), manager.getUtente(rs.getInt("id_utente")), this, manager);
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -934,14 +981,18 @@ public class Ristorante implements Serializable {
             stm = manager.con.prepareStatement("DELETE FROM FOTO WHERE id = ?");
             stm.setInt(1, foto.getId());
             res = stm.executeUpdate() == 1;
+
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -976,21 +1027,27 @@ public class Ristorante implements Serializable {
                 }
             };
             res.sort(c);
+
         } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {
                     stm.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (rs != null) {
                 try {
                     rs.close();
+
                 } catch (SQLException ex) {
-                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(DBManager.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -1037,7 +1094,8 @@ public class Ristorante implements Serializable {
             fout.close();
 
         } catch (IOException ex) {
-            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBManager.class
+                    .getName()).log(Level.SEVERE, null, ex);
             name = "/FotoServlet" + "/default.jpg";
         }
         return "/FotoServlet" + name;
@@ -1069,14 +1127,18 @@ public class Ristorante implements Serializable {
                 stm.setInt(4, rating);
                 stm.executeUpdate();
                 res = true;
+
             } catch (SQLException ex) {
-                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DBManager.class
+                        .getName()).log(Level.SEVERE, null, ex);
             } finally {
                 if (stm != null) {
                     try {
                         stm.close();
+
                     } catch (SQLException ex) {
-                        Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(DBManager.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             }
