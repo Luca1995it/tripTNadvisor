@@ -250,7 +250,7 @@
                                     </c:forEach>
                                 </label>
                                 <br>
-                                <label class="control-label"><fmt:message key="economy.zone"/>: <c:out value="${ristorante.getFascia()}"/></label>
+                                <label class="control-label"><fmt:message key="economy.zone"/>: <fmt:message key="${ristorante.getFascia()}"/></label>
                                 <br>
                                 <c:if test="${ristorante.getLuogo() != null}">
                                     <label class="control-label"><a href="<%= request.getContextPath()%>/maps.jsp"><fmt:message key="maps"/></a></label>

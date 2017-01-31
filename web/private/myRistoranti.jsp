@@ -180,7 +180,7 @@
                                 </a>
                             </label>
                             <br>
-                            <label class="control-label"><fmt:message key="fascia"/>: <c:out value="${ristorante.getFascia()}"/></label>
+                            <label class="control-label"><fmt:message key="fascia"/>: <fmt:message key="${ristorante.getFascia()}"/></label>
                             <br>
                             <label class="control-label"><fmt:message key="cucina"/>: 
                                 <c:forEach var="cucina" items="${ristorante.getCucina()}">

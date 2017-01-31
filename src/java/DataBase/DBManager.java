@@ -851,6 +851,8 @@ public final class DBManager implements Serializable {
     public boolean activate(String hash) {
         PreparedStatement stm = null;
         boolean res = false;
+        System.out.println("Ingresso activate");
+        System.out.println("Hash: " + hash);
         try {
             stm = con.prepareStatement("update utente set attivato = ? where id = (select id_utente from validation where chiave = ?)");
             stm.setBoolean(1, true);

@@ -41,7 +41,6 @@ public class NuovaMailAttivazione extends HttpServlet {
         if (!(mail == null || mail.equals(""))) {
             String cfr = EmailSessionBean.encrypt(mail);
             Language lan = (Language) session.getAttribute("lan");
-
             ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
             emailSessionBean.sendEmail(mail, labels.getString("reg.conf"), labels.getString("click.link.mail") + " https://" + manager.getCurrentIp().getHostAddress() + ":" + manager.port + request.getContextPath() + "/ConfirmServlet?hash=" + cfr);
         }

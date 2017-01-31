@@ -231,7 +231,7 @@
                                 <c:out value="${ristorante.getNome()}"/>
                             </a>
                             <br>
-                            <fmt:message key="fascia"/>: <c:out value="${ristorante.getFascia()}"/><br>
+                            <fmt:message key="fascia"/>: <fmt:message key="${ristorante.getFascia()}"/><br>
                             <fmt:message key="cucina"/>: 
                             <c:forEach var="cucina" items="${ristorante.getCucina()}">
                                 <fmt:message key="${cucina}"/>,

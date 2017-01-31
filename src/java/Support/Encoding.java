@@ -41,16 +41,16 @@ public class Encoding {
 
         for (String a : parole) {
 
-            int numeroSplit = a.length() % 25;
-            for (int i = 0; i < numeroSplit; i++) {
-                String tmp = a.substring(i * 25, (i + 1) * 25);
-                res += tmp + " ";
+            if (a.length() > 25) {
+                int numeroSplit = a.length() / 25;
+                int i;
+                for (i = 0; i < numeroSplit; i++) {
+                    res += a.substring(i * 25, a.length()) + " ";
+                }
+                res += a.substring(i) + " ";
+            } else {
+                res += a + " ";
             }
-
-            if (numeroSplit == 0) {
-                res += a;
-            }
-            res += " ";
         }
         return res;
     }
