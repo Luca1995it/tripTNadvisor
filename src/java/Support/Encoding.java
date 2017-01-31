@@ -28,8 +28,30 @@ public class Encoding {
         String name = filename.substring(dot, filename.length());
         String newname;
 
-        newname = (name + (new GregorianCalendar() {}).toString() + (new GregorianCalendar() {}).getTime() + EmailSessionBean.encrypt(name) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
+        newname = (name + (new GregorianCalendar() {
+        }).toString() + (new GregorianCalendar() {
+        }).getTime() + EmailSessionBean.encrypt(name) + Encoding.getNewCode()).replace(".", "").replace(" ", "_").replace(":", "-") + ext;
         return newname;
 
+    }
+
+    public static String Parsifica(String testo) {
+        String res = null;
+        String[] parole = testo.split(" ");
+
+        for (String a : parole) {
+
+            int numeroSplit = a.length() % 25;
+            for (int i = 0; i < numeroSplit; i++) {
+                String tmp = a.substring(i * 25, (i + 1) * 25);
+                res += tmp + " ";
+            }
+
+            if (numeroSplit == 0) {
+                res += a;
+            }
+            res += " ";
+        }
+        return res;
     }
 }

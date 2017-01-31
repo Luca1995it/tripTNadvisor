@@ -6,6 +6,7 @@
 package DataBase;
 
 import static DataBase.DBManager.readJsonFromUrl;
+import Support.Encoding;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -350,6 +351,7 @@ public class Ristorante implements Serializable {
         if (descr == null) {
             return false;
         }
+        descr = Encoding.Parsifica(descr);
         PreparedStatement stm = null;
         boolean res = false;
         try {

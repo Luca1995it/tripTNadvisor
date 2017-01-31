@@ -142,6 +142,7 @@ public class AddRistorante extends HttpServlet {
             if (tornaIndietro) {
                 request.getRequestDispatcher("/private/ConfigurazioneAddRistorante").forward(request, response);
             } else {
+                descr = Encoding.Parsifica(descr);
                 utente.addRistorante(nome, descr, linkSito, fascia, spec, addr, "/" + fotoPath, fotoDescr);
                 session.setAttribute("utente", manager.getUtente(utente.getId()));
                 request.setAttribute("message", labels.getString("restaurant.added"));

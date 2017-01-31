@@ -517,7 +517,7 @@ public final class DBManager implements Serializable {
         ArrayList<Ristorante> original = new ArrayList<>();
         ArrayList<Ristorante> res;
         ArrayList<Ristorante> fin;
-
+        System.out.println("-----------------------------");
         System.out.println("Search on: " + research + ", " + place + ", " + tipo + ", " + spec + ", " + lat + ", " + lng);
 
         PreparedStatement stm = null;
@@ -527,12 +527,14 @@ public final class DBManager implements Serializable {
             for (int k = 4; k < 10; k++) {
 
                 original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), k * 10);
+                if (spec != null && !spec.equals("") && !spec.equals("all")) {
+                    for (Iterator i = original.iterator(); i.hasNext();) {
+                        Ristorante r = (Ristorante) i.next();
+                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
 
-                for (Iterator i = original.iterator(); i.hasNext();) {
-                    Ristorante r = (Ristorante) i.next();
-                    System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
-                    if (!similString(r.getCucina(), spec, 2)) {
-                        i.remove();
+                        if (!similString(r.getCucina(), spec, 2)) {
+                            i.remove();
+                        }
                     }
                 }
                 if (original.size() > 30) {
@@ -575,12 +577,14 @@ public final class DBManager implements Serializable {
 
                         }
                     }
-                    for (Iterator i = original.iterator(); i.hasNext();) {
-                        
-                        Ristorante r = (Ristorante) i.next();
-                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
-                        if (!similString(r.getCucina(), spec, 2)) {
-                            i.remove();
+                    if (spec != null && !spec.equals("") && !spec.equals("all")) {
+                        for (Iterator i = original.iterator(); i.hasNext();) {
+
+                            Ristorante r = (Ristorante) i.next();
+                            System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                            if (!similString(r.getCucina(), spec, 2)) {
+                                i.remove();
+                            }
                         }
                     }
                     if (original.size() > 30) {
@@ -614,11 +618,13 @@ public final class DBManager implements Serializable {
                     }
 
                 }
-                for (Iterator i = original.iterator(); i.hasNext();) {
-                    Ristorante r = (Ristorante) i.next();
-                    System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
-                    if (!similString(r.getCucina(), spec, 2)) {
-                        i.remove();
+                if (spec != null && !spec.equals("") && !spec.equals("all")) {
+                    for (Iterator i = original.iterator(); i.hasNext();) {
+                        Ristorante r = (Ristorante) i.next();
+                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                        if (!similString(r.getCucina(), spec, 2)) {
+                            i.remove();
+                        }
                     }
                 }
             }
@@ -637,7 +643,7 @@ public final class DBManager implements Serializable {
                     if (spec.toLowerCase().equals("all") || similString(cucina, spec, k)) {
                         name = r.getNome().toLowerCase();
                         cucina = parseCucina(r.getCucina(), labels);
-
+                        System.out.println("Confronto: " + cucina + " " + research + " " + name + " res: " + (similString(name, research, k) || similString(cucina, research, k)));
                         if (similString(name, research, k) || similString(cucina, research, k)) {
                             res.add(r);
                         }

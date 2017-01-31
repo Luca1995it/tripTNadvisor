@@ -88,6 +88,7 @@ public class InserisciRecensioniServlet extends HttpServlet {
 
         String titolo = multi.getParameter("titolo");
         String recensione = multi.getParameter("rec");
+        recensione = Encoding.Parsifica(recensione);
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + ((Language) session.getAttribute("lan")).getLanSelected());
 
         boolean tornaIndietro = false;
