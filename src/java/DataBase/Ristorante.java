@@ -680,11 +680,32 @@ public class Ristorante implements Serializable {
 
     public boolean removeTimes(int id_times) {
         PreparedStatement stm = null;
+        ResultSet rs = null;
         boolean res = false;
         try {
-            stm = manager.con.prepareStatement("delete from times where id = ?");
+            stm = manager.con.prepareStatement("select id_days from times where id = ?");
             stm.setInt(1, id_times);
-            res = stm.executeUpdate() == 1;
+            int id_day = 0;
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                id_day = rs.getInt("id_days");
+                stm = manager.con.prepareStatement("delete from times where id = ?");
+                stm.setInt(1, id_times);
+                if (stm.executeUpdate() == 1) {
+                    stm = manager.con.prepareStatement("select count(*) as count from times where id_days = ?");
+                    stm.setInt(1, id_day);
+                    rs = stm.executeQuery();
+                    if (rs.next()) {
+                        if (rs.getInt("count") == 0) {
+                            stm = manager.con.prepareStatement("delete from days where id = ?");
+                            stm.setInt(1, id_day);
+                            res = stm.executeUpdate() == 1;
+                        }
+                    }
+                }
+
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -987,7 +1008,7 @@ public class Ristorante implements Serializable {
      */
     public String creaQR() {
 
-        String name = "/" + this.getNome().replace(' ', '-').replace('/','-') + ".jpg";
+        String name = "/" + this.getNome().replace(' ', '-').replace('/', '-') + ".jpg";
         String savePath = manager.completePath + manager.fotoFolder + name;
 
         ArrayList<Days> days = getDays();

@@ -28,29 +28,6 @@ public class FilterUser implements Filter {
     public FilterUser() {
     }
 
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession(false);
-        System.out.println("Filtro utente: " + session.getAttribute("utente"));
-
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-
-    }
-
-    /**
-     *
-     * @param req
-     * @param res
-     * @param chain The filter chain we are processing
-     *
-     * @exception IOException if an input/output error occurs
-     * @exception ServletException if a servlet error occurs
-     */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 

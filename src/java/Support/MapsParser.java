@@ -100,18 +100,18 @@ public class MapsParser {
         return null;
     }
 
-    public int getStreetNumber() {
+    public String getStreetNumber() {
         try {
             JSONArray faddress = json.getJSONArray("results").getJSONObject(0).getJSONArray("address_components");
             for (int i = 0; i < faddress.length(); i++) {
                 if (faddress.getJSONObject(i).getJSONArray("types").getString(0).equals("street_number")) {
-                    return faddress.getJSONObject(i).getInt("long_name");
+                    return faddress.getJSONObject(i).getString("long_name");
                 }
             }
         } catch (JSONException ex) {
-            return -1;
+            return null;
         }
-        return -1;
+        return null;
     }
 
     public double getLat() {
