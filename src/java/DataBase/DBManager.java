@@ -1,5 +1,7 @@
 package DataBase;
 
+import Support.InvalidAddresException;
+import Support.MapsParser;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
@@ -16,7 +18,10 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.ResourceBundle;
+import org.json.JSONArray;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,7 +69,6 @@ public final class DBManager implements Serializable {
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////
-    
     public InetAddress getCurrentIp() {
         InetAddress ip;
         try {
@@ -500,6 +504,7 @@ public final class DBManager implements Serializable {
      * ristoranti per nome p per località
      *
      * @param research campo di ricerca
+     * @param place
      * @param tipo
      * @param spec
      * @param lat
@@ -507,116 +512,181 @@ public final class DBManager implements Serializable {
      * @param labels
      * @return un ArrayList dei Ristoranti trovati
      */
-    public ArrayList<Ristorante> search(String research, String tipo, String spec, String lat, String lng, ResourceBundle labels) {
+    public ArrayList<Ristorante> search(String research, String place, String tipo, String spec, String lat, String lng, ResourceBundle labels) {
 
-        ArrayList<Ristorante> original;
+        ArrayList<Ristorante> original = new ArrayList<>();
         ArrayList<Ristorante> res;
+        ArrayList<Ristorante> fin;
+
+        System.out.println("Search on: " + research + ", " + place + ", " + tipo + ", " + spec + ", " + lat + ", " + lng);
+
         PreparedStatement stm = null;
         ResultSet rs = null;
 
-        if ((lat == null) || (lng == null) || lat.equals("") || lng.equals("")) {
-            original = new ArrayList<>();
-            try {
-                stm = con.prepareStatement("SELECT * FROM RISTORANTE");
-                rs = stm.executeQuery();
-                while (rs.next()) {
-                    original.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                if (stm != null) {
-                    try {
-                        stm.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        if ((lat != null) && (lng != null) && !lat.equals("") && !lng.equals("")) {
+            for (int k = 4; k < 10; k++) {
+
+                original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), k * 10);
+
+                for (Iterator i = original.iterator(); i.hasNext();) {
+                    Ristorante r = (Ristorante) i.next();
+                    System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                    if (!similString(r.getCucina(), spec, 2)) {
+                        i.remove();
                     }
                 }
-                if (rs != null) {
-                    try {
-                        rs.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                if (original.size() > 30) {
+                    break;
                 }
             }
 
         } else {
-            original = searchVicini(Double.parseDouble(lat), Double.parseDouble(lng), 50);
-        }
+            original = new ArrayList<>();
+            if (place != null && !place.equals("") && okLuogo(place)) {
+                for (int k = 4; k < 10; k++) {
+                    try {
+                        MapsParser mp = new MapsParser(place, googleKey);
+                        original = searchVicini(mp.getLat(), mp.getLat(), k * 10);
 
-        boolean found = false;
-        String name;
-        String addr;
-        ArrayList<String> cucina;
-        res = new ArrayList<>();
-
-        for (int k = 0; k < 15 && res.size() < 20; k++) {
-
-            for (Ristorante r : original) {
-
-                cucina = parseCucina(r.getCucina(), labels);
-                if (spec.toLowerCase().equals("all") || similString(cucina, spec, k)) {
-
-                    switch (tipo) {
-                        case "all":
-                            name = r.getNome().toLowerCase();
-                            if (r.getLuogo() != null) {
-                                addr = r.getLuogo().getAddress().toLowerCase();
-                            } else {
-                                addr = null;
+                    } catch (InvalidAddresException ex) {
+                        try {
+                            stm = con.prepareStatement("SELECT * FROM RISTORANTE");
+                            rs = stm.executeQuery();
+                            while (rs.next()) {
+                                original.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
                             }
-                            cucina = parseCucina(r.getCucina(), labels);
-
-                            if (similString(name, research, k) || similString(addr, research, k) || similString(cucina, research, k)) {
-                                res.add(r);
+                        } catch (SQLException ex1) {
+                            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                        } finally {
+                            if (stm != null) {
+                                try {
+                                    stm.close();
+                                } catch (SQLException ex1) {
+                                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                             }
-                            break;
-
-                        case "nome":
-                            name = r.getNome().toLowerCase();
-                            if (similString(name, research, k)) {
-                                res.add(r);
-                            }
-                            break;
-
-                        case "addr":
-                            if (r.getLuogo() != null) {
-                                addr = r.getLuogo().getSmallZone().toLowerCase();
-                                if (similString(addr, research, k)) {
-                                    res.add(r);
+                            if (rs != null) {
+                                try {
+                                    rs.close();
+                                } catch (SQLException ex1) {
+                                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             }
 
-                            break;
+                        }
+                    }
+                    for (Iterator i = original.iterator(); i.hasNext();) {
+                        
+                        Ristorante r = (Ristorante) i.next();
+                        System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                        if (!similString(r.getCucina(), spec, 2)) {
+                            i.remove();
+                        }
+                    }
+                    if (original.size() > 30) {
+                        break;
+                    }
+                }
 
-                        case "zona":
-                            if (r.getLuogo() != null) {
-                                addr = r.getLuogo().getGeographicZone().toLowerCase();
-                                if (!similString(addr, research, k)) {
-                                    res.add(r);
-                                }
-                            }
-                            break;
-
-                        case "spec":
-                            cucina = parseCucina(r.getCucina(), labels);
-
-                            if (!similString(cucina, research, k)) {
-                                res.add(r);
-                            }
-                            break;
+            } else {
+                try {
+                    stm = con.prepareStatement("SELECT * FROM RISTORANTE");
+                    rs = stm.executeQuery();
+                    while (rs.next()) {
+                        original.add(new Ristorante(rs.getInt("id"), rs.getString("nome"), rs.getString("descr"), rs.getString("linkSito"), rs.getString("fascia"), getCucina(rs.getInt("id")), getUtente(rs.getInt("id_utente")), rs.getInt("visite"), getLuogo(rs.getInt("id_luogo")), this));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    if (stm != null) {
+                        try {
+                            stm.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    if (rs != null) {
+                        try {
+                            rs.close();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
 
                 }
-
+                for (Iterator i = original.iterator(); i.hasNext();) {
+                    Ristorante r = (Ristorante) i.next();
+                    System.out.println("Simil? " + spec + " " + r.getCucina() + ": " + similString(r.getCucina(), spec, 2));
+                    if (!similString(r.getCucina(), spec, 2)) {
+                        i.remove();
+                    }
+                }
             }
-            res.stream().forEach((l) -> {
-                original.remove(l);
-            });
         }
 
-        return res;
+        String name;
+        ArrayList<String> cucina;
+        res = new ArrayList<>();
+
+        if (research != null && !research.equals("")) {
+            for (int k = 0; k < 10; k++) {
+
+                for (Ristorante r : original) {
+
+                    cucina = parseCucina(r.getCucina(), labels);
+                    if (spec.toLowerCase().equals("all") || similString(cucina, spec, k)) {
+                        name = r.getNome().toLowerCase();
+                        cucina = parseCucina(r.getCucina(), labels);
+
+                        if (similString(name, research, k) || similString(cucina, research, k)) {
+                            res.add(r);
+                        }
+                    }
+                }
+                for (Ristorante r : res) {
+                    original.remove(r);
+                }
+                if (res.size() > 10) {
+                    break;
+                }
+            }
+        } else {
+            res = original;
+        }
+
+        if (!tipo.equals("all")) {
+
+            double midVisite = 0;
+
+            for (Ristorante r : res) {
+                midVisite += r.getVisite();
+            }
+            midVisite /= res.size();
+
+            fin = new ArrayList<>();
+
+            for (int k = 0; k < 10; k++) {
+                for (Ristorante r : res) {
+                    if (r.getVisite() > midVisite) {
+                        fin.add(r);
+                    }
+                }
+
+                for (Ristorante r : fin) {
+                    res.remove(r);
+                }
+                if (fin.size() > res.size()) {
+                    break;
+                }
+                midVisite /= 1.2;
+            }
+
+            return fin;
+
+        } else {
+            return res;
+        }
+
     }
 
     ArrayList<String> parseCucina(ArrayList<String> a, ResourceBundle labels) {
@@ -879,25 +949,22 @@ public final class DBManager implements Serializable {
     }
 
     public boolean updateAutocomplete() {
-        String path = "/web/autocomplete.txt";
+        String path1 = "/web/autocompleteRist.txt";
+        String path2 = "/web/autocompletePlace.txt";
         PreparedStatement stm = null;
         ResultSet rs = null;
         boolean res = false;
         try {
 
-            File file = new File(this.completePath + path);
-            String content = "";
+            File file1 = new File(this.completePath + path1);
+            File file2 = new File(this.completePath + path2);
+            String content1 = "";
+            String content2 = "";
 
             stm = con.prepareStatement("select ristorante.nome as nome from ristorante");
             rs = stm.executeQuery();
             while (rs.next()) {
-                content += rs.getString("nome") + ",";
-            }
-
-            stm = con.prepareStatement("select * from luogo");
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                content += rs.getString("street") + "," + rs.getString("city") + "," + rs.getString("area1") + "," + rs.getString("area2") + "," + rs.getString("state") + ",";
+                content1 += rs.getString("nome") + ",";
             }
 
             stm = con.prepareStatement("select nome from specialita");
@@ -907,29 +974,43 @@ public final class DBManager implements Serializable {
                 ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + a);
                 rs = stm.executeQuery();
                 while (rs.next()) {
-                    content += labels.getString(rs.getString("nome")) + ",";
+                    content1 += labels.getString(rs.getString("nome")) + ",";
                 }
+            }
+
+            stm = con.prepareStatement("select * from luogo");
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                content2 += rs.getString("street") + "," + rs.getString("city") + "," + rs.getString("area1") + "," + rs.getString("area2") + "," + rs.getString("state") + ",";
             }
 
             // if file doesn't exists, then create it
-            try (FileOutputStream fop = new FileOutputStream(file)) {
-                // if file doesn't exists, then create it
-                if (!file.exists()) {
-                    file.createNewFile();
-                }
-                // get the content in bytes
-                byte[] contentInBytes = content.getBytes();
-
-                fop.write(contentInBytes);
-                fop.flush();
-                res = true;
-            } catch (IOException e) {
-                res = false;
-
+            FileOutputStream fop1 = new FileOutputStream(file1);
+            // if file doesn't exists, then create it
+            if (!file1.exists()) {
+                file1.createNewFile();
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBManager.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            // get the content in bytes
+            byte[] contentInBytes1 = content1.getBytes();
+
+            fop1.write(contentInBytes1);
+            fop1.flush();
+
+            // if file doesn't exists, then create it
+            FileOutputStream fop2 = new FileOutputStream(file2);
+            // if file doesn't exists, then create it
+            if (!file2.exists()) {
+                file2.createNewFile();
+            }
+            // get the content in bytes
+            byte[] contentInBytes2 = content2.getBytes();
+
+            fop2.write(contentInBytes2);
+            fop2.flush();
+
+            res = true;
+        } catch (SQLException | IOException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             if (stm != null) {
                 try {

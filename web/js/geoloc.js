@@ -2,6 +2,7 @@ function getLocationConstant() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(onGeoSuccess, onGeoError);
         document.getElementById("temp").style.display = 'block';
+        document.getElementById("getLoc").style.display = 'none';
     } else {
         alert("Your browser or device doesn't support Geolocation");
     }
@@ -13,10 +14,14 @@ function onGeoSuccess(event) {
     document.getElementById("Longitude").value = event.coords.longitude;
     document.getElementById("temp").style.display = 'none';
     document.getElementById("received").style.display = 'block';
-    document.getElementById("getLoc").style.display = 'none';
+    document.getElementById("autocomplete_jquery2").style.display = 'none';
+    document.getElementById("luogoLabel").style.display = 'none';
 }
 
 // If something has gone wrong with the geolocation request
 function onGeoError(event) {
     alert("Error code " + event.code + ". " + event.message);
+    document.getElementById("getLoc").style.display = 'none';
+    document.getElementById("temp").style.display = 'none';
+    document.getElementById("received").style.display = 'none';
 }

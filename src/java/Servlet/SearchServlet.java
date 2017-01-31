@@ -148,6 +148,7 @@ public class SearchServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         String research = request.getParameter("research");
+        String place = request.getParameter("place");
 
         String tipo = request.getParameter("tipo");
         String spec = request.getParameter("spec");
@@ -161,7 +162,7 @@ public class SearchServlet extends HttpServlet {
         Language lan = (Language) session.getAttribute("lan");
         ResourceBundle labels = ResourceBundle.getBundle("Resources.string_" + lan.getLanSelected());
 
-        res = manager.search(research, tipo, spec, lat, lng, labels);
+        res = manager.search(research, place, tipo, spec, lat, lng, labels);
 
         resOriginal = (ArrayList<Ristorante>) res.clone();
 

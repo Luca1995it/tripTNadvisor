@@ -180,7 +180,7 @@
                                 <option value="pre"><fmt:message key="economy.zone"/></option>
                                 <option value="alf"><fmt:message key="alphabetically"/></option>
                             </select><br>
-                            <input type="radio" name="ordine" value="1" checked><fmt:message key="rescent"/>
+                            <input type="radio" name="ordine" value="1" checked><fmt:message key="crescent"/>
                             <input type="radio" name="ordine" value="2"><fmt:message key="decreasing"/>
                         </div>
 

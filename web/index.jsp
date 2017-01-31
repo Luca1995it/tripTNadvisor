@@ -52,7 +52,7 @@
 
     </head>
 
-    <body id="page-top" class="index" onload="setupAutocomplete('<%= request.getContextPath()%>/autocomplete.txt')">
+    <body id="page-top" class="index" onload="setupAutocomplete('<%= request.getContextPath()%>/autocompleteRist.txt', '<%= request.getContextPath()%>/autocompletePlace.txt')">
 
         <!-- Navigation -->
         <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
@@ -189,50 +189,55 @@
                             <div class="row">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <div style="position: relative; height: 80px;">
-                                            <input type="text" placeholder=" <fmt:message key="cerca"/>" class="form-control" name="research" id="autocomplete_jquery1"/>
+                                        <div class="row">
+                                            <label class="control-label"><fmt:message key="search"/></label>
+                                            <input type="text" placeholder="<fmt:message key="cerca"/>" class="form-control" name="research" id="autocomplete_jquery1"/> 
+                                            <br>
+                                            <label class="control-label" id="luogoLabel"><fmt:message key="near"/></label>
+                                            <input type="text" placeholder="<fmt:message key="place"/>" class="form-control" name="place" id="autocomplete_jquery2"/>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button type="submit" class="btn btn-primary"><fmt:message key="search"/></button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div id="divSample" class="hideClass">
+                                                        <input hidden type="text" id="Latitude" name="Latitude"/>
+                                                        <input hidden type="text" id="Longitude" name="Longitude"/>
+                                                    </div>
+                                                    <div id="temp" hidden><h5><fmt:message key="receiving"/></h5></div>
+                                                    <div id="received" hidden><h5><fmt:message key="received"/></h5></div>
+                                                    <button class="btn btn-primary" id="getLoc" type="button" onclick="getLocationConstant()"><fmt:message key="getLoc"/></button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <h5 class=""><fmt:message key="refine"/></h5>
+                                        <div class="radio">
+                                            <h5>
+                                                <label><input type="radio" name="tipo" value="all" checked="checked"/><fmt:message key="all"/> | </label>
+                                                <label><input type="radio" name="tipo" value="must"/><fmt:message key="most.visited"/> | </label>
+                                            </h5>
+                                        </div>
+
+                                        <h5 class=""><fmt:message key="filter.by.spec"/></h5>
+                                        <div class="radio">
+                                            <h5>
+                                                <label>
+                                                    <input type="radio" name="spec" value="all" checked="checked"/><fmt:message key="all"/></label>
+                                                    <c:forEach var="speci" items="${cucine}">
+                                                    <label class="control-label"><input type="radio" name="spec" value="<c:out value="${speci}"/>"/><fmt:message key='${speci}'/></label>
+                                                    </c:forEach>
+                                            </h5>
                                         </div>
                                     </div>
-
-                                    <h5 class=""><fmt:message key="search.type"/></h5>
-                                    <div class="radio">
-                                        <h5>
-                                            <label><input type="radio" name="tipo" value="all" checked="checked"><fmt:message key="all"/> | </label>
-                                            <label><input type="radio" name="tipo" value="nome"><fmt:message key="name"/> | </label>
-                                            <label><input type="radio" name="tipo" value="addr"><fmt:message key="address"/> | </label>
-                                            <label><input type="radio" name="tipo" value="zona"><fmt:message key="geographic.zone"/> | </label>
-                                            <label><input type="radio" name="tipo" value="spec"><fmt:message key="specialty"/></label>
-                                        </h5>
-                                    </div>
-
-                                    <h5 class=""><fmt:message key="search.spec"/></h5>
-                                    <div class="radio">
-                                        <h5>
-                                            <label><input type="radio" name="spec" value="all" checked="checked"><fmt:message key="all"/></label>
-                                                <c:forEach var="speci" items="${cucine}">
-                                                <label><input type="radio" name="spec" value="<c:out value="${speci}"/>"><fmt:message key='${speci}'/></label>
-                                                </c:forEach>
-                                        </h5>
-                                    </div>
-                                    <br>
-                                    <button type="submit" class="btn btn-primary"><fmt:message key="search"/></button>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group">
-                                    <div id="divSample" class="hideClass">
-                                        <input hidden type="text" id="Latitude" name="Latitude"/>
-                                        <input hidden type="text" id="Longitude" name="Longitude"/>
-                                    </div>
-                                    <div id="temp" style="display:none"><h5><fmt:message key="receiving"/></h5></div>
-                                    <div id="received" style="display:none"><h5><fmt:message key="received"/></h5></div>
-                                </div>
-                            </div>
 
+                            </div>
                         </form>
-                        <button class="btn btn-primary" id="getLoc" onclick="getLocationConstant()">
-                            <fmt:message key="getLoc"/>
-                        </button>
+
+
+
                     </div>
                     <div class="col-md-2"></div>
                 </div>
