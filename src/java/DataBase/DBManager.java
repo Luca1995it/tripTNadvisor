@@ -548,7 +548,7 @@ public final class DBManager implements Serializable {
                     try {
                         MapsParser mp = new MapsParser(place, googleKey);
                         System.out.println("MP: " + mp.getCity() + " " + mp.getState());
-                        original = searchVicini(mp.getLat(), mp.getLat(), k * 10);
+                        original = searchVicini(mp.getLat(), mp.getLng(), k * 10);
 
                     } catch (InvalidAddresException ex) {
                         try {
