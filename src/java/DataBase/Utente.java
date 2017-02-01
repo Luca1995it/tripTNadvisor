@@ -697,9 +697,6 @@ public abstract class Utente implements Serializable {
             return false;
         }
         final Utente other = (Utente) obj;
-        if (this.id != other.id) {
-            return false;
-        }
         if (!Objects.equals(this.nome, other.nome)) {
             return false;
         }

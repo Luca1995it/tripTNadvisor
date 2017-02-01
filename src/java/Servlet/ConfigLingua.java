@@ -34,15 +34,19 @@ public class ConfigLingua extends HttpServlet {
         Language lan = (Language) session.getAttribute("lan");
         
         String x = request.getParameter("l");
+        System.out.println(x);
         if (x != null) {
             lan.setLanSelected(x);
         } else lan.setDefault();
-        
+        String referer = request.getHeader("Referer");
+        System.out.println("referer: "+referer);
+        //response.sendRedirect(referer);
+
+
         
         String lastPage = (String) session.getAttribute("lastPage");
-        if (lastPage == null) {
-            lastPage = "/HomeServlet";
-        }
+        System.out.println("LP: " + lastPage);
+        
         request.getRequestDispatcher(lastPage).forward(request, response);
     }
 

@@ -189,8 +189,8 @@
                             <div class="row">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <div class="col-md-2"></div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-2 col-sm-2 col-xs-2"></div>
+                                        <div class="col-md-8 col-sm-8 col-xs-8">
                                             <div class="row">
                                                 <label class="control-label"><fmt:message key="search"/></label>
                                                 <input size="50" type="text" placeholder="<fmt:message key="cerca"/>" class="form-control" name="research" id="autocomplete_jquery1"/> 
@@ -199,10 +199,10 @@
                                                 <input size="50" type="text" placeholder="<fmt:message key="place"/>" class="form-control" name="place" id="autocomplete_jquery2"/>
                                                 <br>
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
                                                         <button type="submit" class="btn btn-primary"><fmt:message key="search"/></button>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-6 col-sm-6 col-xs-6">
                                                         <div id="divSample" class="hideClass">
                                                             <input hidden type="text" id="Latitude" name="Latitude"/>
                                                             <input hidden type="text" id="Longitude" name="Longitude"/>
@@ -233,7 +233,7 @@
                                                 </h5>
                                             </div>
                                         </div>
-                                        <div class="col-md-2"></div>
+                                        <div class="col-md-2 col-sm-2 col-xs-2"></div>
                                     </div>
                                 </div>
 
@@ -266,7 +266,7 @@
                                 <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${ristorante.getId()}"/>" class="portfolio-link" data-toggle="modal">
                                     <c:out value="${ristorante.getNome()}"/><br>
                                     <fmt:message key="users.vote"/>
-                                    <c:if test="${ristorante.getVoto() == 0.0}">
+                                    <c:if test="${ristorante.getVoto() <= 0.0}">
                                         <fmt:message key="no.vote"/>
                                     </c:if>
                                     <c:if test="${ristorante.getVoto() > 0}">
@@ -332,7 +332,14 @@
                                 <a href="<%= request.getContextPath()%>/ConfigurazioneRistorante?id_rist=<c:out value="${rec.getRistorante().getId()}"/>" class="portfolio-link" data-toggle="modal">
                                     <fmt:message key="by"/> 
                                     <c:out value="${rec.getUtente().getNomeCognome()}"/>
-                                    (<c:out value="${rec.getUtente().getReputazione()}"/>), 
+                                    (<c:choose>
+                                        <c:when test="${rec.getUtente().getReputazione() <= 0}">
+                                            <fmt:message key="no.vote"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${rec.getUtente().getReputazione()}"/>
+                                        </c:otherwise>
+                                    </c:choose>), 
                                     <c:out value="${rec.getData()}"/><br>
                                     <fmt:message key="val.media"/>: <c:out value="${rec.getMediaVoti()}"/>
                                 </a>

@@ -5,7 +5,6 @@
  */
 package DataBase;
 
-import static DataBase.DBManager.readJsonFromUrl;
 import Support.Encoding;
 import Support.InvalidAddresException;
 import Support.MapsParser;
@@ -23,9 +22,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.glxn.qrgen.QRCode;
 import net.glxn.qrgen.image.ImageType;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *

@@ -19,7 +19,7 @@
                 - <c:out value="${utente.getNomeCognome()}"/>
             </c:if>
         </title>
-        <c:set value="/base.jsp" scope="session" var="lastPage"/>
+        <c:set value="/classifica.jsp" scope="session" var="lastPage"/>
 
         <!-- Bootstrap Core CSS -->
         <link href="<%= request.getContextPath()%>/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -188,19 +188,37 @@
                             <img src="<%= request.getContextPath()%><c:out value="${utente.getAvpath()}"/>" alt="<fmt:message key="no.img"/>" height="200">
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label"><fmt:message key="position.ranking"/>: <c:out value="${utente.getPosizioneClassifica()}"/></label>
+                            <label class="control-label"><fmt:message key="position.ranking"/>: 
+                                <c:choose>
+                                    <c:when test="${utente.getPosizioneClassifica() <= 0}">
+                                        <fmt:message key="no.vote"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:out value="${utente.getPosizioneClassifica()}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </label>
                             <br>
                             <label class="control-label"><c:out value="${utente.getNome()}"/></label>
                             <br>
                             <label class="control-label"><c:out value="${utente.getCognome()}"/></label>
                             <br>
-                            <label class="control-label"><fmt:message key="rank"/>: <c:out value="${utente.getReputazione()}"/></label>
+                            <label class="control-label"><fmt:message key="rank"/>: 
+                                <c:choose>
+                                    <c:when test="${utente.getReputazione() <= 0}">
+                                        <fmt:message key="no.vote"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:out value="${utente.getReputazione()}"/>
+                                    </c:otherwise>
+                                </c:choose>
+                            </label>
                         </div>
                     </div>
-                        <hr>
+                    <hr>
                 </c:forEach>
                 <br><br>
-                
+
                 <c:if test="${utente != null}">
                     <form action="<%= request.getContextPath()%>/private/ConfigurazioneProfilo" method="get">
                         <button class="btn btn-primary" type="submit">

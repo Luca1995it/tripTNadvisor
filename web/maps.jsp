@@ -19,7 +19,7 @@
                 - <c:out value="${utente.getNomeCognome()}"/>
             </c:if>
         </title>
-        <c:set value="/base.jsp" scope="session" var="lastPage"/>
+        <c:set value="/maps.jsp" scope="session" var="lastPage"/>
 
         <!-- Bootstrap Core CSS -->
         <link href="<%= request.getContextPath()%>/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

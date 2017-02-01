@@ -273,17 +273,18 @@
                             <div class="caption-content">
                                 <label class="control-label"><fmt:message key="ranking"/>:
                                     <c:choose>
-                                        <c:when test="${ristorante.getLuogo() != null}">
-                                            <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/></label>
+                                        <c:when test="${ristorante.getLuogo() != null && ristorante.getPosizioneClassificaPerCitta() > 0}">
+                                            <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
                                         </c:when>
                                         <c:otherwise>
                                             <fmt:message key="non.disponibile"/>
                                         </c:otherwise>
                                     </c:choose>
+                                </label>
                                 <br>
                                 <label class="control-label">
                                     <fmt:message key="users.vote"/>:
-                                    <c:if test="${ristorante.getVoto() == 0.0}">
+                                    <c:if test="${ristorante.getVoto() <= 0.0}">
                                         <fmt:message key="no.vote"/>
                                     </c:if>
                                     <c:if test="${ristorante.getVoto() > 0}">
@@ -408,7 +409,15 @@
                                 <div class="col-md-3">
                                     <div class="caption">
                                         <div class="caption-content">
-                                            <label class="control-form"><c:out value="${rec.getUtente().getNomeCognome()}"/>(<c:out value="${rec.getUtente().getReputazione()}"/>) - <c:out value="${rec.getData()}"/></label>
+                                            <label class="control-form"><c:out value="${rec.getUtente().getNomeCognome()}"/> 
+                                                (<c:choose>
+                                                    <c:when test="${rec.getUtente().getReputazione() <= 0}">
+                                                        <fmt:message key="no.vote"/>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:out value="${rec.getUtente().getReputazione()}"/>
+                                                    </c:otherwise>
+                                                </c:choose>) - <c:out value="${rec.getData()}"/></label>
                                             <br>
                                             <label class="control-form"><fmt:message key="voto"/>: 
                                                 <c:choose>

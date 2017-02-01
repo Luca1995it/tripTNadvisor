@@ -190,89 +190,98 @@
                             <br>
                             <label class="control-label"><fmt:message key="rank"/>: 
                                 <c:choose>
-                                    <c:when test="${r.getVoto() == 0.0}">
-                                        <fmt:message key="no.vote"/>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <c:out value="${ristorate.getVoto()}"/>
-                                    </c:otherwise>
-                                </c:choose>
-                            </label>
-                            <label class="control-label"><fmt:message key="ranking"/>: <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/></label>
-                            <br>
-                            <label class="control-label"><fmt:message key="reviews"/> <c:out value="${ristorante.getRecensioni().size()}"/></label>
-                            <br>
+                                    <c:when test="${ristorante.getVoto() <= 0.0}">
+                                        <fmt:message key="no.vote"/
+                                </c:when>
+                                <c:otherwise>
+                                    <c:out value="${ristorate.getVoto()}"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </label>
+                        <label class="control-label"><fmt:message key="ranking"/>: 
+                            <c:choose>
+                                <c:when test="${ristorante.getLuogo() != null && ristorante.getPosizioneClassificaPerCitta() > 0}">
+                                    <c:out value="${ristorante.getPosizioneClassificaPerCitta()}"/> in <c:out value="${ristorante.getLuogo().getCity()}"/>
+                                </c:when>
+                                <c:otherwise>
+                                    <fmt:message key="non.disponibile"/>
+                                </c:otherwise>
+                            </c:choose>
+                        </label>
+                        <br>
+                        <label class="control-label"><fmt:message key="reviews"/> <c:out value="${ristorante.getRecensioni().size()}"/></label>
+                        <br>
 
-                            <label class="control-label"><fmt:message key="web.site"/> <a href="<c:out value="${ristorante.getLinksito()}"/>"><c:out value="${ristorante.getLinksito()}"/></a></label>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="control-label"><fmt:message key="actions.ristorante"/></label>
-                            <br>
-                            <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraOrariApertura?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.orari"/></a></label>
-                            <br>
-                            <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraCucine?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.spec"/></a></label>
-                            <br>
-                            <label class="control-label"><a href="<%= request.getContextPath()%>/private/LoadRistoranteServlet?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="modify.restaurant"/></a></label>
-                            <br>
-                            <label class="control-label"><a href="<%= request.getContextPath()%>/private/LoadRistoranteFotoServlet?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="add.foto"/></a></label>
-                        </div>
-
+                        <label class="control-label"><fmt:message key="web.site"/> <a href="<c:out value="${ristorante.getLinksito()}"/>"><c:out value="${ristorante.getLinksito()}"/></a></label>
                     </div>
-                    <div class="row"><hr></div>
-                    </c:forEach>
-            </div>
-        </section>
-
-
-        <!-- Footer -->
-        <footer class="text-center">
-            <div class="footer-above">
-                <div class="container">
-                    <div class="row">
-                        <div class="footer-col col-md-6">
-                            <h3>Location</h3>
-                            <p>Polo Ferrari, Via Sommarive 5
-                                <br>TRENTO, TN 38100</p>
-                        </div>
-                        <div class="footer-col col-md-6">
-                            <h3>About TripTNadvisor</h3>
-                            <p>TripTNadvisor is free to use, developed by UNITN students on 2016</p>
-                        </div>
+                    <div class="col-md-4">
+                        <label class="control-label"><fmt:message key="actions.ristorante"/></label>
+                        <br>
+                        <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraOrariApertura?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.orari"/></a></label>
+                        <br>
+                        <label class="control-label"><a href="<%= request.getContextPath()%>/privateRistoratore/ConfiguraCucine?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="gestisci.spec"/></a></label>
+                        <br>
+                        <label class="control-label"><a href="<%= request.getContextPath()%>/private/LoadRistoranteServlet?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="modify.restaurant"/></a></label>
+                        <br>
+                        <label class="control-label"><a href="<%= request.getContextPath()%>/private/LoadRistoranteFotoServlet?id_rist=<c:out value="${ristorante.getId()}"/>"><fmt:message key="add.foto"/></a></label>
                     </div>
+
                 </div>
-            </div>
-            <div class="footer-below">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            Copyright &copy; TRIPTNADVISOR 2016
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-
-        <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
-
-        <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
-            <a class="btn btn-primary" href="#page-top">
-                <i class="fa fa-chevron-up"></i>
-            </a>
+                <div class="row"><hr></div>
+                </c:forEach>
         </div>
+    </section>
 
-        <!-- jQuery -->
-        <script src="<%= request.getContextPath()%>/vendor/jquery/jquery.min.js"></script>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="<%= request.getContextPath()%>/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-above">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-col col-md-6">
+                        <h3>Location</h3>
+                        <p>Polo Ferrari, Via Sommarive 5
+                            <br>TRENTO, TN 38100</p>
+                    </div>
+                    <div class="footer-col col-md-6">
+                        <h3>About TripTNadvisor</h3>
+                        <p>TripTNadvisor is free to use, developed by UNITN students on 2016</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; TRIPTNADVISOR 2016
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-        <!-- Plugin JavaScript -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
-        <!-- Theme JavaScript -->
-        <script src="<%= request.getContextPath()%>/js/freelancer.min.js"></script>
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
 
-    </body>
+    <div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- jQuery -->
+    <script src="<%= request.getContextPath()%>/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<%= request.getContextPath()%>/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="<%= request.getContextPath()%>/js/freelancer.min.js"></script>
+
+</body>
 
 </html>

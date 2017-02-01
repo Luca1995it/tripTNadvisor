@@ -83,7 +83,6 @@
     <listener>
         <listener-class>Listener.WebAppContextListener</listener-class>
     </listener>
-    
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>Resources.string</param-value>
@@ -404,11 +403,7 @@
     </error-page>
     <error-page>
         <error-code>501</error-code>
-        <location>/notFound.jsp</location>
-    </error-page>
-    <error-page>
-        <error-code>504</error-code>
-        <location>/notFound.jsp</location>
+        <location>/error.jsp</location>
     </error-page>
     <login-config>
         <auth-method>FORM</auth-method>

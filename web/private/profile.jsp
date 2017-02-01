@@ -177,13 +177,31 @@
                                 <br>
                                 <label class="control-label"><fmt:message key="email"/>: <c:out value="${utente.getEmail()}"/></label>
                                 <br>
-                                <label class="control-label"><fmt:message key="classify.position"/>: <c:out value="${utente.getPosizioneClassifica()}"/></label>
+                                <label class="control-label"><fmt:message key="classify.position"/>: 
+                                    <c:choose>
+                                        <c:when test="${utente.getPosizioneClassifica() <= 0}">
+                                            <fmt:message key="no.vote"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${utente.getPosizioneClassifica()}"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </label>
                                 <br>
                             </div>
                             <div class="col-md-4">
                                 <label class="control-label"><fmt:message key="you.do"/> <c:out value="${utente.numeroRecensioni()}"/> <fmt:message key="minus.review"/></label>
                                 <br>
-                                <label class="control-label"><fmt:message key="your.score"/> <c:out value="${utente.getReputazione()}"/></label>
+                                <label class="control-label"><fmt:message key="your.score"/> 
+                                    <c:choose>
+                                        <c:when test="${utente.getReputazione() <= 0}">
+                                            <fmt:message key="no.vote"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <c:out value="${utente.getReputazione()}"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </label>
                                 <br>
                                 <c:if test="${utente.isRistoratore()}">
                                     <label class="control-label"><fmt:message key="you.owner.of"/> <c:out value="${utente.getRistoranti().size()}"/> <fmt:message key="minus.restaurant"/></label>
